@@ -259,8 +259,8 @@ home = '''<div class="wrap hero">
     <ul class="ticks"><li>Made for dark-spot care</li><li>For a more even-looking tone</li><li>One small step, morning and night</li></ul>
     <div class="cta"><a class="btn" href="#packs">Shop now</a><a class="btn ghost" href="/how-to-use/">How to use</a></div>
   </div>
-  <div class="hero-media"><div class="frame"><img src="%s" alt="Youth Face Beauty Cream 25g jar and box, Kojic Acid and Alpha Arbutin" width="1000" height="1000" fetchpriority="high"></div>
-    <span class="chip a">From <b>₹549</b> · COD available</span><span class="chip b">100%% original</span></div>
+  <div class="hero-media"><div class="frame"><a href="/product/youth-face-beauty-cream-body-lotion-combo/"><img src="%s" alt="Youth Face Combo: Beauty Cream 25g with Kojic Acid and Alpha Arbutin, and Body Lotion 40ml" width="1200" height="1200" fetchpriority="high"></a></div>
+    <div class="chips"><span class="chip a">Combo <b>₹999</b> · COD available</span><span class="chip b">100%% original</span></div></div>
 </div>
 <div class="wrap trust">
   <div>%s<p><b>100%% original</b><span>Direct from the brand</span></p></div>
@@ -288,7 +288,7 @@ home = '''<div class="wrap hero">
   <div class="sec-h"><span class="eyebrow">Questions</span><h2>Before you order</h2></div>
   %s
   <p style="margin-top:22px"><a class="btn ghost" href="/faq/">All questions</a></p>
-</div></section>''' % ('/assets/img/yf-pack-2.webp', ICON['orig'], ICON['cod'], ICON['wa'], ICON['routine'],
+</div></section>''' % ('/assets/img/yf-combo.webp', ICON['orig'], ICON['cod'], ICON['wa'], ICON['routine'],
                          ''.join(card(p) for p in MAIN), combo_band(), faq_html(HOME_FAQ))
 page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin | Official Store',
      'Youth Face is a modern Indian skincare brand: Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹549, free shipping, COD.',

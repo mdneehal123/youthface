@@ -354,3 +354,6 @@ body.has-bar footer{padding-bottom:100px}
 @media (max-width:760px){.combo{grid-template-columns:1fr}.combo-tx{padding:22px 20px}.combo .acts .btn{flex:1}}
 .combo .acts .btn{white-space:nowrap}
 @media (max-width:420px){.combo .acts{flex-direction:column}}
+.hero-media .frame a{display:block;width:100%;height:100%}
+.hero-media .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px;position:relative;z-index:2}
+.hero-media .chips .chip{position:static}
