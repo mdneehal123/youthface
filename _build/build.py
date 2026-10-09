@@ -14,7 +14,8 @@ ADDR = 'Azad Nagar, 4th Cross, Bhatkal, Uttara Kannada, Karnataka 581320, India'
 TODAY = '2026-10-09'
 GOOGLE_ADS = ''        # e.g. AW-XXXXXXXXXX when Youth Face gets its own Google Ads account
 META_PIXEL = ''        # Meta Pixel ID for Youth Face, when there is one
-GSC_FILE = ''          # Search Console verification file name, if one is used
+GSC_FILE = ''
+GRIEVANCE_NAME = 'Grievance Officer'   # put the owner's full name here (required by the E-Commerce Rules)          # Search Console verification file name, if one is used
 
 UP = '/wp-content/uploads/2026/10/'
 
@@ -497,41 +498,89 @@ track = top('Track order', 'Track your Youth Face order', 'Use the mobile number
 <div class="track-out" id="t-out" role="status" aria-live="polite" hidden></div></div></section>'''
 page('/track-order/', 'Track Your Order | Youth Face', 'Track your Youth Face order with your mobile number and pincode, payment ID or courier tracking number.', track, crumbs=[('Track Order', '/track-order/')])
 
+BIZ = '''<div class="bizcard"><b>Business details</b><span>Youth Face, a brand of %s</span><span>%s</span><span>WhatsApp and phone: %s</span><span>Hours: Monday to Saturday, 10 am to 7 pm IST</span></div>''' % (OWNER, ADDR, WA_SHOW)
+GRIEV = '''<h2>Grievance officer</h2><p>In line with the Consumer Protection (E-Commerce) Rules, 2020, complaints can be sent to our Grievance Officer: <b>%s</b>, %s, %s. WhatsApp and phone: %s. We acknowledge every complaint within 48 hours and aim to resolve it within one month of receiving it.</p>''' % (GRIEVANCE_NAME, OWNER, ADDR, WA_SHOW)
 POL = {
-'/privacy-policy/': ('Privacy Policy', 'Privacy Policy | Youth Face', 'How Youth Face collects, uses and protects your information when you shop on youthfacebeautycream.com.', '''
-<p>This policy explains what information Youth Face (%s) collects when you use this website and place an order, and how it is used.</p>
-<h2>What we collect</h2><p>When you order, we collect your name, mobile number, delivery address, city and pincode, and the items you buy. Payments are processed by Razorpay; we never see or store your card or UPI details.</p>
-<h2>How we use it</h2><p>Only to process, deliver and support your order: sharing your delivery details with our courier partner (through Shiprocket), sending order updates, and helping you on WhatsApp. If you start a payment and do not finish, we may message you once on that number to ask whether you need help.</p>
-<h2>Details saved on your device</h2><p>Your cart and, after you start an order, your delivery details are saved in your own browser so you do not need to type them again. You can clear them from your browser settings at any time.</p>
-<h2>Cookies and measurement</h2><p>The site may use advertising and analytics tags (such as Google or Meta) to measure visits and orders from our ads. We do not send them your name, phone number or address.</p>
-<h2>Your choices</h2><p>To ask about, correct or delete your information, contact us on WhatsApp at %s.</p>''' % (OWNER, WA_SHOW)),
-'/terms-conditions/': ('Terms & Conditions', 'Terms & Conditions | Youth Face', 'Terms and conditions for buying Youth Face products on youthfacebeautycream.com.', '''
-<p>By using this website and placing an order you agree to these terms. The site is operated by %s, Bhatkal, Karnataka, India.</p>
-<h2>Products and prices</h2><p>Prices are in Indian rupees and include applicable taxes. We may change prices or availability at any time; the price shown at checkout is the price you pay.</p>
-<h2>Orders</h2><p>An order is confirmed when payment (or the Cash on Delivery advance) is received. We may cancel an order if a product is unavailable or details appear incorrect or fraudulent, and will refund any amount paid.</p>
-<h2>Cash on Delivery</h2><p>Cash on Delivery orders require a ₹99 advance paid online, which is part of the price. If a Cash on Delivery parcel is refused or cannot be delivered because of incorrect details, the advance is not refunded, as it covers shipping costs.</p>
-<h2>Product use</h2><p>Youth Face products are cosmetics. Follow the directions on the pack, patch test before use and stop if irritation occurs. Results vary from person to person and are not guaranteed.</p>
-<h2>Liability</h2><p>To the extent permitted by law, our liability for any order is limited to the amount paid for it. Nothing here limits your rights under Indian consumer law.</p>
-<h2>Contact</h2><p>WhatsApp %s · %s</p>''' % (OWNER, WA_SHOW, ADDR)),
-'/refund-returns-policy/': ('Refund & Returns', 'Refund and Returns Policy | Youth Face', 'Youth Face refund and returns policy: 7-day window for damaged, defective or wrong items, how to request a return, and refund timing.', '''
-<h2>Return window</h2><p>Return requests are accepted within <b>7 days of delivery</b>.</p>
-<h2>What can be returned</h2><ul><li>Wrong, damaged, defective or materially different items.</li><li>Unused, unopened items in original condition with original packaging and seals.</li></ul>
-<h2>Hygiene products</h2><p>Opened, used, tested or tampered products cannot be returned, unless they arrived damaged, defective or incorrect. Your legal rights for such products are not affected.</p>
-<h2>How to request a return</h2><ol><li>Message us on WhatsApp at %s within 7 days of delivery.</li><li>Share your order details and photos of the product, packaging and shipping label (a short video if needed).</li><li>Wait for approval and instructions before sending anything back.</li></ol>
-<h2>Refunds</h2><p>Approved refunds are made to the original payment method after the returned item is received and checked. Banks usually take 5 to 7 business days to show the amount. Shipping costs are refunded when the error was ours.</p>
-<h2>Cancellations</h2><p>Orders can be cancelled before they are packed or dispatched. Once dispatched, the return process applies.</p>
-<h2>Refused or undelivered orders</h2><p>For Cash on Delivery orders refused at delivery or undeliverable because of incorrect details, the ₹99 advance is not refunded.</p>
-<h2>Purchases elsewhere</h2><p>This policy applies to orders placed on this website. Purchases from other sellers follow that seller's policy.</p>''' % WA_SHOW),
-'/shipping-delivery/': ('Shipping & Delivery', 'Shipping & Delivery Policy | Youth Face', 'Youth Face shipping: free shipping across India, packed in 1 to 3 business days, delivered in 3 to 7 business days after dispatch, Cash on Delivery available.', '''
-<h2>Shipping charges</h2><p>Shipping is <b>free</b> on all orders across India.</p>
-<h2>Processing time</h2><p>Orders are packed within <b>1 to 3 business days</b> of payment or confirmation. Orders placed on Sundays or public holidays are processed the next business day.</p>
-<h2>Delivery time</h2><p>After dispatch, delivery usually takes <b>3 to 7 business days</b> depending on your pincode. Remote areas can take longer. Timelines are estimates.</p>
-<h2>Cash on Delivery</h2><p>Available on most pincodes. Pay ₹99 online to confirm and the rest in cash at delivery.</p>
-<h2>Tracking</h2><p>Track your parcel on the <a href="/track-order/">Track Order</a> page with your mobile number and pincode. Tracking appears once the courier collects the parcel.</p>
-<h2>Address and delivery attempts</h2><p>Please give a complete address and a reachable mobile number. If the courier cannot deliver after its attempts, the parcel returns to us.</p>
-<h2>Damaged or wrong parcels</h2><p>Photograph the package, product and label before discarding anything, and contact us within 7 days. See our <a href="/refund-returns-policy/">Refund & Returns</a> policy.</p>
-<h2>Shipping area</h2><p>We ship within India only.</p>'''),
+'/privacy-policy/': ('Privacy Policy', 'Privacy Policy | Youth Face', 'How Youth Face collects, uses, shares and protects your personal information, how we use cookies and Google and Meta advertising, and how to opt out or delete your data.', '''
+<p>This Privacy Policy explains how Youth Face, a brand of %(o)s (&ldquo;we&rdquo;, &ldquo;us&rdquo;), collects, uses, shares and protects personal information when you visit youthfacebeautycream.com (the &ldquo;site&rdquo;) or place an order. By using the site you agree to this policy.</p>
+%(biz)s
+<h2>1. Information we collect</h2>
+<p><b>Information you give us:</b> when you order or contact us, we collect your name, mobile number, delivery address, city and pincode, the products you choose, and any messages you send us on WhatsApp.</p>
+<p><b>Payment information:</b> payments are processed by Razorpay Software Private Limited. Card, UPI and netbanking details are entered on Razorpay&rsquo;s secure page and are never seen or stored by us. We receive only a payment ID and the payment status.</p>
+<p><b>Information collected automatically:</b> like most websites, our hosting provider and the tools described below record technical information such as your IP address, browser and device type, pages viewed, the website that referred you, and the time of your visit.</p>
+<h2>2. How we use your information</h2>
+<ul><li>To process, pack, ship and deliver your order, and to collect Cash on Delivery payments.</li><li>To send you order confirmations and delivery updates, and to answer your questions.</li><li>If you start a payment and do not complete it, we may contact you once on the number you entered to ask whether you need help finishing the order.</li><li>To prevent fraud and misuse of the site.</li><li>To measure how our website and ads perform and to show you relevant Youth Face ads (see section 4).</li><li>To meet legal, tax and accounting requirements.</li></ul>
+<p>We do <b>not</b> sell or rent your personal information to anyone.</p>
+<h2>3. Who we share it with</h2>
+<p>We share only what each partner needs to do its job:</p>
+<ul><li><b>Razorpay</b>, to process payments.</li><li><b>Shiprocket and its courier partners</b>, who receive your name, phone number and address to deliver your parcel.</li><li><b>Vercel</b>, which hosts this website.</li><li><b>Google and Meta</b>, for advertising measurement as described below.</li><li><b>WhatsApp</b> (Meta), when you choose to message us there.</li><li><b>Government or legal authorities</b>, when required by law.</li></ul>
+<h2>4. Cookies, advertising and remarketing</h2>
+<p>We use cookies and similar technologies to keep the site working (for example, your cart) and to measure and improve our advertising.</p>
+<p><b>Google:</b> we use Google Ads, including remarketing. Third-party vendors, including Google, use cookies to show our ads to you on sites across the internet based on your previous visits to this site, and to measure ad conversions. You can opt out of Google&rsquo;s use of cookies for personalised ads at <a href="https://adssettings.google.com" rel="noopener">Google Ads Settings</a>, and learn how Google uses data at <a href="https://policies.google.com/technologies/partner-sites" rel="noopener">How Google uses information from sites that use its services</a>.</p>
+<p><b>Meta (Facebook and Instagram):</b> we may use the Meta Pixel to measure the results of our ads and to show Youth Face ads to people who visited our site. You can control this in your <a href="https://www.facebook.com/adpreferences" rel="noopener">Facebook ad preferences</a>.</p>
+<p>You can also opt out of many third-party vendors&rsquo; use of cookies for interest-based advertising at <a href="https://optout.aboutads.info" rel="noopener">aboutads.info</a>, or block and delete cookies in your browser settings. Blocking cookies may stop the cart from working.</p>
+<p>We do not send your name, phone number or address to Google or Meta through these tools.</p>
+<h2>5. Information saved on your device</h2>
+<p>Your cart, and the delivery details you type at checkout, are saved in your own browser (local storage) so you do not need to type them again. This stays on your device and you can clear it at any time from your browser settings.</p>
+<h2>6. How long we keep it</h2>
+<p>We keep order records for as long as needed to fulfil and support your order and as required by Indian tax and accounting law. Information that is no longer needed is deleted.</p>
+<h2>7. How we protect it</h2>
+<p>The site uses HTTPS encryption. Payment details are handled only by Razorpay, which is PCI-DSS compliant. Access to order information is limited to the people who need it to serve you. No method of transmission over the internet is completely secure, but we take reasonable steps to protect your information.</p>
+<h2>8. Your rights and choices</h2>
+<p>You may ask us to access, correct or delete your personal information, or to stop contacting you, by messaging us on WhatsApp at %(wa)s. Reply STOP to any message from us and we will not contact you again about marketing. We will respond within 30 days.</p>
+<h2>9. Children</h2>
+<p>This site is intended for adults. We do not knowingly collect personal information from children under 18.</p>
+<h2>10. Changes to this policy</h2>
+<p>We may update this policy from time to time. The latest version is always on this page with the date it was last updated.</p>
+%(griev)s''' % dict(o=OWNER, biz=BIZ, wa=WA_SHOW, griev=GRIEV)),
+
+'/terms-conditions/': ('Terms & Conditions', 'Terms & Conditions | Youth Face', 'Terms and conditions for buying Youth Face products on youthfacebeautycream.com: orders, prices, payment, Cash on Delivery, product use, liability and governing law.', '''
+<p>These Terms and Conditions apply to your use of youthfacebeautycream.com and to every order placed on it. The site is operated by %(o)s, which sells products under the Youth Face brand. By using the site or placing an order, you agree to these terms.</p>
+%(biz)s
+<h2>1. Eligibility</h2><p>You must be at least 18 years old, or use the site under the supervision of a parent or guardian, to place an order.</p>
+<h2>2. Products and descriptions</h2><p>We try to show products, ingredients and prices accurately. Colours and packaging may look slightly different on screen. The full ingredient list is printed on every pack. Our products are cosmetics. They are not medicines and are not intended to diagnose, treat, cure or prevent any disease.</p>
+<h2>3. Prices</h2><p>All prices are in Indian rupees (₹) and include applicable taxes. Shipping is free across India. There are no hidden charges: the amount shown at checkout is the full amount you pay. If a product is listed at a clearly wrong price because of an error, we may cancel the order and refund any amount paid in full.</p>
+<h2>4. Orders</h2><p>An order is confirmed only when payment, or the Cash on Delivery advance, is received and you see the confirmation screen. We may refuse or cancel an order if a product is out of stock, the delivery pincode is not serviceable, or the order details appear incorrect or fraudulent. If we cancel, any amount paid is refunded in full to the original payment method.</p>
+<h2>5. Payment</h2><p>You can pay online by UPI, debit or credit card, or netbanking through Razorpay. We do not store your card or UPI details.</p>
+<h2>6. Cash on Delivery</h2><p>Cash on Delivery orders are confirmed with an advance of <b>₹99 paid online</b>. The advance is part of the product price, not an extra fee, and the remaining amount is paid in cash to the courier at delivery. If a Cash on Delivery parcel is refused at the door, or cannot be delivered because the address or phone number given was incorrect, the ₹99 advance is not refunded, as it covers the cost of shipping the parcel both ways. In every other case, including cancellations before dispatch, the advance is refunded in full.</p>
+<h2>7. Shipping, returns and refunds</h2><p>Delivery is covered by our <a href="/shipping-delivery/">Shipping &amp; Delivery Policy</a>. Returns, replacements and refunds are covered by our <a href="/refund-returns-policy/">Refund &amp; Returns Policy</a>.</p>
+<h2>8. Using our products safely</h2><p>Read the label and follow the directions. Patch test on a small area for 24 hours before first use. Avoid the eyes and broken skin. Stop use and consult a doctor if irritation occurs. If you are pregnant, breastfeeding or being treated for a skin condition, ask your doctor before use. Results vary from person to person and are not guaranteed.</p>
+<h2>9. Reviews and content</h2><p>All text, photos, logos and designs on this site belong to %(o)s and may not be copied without permission.</p>
+<h2>10. Limitation of liability</h2><p>To the extent permitted by law, our total liability for any claim relating to an order is limited to the amount you paid for that order. Nothing in these terms limits your rights under the Consumer Protection Act, 2019 or other Indian law.</p>
+<h2>11. Governing law</h2><p>These terms are governed by the laws of India. Any dispute is subject to the jurisdiction of the courts in Uttara Kannada district, Karnataka.</p>
+<h2>12. Changes</h2><p>We may update these terms. The version on this page on the day you place your order applies to that order.</p>
+%(griev)s''' % dict(o=OWNER, biz=BIZ, griev=GRIEV)),
+
+'/refund-returns-policy/': ('Refund & Returns', 'Refund and Returns Policy | Youth Face', 'Youth Face returns and refunds: 7-day return window, which items qualify, how to request a return, who pays return shipping, and refunds in 5 to 7 business days.', '''
+<p>We want you to be happy with your Youth Face order. This policy explains when you can return a product, how to do it, and how and when you are refunded.</p>
+<div class="policy-sum"><div><b>7 days</b><span>to request a return after delivery</span></div><div><b>Free</b><span>replacement or refund if the item is damaged, defective or wrong</span></div><div><b>5–7 days</b><span>for the refund to reach your account after approval</span></div></div>
+<h2>1. Return window</h2><p>You can request a return within <b>7 days of delivery</b>. Requests made after 7 days cannot be accepted, except where required by law.</p>
+<h2>2. Items that can be returned</h2><ul><li><b>Damaged, defective, leaking or wrong items:</b> we replace the item or refund you in full, including any shipping cost. You do not pay anything to return it.</li><li><b>Unopened items you no longer want:</b> accepted within 7 days if the item is unused, sealed and in its original packaging. You arrange and pay for the return shipping. After we receive and check it, we refund the product price.</li></ul>
+<h2>3. Items that cannot be returned</h2><p>For hygiene and safety reasons, cosmetics that have been <b>opened, used, tested or tampered with</b>, or whose seal is broken, cannot be returned unless they arrived damaged, defective or wrong. Your statutory rights are not affected.</p>
+<h2>4. How to request a return</h2><ol><li>Message us on WhatsApp at %(wa)s within 7 days of delivery with your order number or the mobile number used on the order.</li><li>Send clear photos of the product, its packaging and the shipping label. For damaged or leaking items, a short unboxing video helps us resolve it faster.</li><li>We reply within 2 business days. If approved, we tell you whether we will arrange a pickup or how to send the item back. Please do not send items back without approval.</li></ol>
+<h2>5. Refunds</h2><ul><li><b>When:</b> we start the refund within 2 business days of receiving and checking the returned item, or of approving your claim when no return is needed (for example, a wrong item).</li><li><b>Prepaid orders:</b> refunded to the original payment method (UPI, card or bank account) through Razorpay. Banks usually take <b>5 to 7 business days</b> to show the amount.</li><li><b>Cash on Delivery orders:</b> the ₹99 advance is refunded to the original payment method; the cash part is refunded by UPI or bank transfer to the account details you share with us.</li><li>You will receive a confirmation on WhatsApp when the refund is made.</li></ul>
+<h2>6. Replacements</h2><p>If you prefer a replacement for a damaged, defective or wrong item, we ship it free of charge as soon as the claim is approved, subject to stock.</p>
+<h2>7. Cancellations</h2><p>You can cancel an order free of charge at any time <b>before it is dispatched</b> by messaging us on WhatsApp. Any amount paid, including the Cash on Delivery advance, is refunded in full within 5 to 7 business days. Once an order has been dispatched, it cannot be cancelled, but you may refuse delivery or follow the return process above.</p>
+<h2>8. Refused or undeliverable Cash on Delivery orders</h2><p>If a Cash on Delivery parcel is refused at delivery, or returned because the address or phone number was incorrect, the ₹99 advance is not refunded, as it covers two-way shipping. This is shown at checkout before you pay.</p>
+<h2>9. Orders from other sellers</h2><p>This policy covers orders placed on youthfacebeautycream.com. Products bought from other websites or shops follow that seller&rsquo;s policy.</p>
+%(biz)s
+%(griev)s''' % dict(wa=WA_SHOW, biz=BIZ, griev=GRIEV)),
+
+'/shipping-delivery/': ('Shipping & Delivery', 'Shipping & Delivery Policy | Youth Face', 'Youth Face shipping: free shipping across India, dispatched in 1 to 3 business days, delivered in 3 to 7 business days after dispatch, Cash on Delivery and tracking.', '''
+<p>This policy explains where we ship, what it costs and how long it takes.</p>
+<div class="policy-sum"><div><b>₹0</b><span>shipping on every order, anywhere in India</span></div><div><b>1–3 days</b><span>to pack and dispatch (business days)</span></div><div><b>3–7 days</b><span>delivery after dispatch, depending on pincode</span></div></div>
+<h2>1. Where we ship</h2><p>We ship to serviceable pincodes across <b>India only</b>. We do not ship outside India. At checkout, entering your pincode shows your city and an estimated delivery date. If your pincode turns out not to be serviceable after you order, we contact you and refund any amount paid in full.</p>
+<h2>2. Shipping charges</h2><p>Shipping is <b>free</b> on all orders. There is no minimum order value and no extra handling or Cash on Delivery fee.</p>
+<h2>3. Processing time</h2><p>Orders are packed and handed to the courier within <b>1 to 3 business days</b> (Monday to Saturday, excluding public holidays) after payment or Cash on Delivery confirmation. Orders placed on Sundays or holidays are processed on the next business day.</p>
+<h2>4. Delivery time</h2><p>After dispatch, delivery usually takes <b>3 to 7 business days</b>: metro cities are often faster, and remote or hilly areas can take longer. Delivery dates are estimates. Delays can happen because of weather, strikes, festivals or courier issues outside our control; we will help you follow up if your parcel is late.</p>
+<h2>5. Couriers and tracking</h2><p>Orders ship through Shiprocket with trusted courier partners. Once the parcel is collected, you can track it on our <a href="/track-order/">Track Order</a> page using your mobile number and pincode, or your payment ID.</p>
+<h2>6. Cash on Delivery</h2><p>Cash on Delivery is available on most pincodes. You pay ₹99 online to confirm the order, and the remaining amount in cash to the courier at delivery. Please keep the exact amount ready.</p>
+<h2>7. Delivery attempts and address</h2><p>Please enter a complete address with landmark and a mobile number that can be reached. The courier usually makes up to three delivery attempts. If the parcel cannot be delivered, it is returned to us; see our <a href="/refund-returns-policy/">Refund &amp; Returns Policy</a> for what happens next.</p>
+<h2>8. Damaged or tampered parcels</h2><p>If the outer package looks damaged or tampered with, you may refuse it, or take photos before opening. Contact us on WhatsApp within 7 days of delivery and we will replace or refund damaged items at no cost.</p>
+%(biz)s
+%(griev)s''' % dict(biz=BIZ, griev=GRIEV)),
 }
+
 for path, (h, t, d, body) in POL.items():
     page(path, t, d, top('Policy', h, 'Last updated: 9 October 2026') + '<section style="padding-top:20px"><div class="wrap prose">%s</div></section>' % body, crumbs=[(h, path)])
 

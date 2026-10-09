@@ -330,3 +330,13 @@ body.has-bar footer{padding-bottom:100px}
 .nudge-x{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.9);font-size:1.4rem;line-height:1;cursor:pointer;z-index:2;color:var(--ink)}
 @media (max-width:560px){.nudge-box{grid-template-columns:1fr}.nudge-box>img{max-height:200px;object-fit:contain}.nudge-tx h2{font-size:1.5rem}}
 @keyframes nfade{from{opacity:0}to{opacity:1}}
+
+/* policy pages */
+.bizcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:2px;margin:22px 0;font-size:.95rem}
+.bizcard b{font-family:var(--display);font-size:1.15rem;font-weight:600;margin-bottom:4px}
+.bizcard span{color:var(--muted)}
+.policy-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 8px}
+.policy-sum div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.policy-sum b{font-family:var(--display);font-size:1.5rem;font-weight:600;color:var(--accent)}
+.policy-sum span{font-size:.85rem;color:var(--muted);line-height:1.4}
+@media (max-width:640px){.policy-sum{grid-template-columns:1fr}}
