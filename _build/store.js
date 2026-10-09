@@ -114,7 +114,7 @@
       .then(function(r){return r.ok?r.json():Promise.reject(r.status);})
       .then(function(o){loadRzp(function(){var done=false;
         var rz=new window.Razorpay({key:o.key_id,order_id:o.order_id,amount:o.amount,currency:o.currency,name:'Youth Face',description:advance?'Advance for Cash on Delivery':'Youth Face order',
-          prefill:{name:F.name.value.trim(),contact:mobile(F.phone.value)},theme:{color:'#24493F'},
+          prefill:{name:F.name.value.trim(),contact:mobile(F.phone.value)},theme:{color:'#740817'},
           handler:function(resp){done=true;fetch('/api/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(resp)}).then(function(r){return r.json();})
             .then(function(v){thanks(resp.razorpay_payment_id,o,!!v.ok);}).catch(function(){thanks(resp.razorpay_payment_id,o,false);});},
           modal:{ondismiss:function(){stop();if(!done){$('ny-switch').textContent=lastMode==='cod'?'Pay the full amount online instead':'Switch to Cash on Delivery (₹99 now)';$('not-yet').hidden=false;$('not-yet').scrollIntoView({block:'center',behavior:'smooth'});}}}});

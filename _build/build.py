@@ -20,7 +20,9 @@ UP = '/wp-content/uploads/2026/10/'
 
 
 def img(name):
-    """Same path as the old site. Served from this repo when the file is present, otherwise from the old site."""
+    """Images in this repo are given as /assets/... paths. Old-site names fall back to the old site if missing."""
+    if name.startswith('/'):
+        return name
     local = os.path.join(ROOT, UP.strip('/'), name)
     return (UP if os.path.exists(local) else OLD + UP) + name
 
@@ -31,29 +33,29 @@ PRODUCTS = [
          sku='YFB-CREAM-25',
          title='Buy Youth Face Beauty Cream 25g – Pack of 1 (Original) | Kojic Acid & Alpha Arbutin',
          desc='Buy the original Youth Face Beauty Cream 25g with Kojic Acid & Alpha Arbutin, direct from the brand. ₹549, Cash on Delivery available, ships from Bhatkal.',
-         imgs=['Youth-Face-Beauty-Cream-25g.png', 'ChatGPT-Image-Sep-15-2026-05_56_58-PM-1.png', '6be0a814-b1de-412c-98cd-06647184de2d.jpg'],
-         thumb='Youth-Face-Beauty-Cream-25g-600x600.png'),
+         imgs=['/assets/img/yf-pack-1.webp'], og='/assets/img/yf-pack-1.jpg',
+         thumb='/assets/img/yf-pack-1-600.webp'),
     dict(id='p2', wc=17, slug='youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-pack-of-2',
          name='Youth Face Beauty Cream Pack of 2 – Kojic Acid & Alpha Arbutin', card='Beauty Cream · Pack of 2', size='2 × 25 g jars (50 g)', price=999, mrp=1599, badge='Most popular',
          sku='YFB-CREAM-25x2',
          title='Youth Face Beauty Cream Pack of 2 | Kojic Acid & Alpha Arbutin',
          desc='Buy Youth Face Beauty Cream Pack of 2 with Kojic Acid & Alpha Arbutin online in India. 2 × 25g jars for your daily skincare routine. ₹999, COD available.',
-         imgs=['ChatGPT-Image-Sep-17-2026-08_27_12-PM.png', '9c791416-0b6d-4985-8465-48bb4a913b23.jpg', '55e4f26b-d70e-42f0-bc88-0ea37c533cb6.jpg', '319c2295-d196-4a76-9f95-1a0316f45f67.jpg'],
-         thumb='ChatGPT-Image-Sep-17-2026-08_27_12-PM-600x600.png'),
+         imgs=['/assets/img/yf-pack-2.webp', '/assets/img/yf-pack-1.webp'], og='/assets/img/yf-pack-2.jpg',
+         thumb='/assets/img/yf-pack-2-600.webp'),
     dict(id='p3', wc=18, slug='youth-face-beauty-cream-pack-of-3-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-pack-of-3',
          name='Youth Face Beauty Cream Pack of 3 – Kojic Acid & Alpha Arbutin', card='Beauty Cream · Pack of 3', size='3 × 25 g jars (75 g)', price=1444, mrp=1899, badge='Best value',
          sku='YFB-CREAM-25x3',
          title='Youth Face Beauty Cream Pack of 3 | Kojic Acid & Alpha Arbutin',
          desc='Youth Face Beauty Cream Pack of 3: three 25g jars with Kojic Acid & Alpha Arbutin. ₹1,444, best value per jar, free shipping and Cash on Delivery.',
-         imgs=['Youth-Face-Beauty-Cream-skincare-product-for-dark-spot-care.png', '6be0a814-b1de-412c-98cd-06647184de2d.jpg', 'ba3e3a86-0e0f-41bb-93da-3e0e1d486bee.jpg', 'ChatGPT-Image-Sep-15-2026-05_56_58-PM-1.png', 'ChatGPT-Image-Sep-15-2026-05_51_41-PM.png'],
-         thumb='Youth-Face-Beauty-Cream-skincare-product-for-dark-spot-care-600x600.png'),
+         imgs=['/assets/img/yf-pack-3.webp', '/assets/img/yf-pack-1.webp'], og='/assets/img/yf-pack-3.jpg',
+         thumb='/assets/img/yf-pack-3-600.webp'),
     dict(id='lotion', wc=19, slug='youth-face-body-lotion', short='',
          name='Youth Face Body Lotion', card='Body Lotion · 40 ml', size='40 ml bottle', price=599, mrp=599, badge='',
          sku='YFB-LOTION-40',
          title='Youth Face Body Lotion 40ml | Youth Face',
          desc='Youth Face Body Lotion, 40ml: a lightweight, quick-absorbing daily moisturiser for soft, comfortable skin. Order direct from Youth Face, India.',
-         imgs=['ChatGPT-Image-Sep-19-2026-01_47_45-AM.png'],
-         thumb='ChatGPT-Image-Sep-19-2026-01_47_45-AM-600x600.png'),
+         imgs=['/assets/img/yf-body-lotion.webp'], og='/assets/img/yf-body-lotion.jpg',
+         thumb='/assets/img/yf-body-lotion-600.webp'),
 ]
 BYID = {p['id']: p for p in PRODUCTS}
 
@@ -78,14 +80,15 @@ POLICIES = [('/privacy-policy/', 'Privacy Policy'), ('/terms-conditions/', 'Term
 CART_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 7Z"/><path d="M9 7V6a3 3 0 0 1 6 0v1"/></svg>'
 MENU_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>'
 WA_GLYPH = '<img class="wa-glyph" src="/assets/whatsapp-glyph-green.svg" alt="" width="%d" height="%d">'
-BRAND = '<b>Youth</b><i>Face</i>'
+BRAND = '<img src="/assets/img/youth-face-logo-88.png" alt="Youth Face Beauty Cream" width="297" height="88">'
+BRAND_W = '<img src="/assets/img/youth-face-logo-88-white.png" alt="Youth Face Beauty Cream" width="297" height="88">'
 
 pages = []
 
 
 def org_graph():
     return [{
-        '@type': 'Organization', '@id': SITE + '/#org', 'name': 'Youth Face', 'url': SITE + '/', 'legalName': OWNER,
+        '@type': 'Organization', '@id': SITE + '/#org', 'name': 'Youth Face', 'url': SITE + '/', 'legalName': OWNER, 'logo': SITE + '/assets/img/youth-face-logo.png',
         'address': {'@type': 'PostalAddress', 'streetAddress': 'Azad Nagar, 4th Cross', 'addressLocality': 'Bhatkal',
                     'addressRegion': 'Karnataka', 'postalCode': '581320', 'addressCountry': 'IN'},
         'contactPoint': {'@type': 'ContactPoint', 'telephone': '+' + WA, 'contactType': 'customer service', 'areaServed': 'IN'}
@@ -94,7 +97,7 @@ def org_graph():
 
 def product_ld(p):
     return {'@type': 'Product', '@id': SITE + url(p) + '#product', 'name': p['name'], 'sku': p['sku'],
-            'image': [img(i) if img(i).startswith('http') else SITE + img(i) for i in p['imgs']],
+            'image': [SITE + p['og']] + [SITE + i for i in p['imgs']],
             'description': p['desc'], 'brand': {'@type': 'Brand', 'name': 'Youth Face'},
             'offers': {'@type': 'Offer', 'url': SITE + url(p), 'price': str(p['price']), 'priceCurrency': 'INR',
                        'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition',
@@ -116,7 +119,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
     if schema:
         graph += schema
     ld = json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False)
-    ogi = ogimg or img(PRODUCTS[0]['imgs'][0])
+    ogi = ogimg or PRODUCTS[0]['og']
     if not ogi.startswith('http'):
         ogi = SITE + ogi
     tags = ''
@@ -133,7 +136,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
 <meta name="description" content="%(desc)s">
 <meta name="robots" content="%(robots)s">
 <link rel="canonical" href="%(url)s">
-<meta name="theme-color" content="#F7F4EE">
+<meta name="theme-color" content="#FBF3EA">
 <meta property="og:locale" content="en_IN">
 <meta property="og:type" content="%(og)s">
 <meta property="og:site_name" content="Youth Face">
@@ -145,7 +148,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
 %(extra)s<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
 %(tags)s<script type="application/ld+json">%(ld)s</script>
 </head>
@@ -163,7 +166,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
 </main>
 <footer><div class="wrap">
   <div class="fgrid">
-    <div><a class="brand" href="/">%(brand)s</a><p class="about">Premium skincare for a simple everyday routine. %(owner)s, Bhatkal, Karnataka.</p>
+    <div><a class="brand" href="/">%(brandw)s</a><p class="about">Premium skincare for a simple everyday routine. %(owner)s, Bhatkal, Karnataka.</p>
       <div class="accept" aria-label="We accept"><span>UPI</span><span>Cards</span><span>Netbanking</span><span>Cash on Delivery</span></div></div>
     <div><h4>Shop</h4>%(shop)s</div>
     <div><h4>Customer care</h4><a href="/about-us/">About Us</a><a href="/contact/">Contact</a><a href="/faq/">FAQ</a><a href="/track-order/">Track Order</a><a href="/how-to-use/">How To Use</a><a href="/skincare-guides/">Skincare Guides</a></div>
@@ -176,7 +179,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
 </body>
 </html>
 ''' % dict(title=html.escape(title), desc=html.escape(desc), robots='index, follow, max-image-preview:large' if index else 'noindex, follow',
-           url=full, og=og, ogi=ogi, extra=extra_head, tags=tags, ld=ld, brand=BRAND, nav=nav, menu=MENU_SVG, cart=CART_SVG, body=body,
+           url=full, og=og, ogi=ogi, extra=extra_head, tags=tags, ld=ld, brand=BRAND, brandw=BRAND_W, nav=nav, menu=MENU_SVG, cart=CART_SVG, body=body,
            owner=OWNER, addr=ADDR, wa=WA, wash=WA_SHOW, watext='Hi%20Youth%20Face%2C%20I%20need%20help%20with%20my%20order.',
            glyph=WA_GLYPH % (56, 56),
            shop=''.join('<a href="%s">%s</a>' % (url(p), p['card']) for p in PRODUCTS),
@@ -194,12 +197,12 @@ def top(eyebrow, h1, lead=''):
 
 def card(p, h='h3'):
     off = pct(p)
-    return '''<article class="card">%s<a class="ph" href="%s"><img src="%s" alt="%s" width="600" height="600" loading="lazy"></a>
-  <div class="bd"><%s><a href="%s">%s</a></%s><span class="size">%s</span>
+    return '''<article class="card"><a class="ph" href="%s"><img src="%s" alt="%s" width="600" height="600" loading="lazy"></a>
+  <div class="bd">%s<%s><a href="%s">%s</a></%s><span class="size">%s</span>
   <div class="price"><b>%s</b>%s%s</div>
   <div class="acts"><button class="btn ghost" type="button" data-add="%s">Add to cart</button><button class="btn" type="button" data-buy="%s">Buy now</button></div></div></article>''' % (
-        '<span class="badge%s">%s</span>' % (' gold' if p['badge'] == 'Best value' else '', p['badge']) if p['badge'] else '',
-        url(p), img(p['thumb']), html.escape(p['name']), h, url(p), p['card'], h, p['size'], rs(p['price']),
+        url(p), img(p['thumb']), html.escape(p['name']),
+        '<span class="badge%s">%s</span>' % (' gold' if p['badge'] == 'Best value' else '', p['badge']) if p['badge'] else '', h, url(p), p['card'], h, p['size'], rs(p['price']),
         '<s>%s</s>' % rs(p['mrp']) if off else '', '<span class="off">%d%% off</span>' % off if off else '', p['id'], p['id'])
 
 
@@ -235,7 +238,7 @@ home = '''<div class="wrap hero">
     <ul class="ticks"><li>Made for dark-spot care</li><li>For a more even-looking tone</li><li>One small step, morning and night</li></ul>
     <div class="cta"><a class="btn" href="#packs">Shop now</a><a class="btn ghost" href="/how-to-use/">How to use</a></div>
   </div>
-  <div class="hero-media"><div class="frame"><img src="%s" alt="Youth Face Beauty Cream 25g jar with Kojic Acid and Alpha Arbutin" width="1000" height="1000" fetchpriority="high"></div>
+  <div class="hero-media"><div class="frame"><img src="%s" alt="Youth Face Beauty Cream 25g jar and box, Kojic Acid and Alpha Arbutin" width="1000" height="1000" fetchpriority="high"></div>
     <span class="chip a">From <b>₹549</b> · COD available</span><span class="chip b">100%% original</span></div>
 </div>
 <div class="wrap trust">
@@ -257,14 +260,14 @@ home = '''<div class="wrap hero">
   </div>
 </div></section>
 <section><div class="wrap band">
-  <div><span class="eyebrow" style="color:#E7C98C">How to use</span><h2>Your routine in three steps</h2><p>Consistency matters more than quantity. Use it daily for several weeks and judge in the same light.</p><p style="margin-top:22px"><a class="btn gold" href="/how-to-use/">Read the full guide</a></p></div>
+  <div><span class="eyebrow" style="color:#E9C98B">How to use</span><h2>Your routine in three steps</h2><p>Consistency matters more than quantity. Use it daily for several weeks and judge in the same light.</p><p style="margin-top:22px"><a class="btn gold" href="/how-to-use/">Read the full guide</a></p></div>
   <ol><li>Wash your face with a gentle cleanser and pat dry.</li><li>Apply a small amount to the face and neck and massage in.</li><li>In the morning, finish with a broad-spectrum sunscreen.</li></ol>
 </div></section>
 <section><div class="wrap">
   <div class="sec-h"><span class="eyebrow">Questions</span><h2>Before you order</h2></div>
   %s
   <p style="margin-top:22px"><a class="btn ghost" href="/faq/">All questions</a></p>
-</div></section>''' % (img(PRODUCTS[0]['imgs'][0]), ICON['orig'], ICON['cod'], ICON['wa'], ICON['routine'],
+</div></section>''' % ('/assets/img/yf-pack-2.webp', ICON['orig'], ICON['cod'], ICON['wa'], ICON['routine'],
                          ''.join(card(p) for p in PRODUCTS), faq_html(HOME_FAQ))
 page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin | Official Store',
      'Youth Face is a modern Indian skincare brand: Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹549, free shipping, COD.',
@@ -324,7 +327,7 @@ for p in PRODUCTS:
         tabs=''.join('<details%s><summary>%s</summary><div class="in">%s</div></details>' % (' open' if n == 0 else '', t, c) for n, (t, c) in enumerate(tabs)),
         faq=faq_html(PDP_FAQ), rel=''.join(card(q) for q in others))
     ogt = '<meta property="product:brand" content="Youth Face">\n<meta property="product:availability" content="in stock">\n<meta property="product:condition" content="new">\n<meta property="product:price:amount" content="%d">\n<meta property="product:price:currency" content="INR">\n<meta property="product:retailer_item_id" content="%s">\n' % (p['price'], p['sku'])
-    page(url(p), p['title'], p['desc'], body, og='product', ogimg=img(p['imgs'][0]), extra_head=ogt,
+    page(url(p), p['title'], p['desc'], body, og='product', ogimg=p['og'], extra_head=ogt,
          crumbs=[('Shop', '/shop/'), (p['card'], url(p))], schema=[product_ld(p), faq_ld(PDP_FAQ)])
 
 # ---------------- Cart & checkout ----------------
@@ -471,7 +474,7 @@ os.makedirs(os.path.join(ROOT, 'assets'), exist_ok=True)
 shutil.copy(os.path.join(B, 'site.css'), os.path.join(ROOT, 'assets', 'site.css'))
 shutil.copy(os.path.join(B, 'store.js'), os.path.join(ROOT, 'assets', 'store.js'))
 open(os.path.join(ROOT, 'assets', 'products.json'), 'w').write(json.dumps({p['id']: {'name': p['name'], 'card': p['card'], 'price': p['price'], 'mrp': p['mrp'], 'img': img(p['thumb']), 'url': url(p), 'wc': p['wc']} for p in PRODUCTS}, ensure_ascii=False))
-open(os.path.join(ROOT, 'assets', 'icon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#24493F"/><text x="32" y="43" text-anchor="middle" font-family="Georgia,serif" font-size="30" fill="#F7F4EE">Y<tspan font-style="italic" fill="#E7C98C">F</tspan></text></svg>')
+open(os.path.join(ROOT, 'assets', 'icon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#740817"/><text x="32" y="44" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="32" fill="#FBF3EA">YF</text></svg>')
 
 sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for pth in pages:
@@ -492,6 +495,11 @@ for src, dst in [('/my-account', '/track-order/'), ('/my-account/:path*', '/trac
                  ('/page-sitemap.xml', '/sitemap.xml'), ('/post-sitemap.xml', '/sitemap.xml'), ('/wp-sitemap-:rest*', '/sitemap.xml'),
                  ('/about', '/about-us/'), ('/shipping-policy/', '/shipping-delivery/'), ('/refund_returns/', '/refund-returns-policy/')]:
     redirects.append({'source': src, 'destination': dst, 'permanent': True})
+# Old WordPress image addresses (indexed by Google Images) point to the matching new photo.
+OLD_IMG = {'Youth-Face-Beauty-Cream-25g': 'yf-pack-1', 'ChatGPT-Image-Sep-17-2026-08_27_12-PM': 'yf-pack-2',
+           'Youth-Face-Beauty-Cream-skincare-product-for-dark-spot-care': 'yf-pack-3', 'ChatGPT-Image-Sep-19-2026-01_47_45-AM': 'yf-body-lotion'}
+for old, new in OLD_IMG.items():
+    redirects.append({'source': '/wp-content/uploads/2026/10/%s(-600x600)?.png' % old, 'destination': '/assets/img/%s.jpg' % new, 'permanent': True})
 for src in ['/wp-admin', '/wp-admin/:path*', '/wp-login.php', '/xmlrpc.php']:
     redirects.append({'source': src, 'destination': '/', 'permanent': False})
 vercel = {'cleanUrls': False, 'redirects': redirects,
@@ -499,5 +507,5 @@ vercel = {'cleanUrls': False, 'redirects': redirects,
                       {'source': '/(cart|checkout)/(.*)', 'headers': [{'key': 'X-Robots-Tag', 'value': 'noindex'}]}]}
 open(os.path.join(ROOT, 'vercel.json'), 'w').write(json.dumps(vercel, indent=2) + '\n')
 open(os.path.join(ROOT, '.vercelignore'), 'w').write('_build\nREADME.md\n')
-missing = [i for p in PRODUCTS for i in set(p['imgs'] + [p['thumb']]) if not os.path.exists(os.path.join(ROOT, UP.strip('/'), i))]
+missing = [i for p in PRODUCTS for i in set(p['imgs'] + [p['thumb']]) if not os.path.exists(os.path.join(ROOT, i.strip('/')))]
 print('built', len(pages), 'indexed pages;', len(redirects), 'redirects;', len(set(missing)), 'images still served from the old site')
