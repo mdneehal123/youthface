@@ -10,7 +10,7 @@ const PICKUP = 'Primary';
 // Owner to confirm real box sizes; these are safe estimates.
 const BOX = { weight: 0.1, length: 10, breadth: 10, height: 8 };
 function parcel(cart) {
-  const units = cart.lines.reduce((a, l) => a + l.qty * (/x3$/.test(l.sku) ? 3 : /x2$/.test(l.sku) ? 2 : 1), 0);
+  const units = cart.lines.reduce((a, l) => a + l.qty * (/x3$/.test(l.sku) ? 3 : /x2$|COMBO/.test(l.sku) ? 2 : 1), 0);
   const weight = Math.max(0.1, Math.round((cart.kg + 0.05) * 100) / 100);
   if (units <= 1) return { weight, length: 10, breadth: 10, height: 8 };
   if (units <= 3) return { weight, length: 15, breadth: 12, height: 8 };

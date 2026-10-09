@@ -57,7 +57,15 @@ PRODUCTS = [
          desc='Youth Face Body Lotion, 40ml: a lightweight, quick-absorbing daily moisturiser for soft, comfortable skin. Order direct from Youth Face, India.',
          imgs=['/assets/img/yf-body-lotion.webp'], og='/assets/img/yf-body-lotion.jpg',
          thumb='/assets/img/yf-body-lotion-600.webp'),
+    dict(id='combo', wc=0, slug='youth-face-beauty-cream-body-lotion-combo', short='',
+         name='Youth Face Combo – Beauty Cream 25g + Body Lotion 40ml', card='Combo · Cream + Lotion', size='25 g cream + 40 ml lotion', price=999, mrp=1498, badge='Face + body',
+         sku='YFB-COMBO-CL',
+         title='Youth Face Combo: Beauty Cream + Body Lotion | ₹999 | Kojic Acid & Alpha Arbutin',
+         desc='Youth Face Combo: Beauty Cream 25g with Kojic Acid & Alpha Arbutin for the face plus Body Lotion 40ml for the body, together for ₹999. Free shipping, COD available.',
+         imgs=['/assets/img/yf-combo.webp', '/assets/img/yf-pack-1.webp', '/assets/img/yf-body-lotion.webp'], og='/assets/img/yf-combo.jpg',
+         thumb='/assets/img/yf-combo-600.webp'),
 ]
+MAIN = [p for p in PRODUCTS if p['id'] != 'combo']
 BYID = {p['id']: p for p in PRODUCTS}
 
 
@@ -208,6 +216,17 @@ def card(p, h='h3'):
         '<s>%s</s>' % rs(p['mrp']) if off else '', '<span class="off">%d%% off</span>' % off if off else '', p['id'], p['id'])
 
 
+def combo_band(h='h2'):
+    c = BYID['combo']
+    sep = BYID['p1']['price'] + BYID['lotion']['price']
+    return '''<div class="combo"><a class="ph" href="%s"><img src="%s" alt="Youth Face Combo: Beauty Cream and Body Lotion" width="600" height="600" loading="lazy"></a>
+  <div class="combo-tx"><span class="eyebrow">Combo offer · Face + body</span><%s><a href="%s">Beauty Cream + Body Lotion</a></%s>
+  <p>Youth Face Beauty Cream 25 g for your face and Body Lotion 40 ml for your body, together for %s. That is %s less than buying them separately.</p>
+  <div class="price"><b>%s</b><s>MRP %s</s><span class="off">%d%% off</span></div>
+  <div class="acts"><button class="btn ghost" type="button" data-add="combo">Add to cart</button><button class="btn" type="button" data-buy="combo">Buy the combo</button></div></div></div>''' % (
+        url(c), img(c['thumb']), h, url(c), h, rs(c['price']), rs(sep - c['price']), rs(c['price']), rs(c['mrp']), pct(c))
+
+
 def faq_html(items):
     return '<div class="faq">' + ''.join('<details><summary>%s</summary><p>%s</p></details>' % (q, a) for q, a in items) + '</div>'
 
@@ -251,7 +270,7 @@ home = '''<div class="wrap hero">
 </div>
 <section id="packs"><div class="wrap">
   <div class="sec-h"><span class="eyebrow">Find your ritual</span><h2>Choose your Youth Face pack</h2><p>Start with one jar, or save more with a pack of two or three. Free shipping on every order.</p></div>
-  <div class="grid">%s</div>
+  <div class="grid">%s</div>%s
 </div></section>
 <section><div class="wrap">
   <div class="sec-h"><span class="eyebrow">The formula</span><h2>Two proven ingredients. One easy habit.</h2></div>
@@ -270,14 +289,14 @@ home = '''<div class="wrap hero">
   %s
   <p style="margin-top:22px"><a class="btn ghost" href="/faq/">All questions</a></p>
 </div></section>''' % ('/assets/img/yf-pack-2.webp', ICON['orig'], ICON['cod'], ICON['wa'], ICON['routine'],
-                         ''.join(card(p) for p in PRODUCTS), faq_html(HOME_FAQ))
+                         ''.join(card(p) for p in MAIN), combo_band(), faq_html(HOME_FAQ))
 page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin | Official Store',
      'Youth Face is a modern Indian skincare brand: Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹549, free shipping, COD.',
      home, og='website', schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + url(p)} for i, p in enumerate(PRODUCTS)]}, faq_ld(HOME_FAQ)])
 
 # ---------------- Shop ----------------
 shop = top('Shop', 'Shop Youth Face', 'Beauty Cream in packs of one, two and three, and the Youth Face Body Lotion. Free shipping and Cash on Delivery on every order.') + \
-    '<section style="padding-top:28px"><div class="wrap"><div class="grid">%s</div></div></section>' % ''.join(card(p, 'h2') for p in PRODUCTS)
+    '<section style="padding-top:28px"><div class="wrap"><div class="grid">%s</div>%s</div></section>' % (''.join(card(p, 'h2') for p in MAIN), combo_band('h2'))
 page('/shop/', 'Shop Youth Face Skincare | Beauty Cream & Body Lotion', 'Shop Youth Face Beauty Cream (Pack of 1, 2 and 3) with Kojic Acid & Alpha Arbutin, and Youth Face Body Lotion. Free shipping, COD available.',
      shop, crumbs=[('Shop', '/shop/')], schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + url(p)} for i, p in enumerate(PRODUCTS)]}])
 
@@ -293,6 +312,11 @@ LOTION_TABS = [
     ('How to use', '<p>Apply a generous amount to clean, dry body skin and massage gently until absorbed. Use daily, or whenever your skin feels dry.</p>'),
     ('Shipping & payment', CREAM_TABS[3][1]),
 ]
+COMBO_TABS = [
+    ('What you get', '<p><b>1 × Youth Face Beauty Cream, 25 g jar</b>: a daily face cream with Kojic Acid and Alpha Arbutin for dark-spot care and a more even-looking tone.</p><p><b>1 × Youth Face Body Lotion, 40 ml</b>: a lightweight, quick-absorbing daily moisturiser for soft, comfortable body skin.</p>'),
+    ('How to use', '<p><b>Face:</b> apply a pea-sized amount of the Beauty Cream to clean, dry face and neck, once or twice a day, with sunscreen every morning.</p><p><b>Body:</b> apply the Body Lotion generously to clean, dry skin after a bath and massage until absorbed.</p><p>Patch test both products first. Avoid the eyes. Stop use if irritation occurs.</p>'),
+    ('Shipping & payment', CREAM_TABS[3][1]),
+]
 PDP_FAQ = [
     ('Is this the original Youth Face product?', 'Yes. This is the official Youth Face store and every order ships directly from the brand.'),
     ('Can I pay Cash on Delivery?', 'Yes. Pay ₹99 online to confirm and the rest in cash at delivery, or pay the full amount online.'),
@@ -302,10 +326,11 @@ for p in PRODUCTS:
     off = pct(p)
     thumbs = ''.join('<button type="button" data-src="%s"%s aria-label="Picture %d"><img src="%s" alt="" width="76" height="76" loading="lazy"></button>' % (
         img(i), ' class="on"' if n == 0 else '', n + 1, img(i)) for n, i in enumerate(p['imgs'])) if len(p['imgs']) > 1 else ''
-    tabs = CREAM_TABS if p['id'] != 'lotion' else LOTION_TABS
+    tabs = COMBO_TABS if p['id'] == 'combo' else CREAM_TABS if p['id'] != 'lotion' else LOTION_TABS
     others = [q for q in PRODUCTS if q['id'] != p['id']][:3]
     summary = ('One %s with Kojic Acid &amp; Alpha Arbutin for dark-spot care and a more even-looking tone.' % p['size']) if p['id'] == 'p1' else \
         ('%s of Youth Face Beauty Cream with Kojic Acid &amp; Alpha Arbutin. Better value per jar for regular use.' % p['size'].capitalize()) if p['id'] in ('p2', 'p3') else \
+        ('One jar of Youth Face Beauty Cream (25 g) for the face and one Youth Face Body Lotion (40 ml) for the body, together for %s instead of %s when bought separately.' % (rs(p['price']), rs(BYID['p1']['price'] + BYID['lotion']['price']))) if p['id'] == 'combo' else \
         'A lightweight, quick-absorbing daily moisturiser for soft, comfortable skin.'
     body = '''<div class="wrap pdp" data-product="%(id)s">
   <div class="gallery"><div class="main"><img id="pdp-img" src="%(main)s" alt="%(alt)s" width="1000" height="1000" fetchpriority="high"></div><div class="thumbs">%(thumbs)s</div></div>

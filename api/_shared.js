@@ -3,7 +3,8 @@ const PRODUCTS = {
   p1: { name: 'Youth Face Beauty Cream 25g, Pack of 1', sku: 'YFB-CREAM-25', price: 549, mrp: 899, kg: 0.06 },
   p2: { name: 'Youth Face Beauty Cream, Pack of 2', sku: 'YFB-CREAM-25x2', price: 999, mrp: 1599, kg: 0.12 },
   p3: { name: 'Youth Face Beauty Cream, Pack of 3', sku: 'YFB-CREAM-25x3', price: 1444, mrp: 1899, kg: 0.18 },
-  lotion: { name: 'Youth Face Body Lotion 40ml', sku: 'YFB-LOTION-40', price: 599, mrp: 599, kg: 0.07 }
+  lotion: { name: 'Youth Face Body Lotion 40ml', sku: 'YFB-LOTION-40', price: 599, mrp: 599, kg: 0.07 },
+  combo: { name: 'Youth Face Combo: Beauty Cream 25g + Body Lotion 40ml', sku: 'YFB-COMBO-CL', price: 999, mrp: 1498, kg: 0.13 }
 };
 const BRAND = 'Youth Face';
 // Cash on Delivery needs this much paid online in advance. The rest is collected at the door.
