@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  var WA='919980881230', ADVANCE=99, KEY='yf-cart', DETAILS='yf-details', ORDERS='yf-orders';
+  var WA='919980881230', ADVANCE=99, KEY='yf-cart', DETAILS='yf-details', ORDERS='yf-orders', PENDING='yf-pending', NUDGE='yf-nudge';
   var P=null, $=function(id){return document.getElementById(id);};
   function rs(n){return '₹'+Number(n).toLocaleString('en-IN');}
   function el(tag,cls,text){var e=document.createElement(tag);if(cls){e.className=cls;}if(text!=null){e.textContent=text;}return e;}
@@ -39,6 +39,8 @@
     if($('cart-lines')){renderCart();}
     if($('checkout')){checkout();}
     if($('track-form')){trackPage();}
+    if(!$('checkout')&&!$('ro-form')){resumeStrip();nudge();}
+    buyBar();
   }
   fetch('/assets/products.json').then(function(r){return r.json();}).then(function(d){P=d;boot();}).catch(function(){P={};badge();});
 
@@ -94,6 +96,9 @@
       if(!busy){btn.textContent=m==='online'?'Pay '+rs(t.total)+' securely':m==='cod'?'Pay '+rs(ADVANCE)+' to confirm order':'Send order on WhatsApp';}
     }
     [].slice.call(document.querySelectorAll('input[name=pay]')).forEach(function(r){r.addEventListener('change',render);});
+    var pend=load(PENDING,null);
+    if(pend&&Date.now()-pend.at<3*864e5&&lines().length){var r0=document.querySelector('input[name=pay][value='+(pend.mode==='cod'?'cod':'online')+']');if(r0){r0.checked=true;}
+      var wb=el('p','welcome','Welcome back! Your details are already filled in. One tap below and your order is placed.');btn.insertAdjacentElement('beforebegin',wb);}
     render();
     // pincode → city and delivery estimate
     var pinSeen='',cityAuto='';
@@ -117,7 +122,7 @@
           prefill:{name:F.name.value.trim(),contact:mobile(F.phone.value)},theme:{color:'#740817'},
           handler:function(resp){done=true;fetch('/api/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(resp)}).then(function(r){return r.json();})
             .then(function(v){thanks(resp.razorpay_payment_id,o,!!v.ok);}).catch(function(){thanks(resp.razorpay_payment_id,o,false);});},
-          modal:{ondismiss:function(){stop();if(!done){$('ny-switch').textContent=lastMode==='cod'?'Pay the full amount online instead':'Switch to Cash on Delivery (₹99 now)';$('not-yet').hidden=false;$('not-yet').scrollIntoView({block:'center',behavior:'smooth'});}}}});
+          modal:{ondismiss:function(){stop();if(!done){save(PENDING,{mode:lastMode,at:Date.now()});$('ny-switch').textContent=lastMode==='cod'?'Pay the full amount online instead':'Switch to Cash on Delivery (₹99 now)';$('not-yet').hidden=false;$('not-yet').scrollIntoView({block:'center',behavior:'smooth'});}}}});
         rz.on('payment.failed',function(){stop('The payment did not go through. Nothing is charged unless your bank shows a debit. Please try again.');});rz.open();},
         function(){stop('The payment window could not load. Check your connection and try again, or order on WhatsApp.');});})
       .catch(function(){stop('Online payment is not available right now. Please try again in a few minutes, or order on WhatsApp.');});
@@ -128,7 +133,7 @@
       if(m==='wa'){remember();window.open(waUrl(),'_blank','noopener');return;}pay(m==='cod');});
     function thanks(pid,o,ok){
       var t=totals(),cod=o.balance>0;var past=load(ORDERS,[]).filter(function(x){return x&&x.id!==pid;});past.unshift({id:pid,at:Date.now(),items:t.lines.map(function(x){return x.p.card+(x.qty>1?' ×'+x.qty:'');}).join(', ')});save(ORDERS,past.slice(0,5));
-      setCart({});
+      setCart({});try{localStorage.removeItem(PENDING);}catch(e){}
       var wrap=$('checkout');wrap.textContent='';var box=el('div','panel thanks');box.style.gridColumn='1 / -1';
       box.appendChild(el('span','tick','✓'));box.appendChild(el('h2',null,ok?(cod?'Order confirmed. Thank you!':'Payment received. Thank you!'):'Payment submitted. We are confirming it.'));
       box.appendChild(el('p','muted','We will pack your order within 1 to 3 business days and send it with free shipping.'));
@@ -181,5 +186,51 @@
     var mine=load(ORDERS,[]).filter(function(o){return o&&/^pay_/.test(o.id);});
     var q=new URLSearchParams(location.search).get('id');
     if(q){setMode(false);$('t-id').value=q;run();}else if(mine.length){setMode(false);$('t-id').value=mine[0].id;run();}
+  }
+  /* ---------------- unfinished-order strip (all pages except checkout) ---------------- */
+  function resumeStrip(){
+    var t=totals();if(!t.lines.length){return;}
+    var pend=load(PENDING,null),det=load(DETAILS,null);if(!pend&&!det){return;}
+    try{if(sessionStorage.getItem('yf-strip-x')){return;}}catch(e){}
+    var n=count(),bar=el('div','resume');bar.setAttribute('role','region');bar.setAttribute('aria-label','Unfinished order');
+    var w=el('div','wrap resume-in');
+    w.appendChild(el('p',null,pend?'Your order is one tap away. The payment didn’t finish last time, and your details are saved.':'You left '+(n===1?'a jar':n+' items')+' in your cart ('+rs(t.total)+'). Your details are saved.'));
+    var go=el('a','btn sm','Finish my order');go.href='/checkout/';w.appendChild(go);
+    var x=el('button','resume-x','×');x.type='button';x.setAttribute('aria-label','Hide');x.addEventListener('click',function(){bar.remove();try{sessionStorage.setItem('yf-strip-x','1');}catch(e){}});w.appendChild(x);
+    bar.appendChild(w);var main=$('main');main.insertBefore(bar,main.firstChild);
+  }
+
+  /* ---------------- sticky Buy bar on product pages ---------------- */
+  function buyBar(){
+    var bar=$('buybar'),acts=document.querySelector('.pdp .acts');if(!bar||!acts){return;}
+    var ticking=false;
+    function check(){ticking=false;var show=acts.getBoundingClientRect().bottom<0;if(bar.hidden===show){bar.hidden=!show;document.body.classList.toggle('has-bar',show);}}
+    window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(check);}},{passive:true});check();
+  }
+
+  /* ---------------- 3½-minute pop-up (once every 3 days, never on cart/checkout) ---------------- */
+  function nudge(){
+    if(/^\/(cart|checkout|reorder)\//.test(location.pathname)){return;}
+    var last=load(NUDGE,0);if(Date.now()-last<3*864e5){return;}
+    if(load(ORDERS,[]).some(function(o){return o&&Date.now()-o.at<30*864e5;})){return;}
+    var secs=0,timer=setInterval(function(){if(document.visibilityState==='visible'){secs++;}if(secs>=210){clearInterval(timer);open();}},1000);
+    function open(){
+      if(document.querySelector('.nudge')){return;}save(NUDGE,Date.now());
+      var p2=P.p2||{},bg=el('div','nudge');bg.setAttribute('role','dialog');bg.setAttribute('aria-modal','true');bg.setAttribute('aria-labelledby','nudge-h');
+      var box=el('div','nudge-box'),x=el('button','nudge-x','×');x.type='button';x.setAttribute('aria-label','Close');
+      var im=el('img');im.src=p2.img||'';im.alt='Youth Face Beauty Cream, Pack of 2';im.width=600;im.height=600;
+      var tx=el('div','nudge-tx');tx.appendChild(el('span','eyebrow','3½ minutes and counting'));
+      var h=el('h2',null,'Still scrolling? Your skin noticed.');h.id='nudge-h';tx.appendChild(h);
+      tx.appendChild(el('p','muted','That’s longer than most people spend choosing a sunscreen. Your dark spots won’t read the guides for you — but a jar can sit on your shelf by next week.'));
+      var pr=el('p','nudge-pr');pr.appendChild(el('b',null,'Pack of 2 · '+rs(p2.price||999)));if(p2.mrp>p2.price){pr.appendChild(el('s',null,rs(p2.mrp)));}pr.appendChild(el('span',null,'Free shipping · Cash on Delivery'));tx.appendChild(pr);
+      var go=el('button','btn block','Okay fine, I’ll take the Pack of 2');go.type='button';go.setAttribute('data-buy','p2');tx.appendChild(go);
+      var no=el('button','nudge-no','Still browsing. Let me be.');no.type='button';tx.appendChild(no);
+      box.appendChild(x);box.appendChild(im);box.appendChild(tx);bg.appendChild(box);document.body.appendChild(bg);
+      var prev=document.activeElement;go.focus({preventScroll:true});
+      function close(){bg.remove();document.removeEventListener('keydown',esc);if(prev&&prev.focus){prev.focus({preventScroll:true});}}
+      function esc(e){if(e.key==='Escape'){close();}}
+      x.addEventListener('click',close);no.addEventListener('click',close);bg.addEventListener('click',function(e){if(e.target===bg){close();}});document.addEventListener('keydown',esc);
+      if(typeof gtag==='function'){gtag('event','nudge_shown');}
+    }
   }
 })();

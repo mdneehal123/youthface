@@ -274,3 +274,59 @@ footer .about{font-size:.9rem;margin-top:10px;max-width:34ch}
 .hero h1{font-weight:500}
 @media (max-width:520px){.brand img{height:38px}}
 .card .badge{position:static;align-self:flex-start;margin-bottom:2px}
+
+/* small buttons, owner page */
+.btn.sm{min-height:40px;padding:0 18px;font-size:.84rem}
+.form select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+.byline{font-weight:700;margin-bottom:10px}
+.ro-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:0 0 14px}
+.ro-tiles div{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:2px}
+.ro-tiles b{font-family:var(--display);font-size:1.5rem;font-weight:600;font-variant-numeric:tabular-nums}
+.ro-tiles span{font-size:.8rem;color:var(--muted)}
+.ro-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding:14px 0}
+.ro-row>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ro-row span{font-size:.86rem;color:var(--muted)}
+.ro-row.is-sent{opacity:.55}
+
+/* unfinished-order strip */
+.resume{background:var(--gold-soft);border-bottom:1px solid #E8D3A8}
+.resume-in{display:flex;align-items:center;gap:14px;padding-block:10px;flex-wrap:wrap}
+.resume-in p{flex:1;min-width:200px;font-weight:600;font-size:.92rem}
+.resume-x{background:none;border:0;font-size:1.5rem;line-height:1;cursor:pointer;color:var(--muted);padding:4px 6px}
+.welcome{background:var(--gold-soft);border-radius:12px;padding:12px 14px;font-weight:600;font-size:.92rem}
+
+/* sticky buy bar (product pages) */
+.buybar{position:fixed;left:0;right:0;bottom:0;z-index:35;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(116,8,23,.08);padding-bottom:env(safe-area-inset-bottom,0px)}
+.buybar-in{display:flex;align-items:center;gap:12px;padding-block:10px}
+.buybar img{width:48px;height:48px;border-radius:10px;object-fit:cover;flex:0 0 auto}
+.bb-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.bb-t>b{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bb-t span b{font-family:var(--display);font-size:1.15rem}
+.bb-t s{color:var(--muted);font-size:.82rem;margin-left:6px}
+.buybar .btn{min-height:46px;padding:0 24px;flex:0 0 auto}
+body.has-bar .wa-float{bottom:92px}
+body.has-bar footer{padding-bottom:100px}
+
+/* guide article */
+.article{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px;align-items:start}
+.guide-cta{position:sticky;top:96px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:6px}
+.guide-cta img{border-radius:14px;margin-bottom:8px;background:var(--bg)}
+.guide-cta b{font-family:var(--display);font-size:1.25rem;font-weight:600}
+.guide-cta span{font-size:.85rem;color:var(--muted);margin-bottom:8px}
+@media (max-width:900px){.article{grid-template-columns:1fr}.guide-cta{position:static;max-width:420px}}
+
+/* 3½-minute pop-up */
+.nudge{position:fixed;inset:0;z-index:80;background:rgba(42,18,21,.55);display:flex;align-items:center;justify-content:center;padding:16px;animation:nfade .25s ease}
+.nudge-box{position:relative;background:var(--surface);border-radius:24px;max-width:640px;width:100%;display:grid;grid-template-columns:1fr 1.15fr;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.3);max-height:calc(100vh - 32px);overflow-y:auto}
+.nudge-box>img{width:100%;height:100%;object-fit:cover;background:var(--bg)}
+.nudge-tx{padding:26px 24px 20px;display:flex;flex-direction:column;gap:10px}
+.nudge-tx h2{font-size:1.75rem}
+.nudge-tx p{font-size:.92rem}
+.nudge-pr{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.nudge-pr b{font-family:var(--display);font-size:1.25rem}
+.nudge-pr s{color:var(--muted)}
+.nudge-pr span{flex-basis:100%;font-size:.8rem;color:var(--ok);font-weight:700}
+.nudge-no{background:none;border:0;color:var(--muted);text-decoration:underline;font:inherit;font-size:.85rem;cursor:pointer;padding:6px}
+.nudge-x{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.9);font-size:1.4rem;line-height:1;cursor:pointer;z-index:2;color:var(--ink)}
+@media (max-width:560px){.nudge-box{grid-template-columns:1fr}.nudge-box>img{max-height:200px;object-fit:contain}.nudge-tx h2{font-size:1.5rem}}
+@keyframes nfade{from{opacity:0}to{opacity:1}}

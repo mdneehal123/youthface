@@ -104,7 +104,7 @@ def product_ld(p):
                        'seller': {'@id': SITE + '/#org'}}}
 
 
-def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='website', ogimg=None, extra_head=''):
+def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='website', ogimg=None, extra_head='', js='store.js'):
     full = SITE + path
     nav = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == path else '', t) for h, t in NAV)
     graph = org_graph()
@@ -175,13 +175,14 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
   <div class="legal"><span>© 2026 Youth Face · %(owner)s · %(addr)s</span><span>Online payments by Razorpay. Cosmetic product; results vary from person to person.</span></div>
 </div></footer>
 <a class="wa-float" href="https://wa.me/%(wa)s?text=%(watext)s" target="_blank" rel="noopener" aria-label="Chat with Youth Face on WhatsApp">%(glyph)s</a>
-<script src="/assets/store.js" defer></script>
+%(js)s
 </body>
 </html>
 ''' % dict(title=html.escape(title), desc=html.escape(desc), robots='index, follow, max-image-preview:large' if index else 'noindex, follow',
            url=full, og=og, ogi=ogi, extra=extra_head, tags=tags, ld=ld, brand=BRAND, brandw=BRAND_W, nav=nav, menu=MENU_SVG, cart=CART_SVG, body=body,
            owner=OWNER, addr=ADDR, wa=WA, wash=WA_SHOW, watext='Hi%20Youth%20Face%2C%20I%20need%20help%20with%20my%20order.',
            glyph=WA_GLYPH % (56, 56),
+           js=''.join('<script src="/assets/%s" defer></script>' % j for j in js.split(',')),
            shop=''.join('<a href="%s">%s</a>' % (url(p), p['card']) for p in PRODUCTS),
            pol=''.join('<a href="%s">%s</a>' % (h, t) for h, t in POLICIES))
     out = os.path.join(ROOT, path.strip('/'), 'index.html') if path not in ('/404',) else os.path.join(ROOT, '404.html')
@@ -320,7 +321,9 @@ for p in PRODUCTS:
   </div>
 </div>
 <section style="padding-top:20px"><div class="wrap"><div class="sec-h"><h2>Questions</h2></div>%(faq)s</div></section>
-<section style="padding-top:20px"><div class="wrap"><div class="sec-h"><span class="eyebrow">You may also like</span><h2>More from Youth Face</h2></div><div class="grid three">%(rel)s</div></div></section>''' % dict(
+<section style="padding-top:20px"><div class="wrap"><div class="sec-h"><span class="eyebrow">You may also like</span><h2>More from Youth Face</h2></div><div class="grid three">%(rel)s</div></div></section>
+<div class="buybar" id="buybar" hidden><div class="wrap buybar-in"><img src="%(thumb)s" alt="" width="48" height="48"><div class="bb-t"><b>%(card)s</b><span><b>%(price)s</b>%(bbmrp)s</span></div><button class="btn" type="button" data-buy="%(id)s" data-useqty>Buy now</button></div></div>''' % dict(
+        thumb=img(p['thumb']), card='Body Lotion' if p['id'] == 'lotion' else p['card'].split(' · ')[-1], bbmrp=' <s>%s</s>' % rs(p['mrp']) if off else '',
         id=p['id'], main=img(p['imgs'][0]), alt=html.escape(p['name']), thumbs=thumbs,
         badge=' · ' + p['badge'] if p['badge'] else '', name=html.escape(p['name']), price=rs(p['price']),
         mrp='<s>MRP %s</s>' % rs(p['mrp']) if off else '', off='<span class="off">%d%% off</span>' % off if off else '', size=p['size'], summary=summary,
@@ -350,7 +353,7 @@ checkout_body = top('Checkout', 'Checkout', 'Enter your delivery details and cho
     <label><input type="radio" name="pay" value="wa"><span>Order on WhatsApp<small>Send your order, we confirm on chat</small></span><b id="amt-wa"></b></label>
   </fieldset>
   <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Cash on Delivery orders are confirmed with a ₹99 advance paid online now. It is part of the price, not an extra charge. If the parcel is refused at delivery, the ₹99 is not refunded.</p>
-  <div class="notyet" id="not-yet" hidden><p><b>Your order isn't placed yet.</b> The payment wasn't completed. Your details are saved, so you can finish in one tap.</p><button type="button" class="btn" id="ny-retry">Try payment again</button><button type="button" class="btn ghost" id="ny-switch">Switch to Cash on Delivery</button></div>
+  <div class="notyet" id="not-yet" hidden><p><b>Plot twist: your order isn't placed yet.</b> The payment window closed before it finished. Nothing is lost. Your details are saved, so it's one tap from here.</p><button type="button" class="btn" id="ny-retry">Try payment again</button><button type="button" class="btn ghost" id="ny-switch">Switch to Cash on Delivery</button></div>
   <p class="oerr" id="co-err" role="alert" hidden></p>
   <button class="btn block" type="submit" id="co-pay">Pay securely</button>
   <p class="muted" style="font-size:.8rem">Your details are used only to deliver this order, and we may message you on this number about it. See our <a href="/privacy-policy/">privacy policy</a>.</p>
@@ -391,24 +394,89 @@ page('/faq/', 'Youth Face FAQ | Orders, COD, Delivery & Usage', 'Answers about Y
      crumbs=[('FAQ', '/faq/')], schema=[faq_ld(FAQ_ALL)])
 
 GUIDES = [
-    ('routine', 'Skincare routine basics', 'Build a simple routine and learn the usual order to apply products.',
-     '<p>A good routine has three parts: cleanse, treat, protect. Wash your face with a gentle cleanser, apply your treatment cream to dry skin, and in the morning finish with sunscreen. Keep it short enough to do every day; consistency matters more than the number of products.</p>'),
-    ('kojic-acid', 'Understanding Kojic Acid', 'Why it is used in skincare and what to keep in mind.',
-     '<p>Kojic Acid is an ingredient used in creams made for dark spots and uneven-looking tone. Introduce it slowly, patch test first, and use sunscreen daily, because sun exposure is a major cause of dark spots in the first place.</p>'),
-    ('alpha-arbutin', 'Understanding Alpha Arbutin', 'Its role in products for a more even-looking complexion.',
-     '<p>Alpha Arbutin is a gentle ingredient often paired with Kojic Acid in products for a brighter-looking, more even complexion. It works gradually, so judge results over weeks rather than days.</p>'),
-    ('using-youth-face', 'How to use Youth Face products', 'Simple directions for the Beauty Cream and Body Lotion.',
-     '<p>Beauty Cream: apply a small amount to clean face and neck, once or twice daily, with sunscreen in the morning. Body Lotion: apply generously to clean, dry body skin and massage until absorbed. See the full <a href="/how-to-use/">How To Use</a> guide.</p>'),
-    ('daytime', 'Daytime skincare routine', 'Cleanse, apply and protect before you step out.',
-     '<p>Morning: rinse or cleanse, apply your cream, wait a minute, then apply a broad-spectrum sunscreen. Reapply sunscreen if you are outdoors for long.</p>'),
-    ('evening', 'Evening skincare routine', 'A calm, simple routine before bed.',
-     '<p>Evening: remove sunscreen and the day\'s dirt with a gentle cleanser, pat dry, apply your cream and let it absorb. Avoid layering too many active products at night.</p>'),
+    dict(slug='skincare-routine-basics', old='routine', title='Skincare routine basics', blurb='Build a simple routine and learn the usual order to apply products.',
+         seo='Skincare Routine Basics: The Simple Order to Apply Products | Youth Face',
+         desc='A beginner-friendly skincare routine: cleanse, treat and protect. Learn the order to apply products, how much to use and how long to wait for results.',
+         body='''<p>A skincare routine does not need ten steps. Most people do best with three: <b>cleanse, treat, protect</b>. The routine that works is the one you can repeat every day without thinking about it.</p>
+<h2>Step 1: Cleanse</h2><p>Wash your face with a gentle cleanser and lukewarm water, then pat dry with a clean towel. Very hot water and harsh scrubbing can leave skin tight and irritated, which makes every product that follows feel worse.</p>
+<h2>Step 2: Treat</h2><p>This is where a targeted cream such as <a href="/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/">Youth Face Beauty Cream</a> goes. Apply it to clean, dry skin. A pea-sized amount covers the face; a little more if you include the neck. Massage gently until it disappears.</p>
+<h2>Step 3: Protect (mornings)</h2><p>In the morning, finish with a broad-spectrum sunscreen. Sun exposure is one of the main reasons dark spots appear and stay, so skipping sunscreen undoes much of the work of any dark-spot routine.</p>
+<h2>The usual order</h2><p>A simple rule: <b>thinnest to thickest</b>. Watery products go first, creams next, sunscreen last in the morning. Give each layer about a minute before the next.</p>
+<h2>How long before you see a change?</h2><p>Skin renews itself slowly. Use the same routine daily for several weeks before deciding whether it works for you, and compare photos taken in the same light. Changing products every few days makes it impossible to tell what is helping.</p>
+<h2>Keep it gentle</h2><ul><li>Patch test any new product on a small area for 24 hours.</li><li>Introduce one new product at a time.</li><li>If redness, burning or itching continues, stop and speak to a dermatologist.</li></ul>'''),
+    dict(slug='kojic-acid', old='kojic-acid', title='Understanding Kojic Acid', blurb='Why it is used in skincare and what to keep in mind.',
+         seo='What Is Kojic Acid? Uses in Skincare, How to Use It & Tips | Youth Face',
+         desc='Kojic Acid explained simply: where it comes from, why it is used in creams for dark spots and uneven-looking tone, and how to use it safely with sunscreen.',
+         body='''<p>Kojic Acid is one of the most familiar names on the label of creams made for dark spots and uneven-looking skin tone. Here is what it is and how to use it sensibly.</p>
+<h2>Where it comes from</h2><p>Kojic Acid was first identified as a by-product of fermenting rice for sake and soy sauce. Today it is produced for cosmetic use and added to creams, serums and soaps.</p>
+<h2>Why it is used in skincare</h2><p>It is used in products for <b>dark-spot care</b> and a <b>more even-looking complexion</b>. It is often paired with other ingredients such as Alpha Arbutin, as in <a href="/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/">Youth Face Beauty Cream</a>, so the formula works as a team rather than relying on a single ingredient.</p>
+<h2>How to use a Kojic Acid cream</h2><ol><li>Patch test first, on the side of the neck or inner arm, for 24 hours.</li><li>Apply a small amount to clean, dry skin once a day to start. Move to twice a day if your skin is comfortable.</li><li>Use sunscreen every morning. Without it, new spots keep forming.</li></ol>
+<h2>What to keep in mind</h2><ul><li>Some people find it mildly tingly at first. Persistent redness or burning means stop.</li><li>Avoid the eye area and broken or freshly waxed skin.</li><li>Do not stack several strong active products at once. Keep the rest of the routine simple.</li><li>Results are gradual and vary from person to person.</li></ul>
+<h2>The short version</h2><p>Kojic Acid is a well-known ingredient for dark-spot care. Use it consistently, gently and always with sunscreen, and judge it over weeks, not days.</p>'''),
+    dict(slug='alpha-arbutin', old='alpha-arbutin', title='Understanding Alpha Arbutin', blurb='Its role in products for a more even-looking complexion.',
+         seo='What Is Alpha Arbutin? Benefits in Skincare & How to Use It | Youth Face',
+         desc='Alpha Arbutin explained: why this gentle ingredient is used for a brighter, more even-looking complexion, how it pairs with Kojic Acid, and how to use it.',
+         body='''<p>Alpha Arbutin is a popular ingredient in products made for a brighter-looking, more even complexion. It has a reputation for being gentle, which is why it is often paired with stronger-feeling ingredients.</p>
+<h2>What it is</h2><p>Arbutin occurs naturally in plants such as bearberry. Alpha Arbutin is a stable form made for cosmetics, so it keeps working in a cream over the product's shelf life.</p>
+<h2>Why it is used</h2><p>It is used for <b>dark-spot care</b> and to help skin look more even in tone. Because it is generally well tolerated, it suits people who want a steady, low-drama routine.</p>
+<h2>Alpha Arbutin and Kojic Acid together</h2><p>The two are a common pairing. <a href="/skincare-guides/kojic-acid/">Kojic Acid</a> and Alpha Arbutin are used side by side so one gentle formula can do more than either alone. <a href="/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/">Youth Face Beauty Cream</a> is built around exactly this pair.</p>
+<h2>How to use it</h2><ol><li>Apply to clean, dry skin, once or twice a day.</li><li>Follow with sunscreen in the morning.</li><li>Be patient: expect gradual change over several weeks of regular use.</li></ol>
+<h2>Good to know</h2><ul><li>Even gentle ingredients deserve a patch test.</li><li>Consistency beats quantity. A thick layer does not work faster.</li><li>If you are pregnant, nursing or under treatment for a skin condition, ask your doctor before starting any new active product.</li></ul>'''),
+    dict(slug='how-to-use-youth-face', old='using-youth-face', title='How to use Youth Face products', blurb='Simple directions for the Beauty Cream and Body Lotion.',
+         seo='How to Use Youth Face Beauty Cream and Body Lotion | Step-by-Step Guide',
+         desc='Step-by-step directions for Youth Face Beauty Cream with Kojic Acid & Alpha Arbutin and Youth Face Body Lotion: how much to use, when, and what to avoid.',
+         body='''<p>Both Youth Face products are made for a simple daily routine. Here is exactly how to use each one.</p>
+<h2>Youth Face Beauty Cream (face)</h2><ol><li>Wash your face with a gentle cleanser and pat dry.</li><li>Take a pea-sized amount for the face, a little more if you include the neck.</li><li>Dot it on the forehead, cheeks and chin, then massage in gently until absorbed. Avoid the eye area.</li><li>Use once a day to start, then twice a day (morning and night) if your skin is comfortable.</li><li>Every morning, finish with a broad-spectrum sunscreen.</li></ol>
+<p>One 25 g jar usually lasts around a month of daily use, depending on how much you apply, which is why many customers choose the <a href="/product/youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin/">Pack of 2</a> or <a href="/product/youth-face-beauty-cream-pack-of-3-kojic-acid-alpha-arbutin/">Pack of 3</a> to keep the routine going without a gap.</p>
+<h2>Youth Face Body Lotion (body)</h2><ol><li>Apply a generous amount to clean, dry body skin, ideally after a bath.</li><li>Massage in until absorbed.</li><li>Use daily, or whenever skin feels dry.</li></ol>
+<p>The <a href="/product/youth-face-body-lotion/">Body Lotion</a> is a separate product for the body. Use the Beauty Cream on your face.</p>
+<h2>Before first use</h2><ul><li>Patch test on a small area for 24 hours.</li><li>Do not apply on broken, sunburnt or freshly waxed skin.</li><li>Stop if irritation continues, and consult a dermatologist.</li></ul>
+<p>See also the full <a href="/how-to-use/">How To Use</a> page.</p>'''),
+    dict(slug='daytime-skincare-routine', old='daytime', title='Daytime skincare routine', blurb='Cleanse, apply and protect before you step out.',
+         seo='Daytime Skincare Routine: 3 Steps Before You Step Out | Youth Face',
+         desc='A quick morning skincare routine for Indian weather: cleanse, apply your cream and protect with sunscreen. Includes reapplying tips for long days outdoors.',
+         body='''<p>The morning routine has one main job: get your skin ready for the day and protect it from the sun. It takes under five minutes.</p>
+<h2>1. Rinse or cleanse</h2><p>If your skin feels oily or you sweated at night, use a gentle cleanser. If it feels comfortable, a splash of water is enough. Pat dry.</p>
+<h2>2. Apply your cream</h2><p>Apply a pea-sized amount of <a href="/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/">Youth Face Beauty Cream</a> to the face and neck and let it absorb for a minute.</p>
+<h2>3. Sunscreen, every day</h2><p>Use a broad-spectrum sunscreen, SPF 30 or higher, on the face, neck and ears. Use about two finger-lengths for the face and neck. Sunscreen matters even on cloudy days and indoors near windows.</p>
+<h2>On long days outdoors</h2><ul><li>Reapply sunscreen every two to three hours, and after sweating heavily.</li><li>A cap, scarf or umbrella helps more than people expect.</li><li>Carry a small towel to blot sweat instead of rubbing.</li></ul>
+<h2>Keep it light in humid weather</h2><p>In heat and humidity, fewer, thinner layers feel better and stay put. Skip heavy creams in the morning and save extra moisture for the night.</p>
+<p>Next: the <a href="/skincare-guides/evening-skincare-routine/">evening routine</a>.</p>'''),
+    dict(slug='evening-skincare-routine', old='evening', title='Evening skincare routine', blurb='A calm, simple routine before bed.',
+         seo='Evening Skincare Routine: A Simple Night Routine | Youth Face',
+         desc='A calm night skincare routine: remove sunscreen and the day\'s dirt, apply your treatment cream, and let skin rest. Simple steps and common mistakes to avoid.',
+         body='''<p>The evening routine is about cleaning off the day and giving your treatment cream time to work while you sleep.</p>
+<h2>1. Clean off the day</h2><p>Sunscreen, sweat, dust and makeup need to come off. Use a gentle cleanser; if you wear heavy makeup or water-resistant sunscreen, cleanse twice. Pat dry.</p>
+<h2>2. Apply your cream</h2><p>Apply <a href="/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/">Youth Face Beauty Cream</a> to clean, dry skin. Night is a good time for your treatment step because there is no sun exposure afterwards.</p>
+<h2>3. Let it rest</h2><p>Give the cream a few minutes to absorb before lying down, and change pillowcases often, since they collect oil and dirt.</p>
+<h2>Common mistakes</h2><ul><li><b>Too many actives at once.</b> Layering several strong products at night is a common cause of irritation. Keep it to one treatment cream.</li><li><b>Skipping the cleanse.</b> Cream applied over the day's sunscreen and dust works less well.</li><li><b>Scrubbing hard.</b> Rough exfoliation makes skin sensitive. Gentle is enough.</li></ul>
+<p>Pair this with the <a href="/skincare-guides/daytime-skincare-routine/">daytime routine</a> and you have the whole day covered.</p>'''),
 ]
+
+
+def guide_url(g):
+    return '/skincare-guides/%s/' % g['slug']
+
+
 guides = top('Skincare Guides', 'Youth Face skincare guides', 'Plain, practical guides to building a routine and understanding the ingredients you use.') + \
     '<section style="padding-top:24px"><div class="wrap"><div class="guides">%s</div><div class="prose" style="margin-top:40px">%s<p class="note">This information is general and does not replace advice from a qualified dermatologist or healthcare professional.</p></div></div></section>' % (
-        ''.join('<a href="#%s"><span class="eyebrow">Guide</span><h3>%s</h3><p>%s</p></a>' % (g[0], g[1], g[2]) for g in GUIDES),
-        ''.join('<h2 id="%s">%s</h2>%s' % (g[0], g[1], g[3]) for g in GUIDES))
-page('/skincare-guides/', 'Skincare Guides | Kojic Acid, Alpha Arbutin & Daily Routines | Youth Face', 'Youth Face skincare guides: routine basics, Kojic Acid, Alpha Arbutin, how to use Youth Face, and simple day and night routines.', guides, crumbs=[('Skincare Guides', '/skincare-guides/')])
+        ''.join('<a href="%s"><span class="eyebrow">Guide</span><h3>%s</h3><p>%s</p></a>' % (guide_url(g), g['title'], g['blurb']) for g in GUIDES),
+        ''.join('<h2 id="%s">%s</h2><p>%s <a href="%s">Read the full guide</a></p>' % (g['old'], g['title'], g['blurb'], guide_url(g)) for g in GUIDES))
+page('/skincare-guides/', 'Skincare Guides | Kojic Acid, Alpha Arbutin & Daily Routines | Youth Face', 'Youth Face skincare guides: routine basics, Kojic Acid, Alpha Arbutin, how to use Youth Face, and simple day and night routines.', guides,
+     crumbs=[('Skincare Guides', '/skincare-guides/')], schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + guide_url(g), 'name': g['title']} for i, g in enumerate(GUIDES)]}])
+
+for i, g in enumerate(GUIDES):
+    more = [GUIDES[(i + j) % len(GUIDES)] for j in (1, 2, 3)]
+    body = top('Skincare guide', g['title'], g['blurb']) + \
+        '<section style="padding-top:20px"><div class="wrap article"><div class="prose">%s<p class="note">This guide is general information about cosmetic skincare and does not replace advice from a qualified dermatologist. Results vary from person to person.</p></div>' \
+        '<aside class="guide-cta"><img src="%s" alt="Youth Face Beauty Cream with Kojic Acid and Alpha Arbutin" width="600" height="600" loading="lazy"><b>Youth Face Beauty Cream</b><span>Kojic Acid &amp; Alpha Arbutin · from %s · COD available</span><a class="btn block" href="/shop/">Shop now</a></aside></div></section>' \
+        '<section style="padding-top:8px"><div class="wrap"><div class="sec-h"><span class="eyebrow">Keep reading</span><h2>More guides</h2></div><div class="guides">%s</div></div></section>' % (
+            g['body'], img(PRODUCTS[1]['thumb']), rs(PRODUCTS[0]['price']),
+            ''.join('<a href="%s"><span class="eyebrow">Guide</span><h3>%s</h3><p>%s</p></a>' % (guide_url(m), m['title'], m['blurb']) for m in more))
+    art = {'@type': 'Article', 'headline': g['title'], 'description': g['desc'], 'datePublished': TODAY, 'dateModified': TODAY,
+           'mainEntityOfPage': SITE + guide_url(g), 'image': SITE + PRODUCTS[1]['og'], 'inLanguage': 'en-IN',
+           'author': {'@id': SITE + '/#org'}, 'publisher': {'@id': SITE + '/#org'}}
+    page(guide_url(g), g['seo'], g['desc'], body, og='article', crumbs=[('Skincare Guides', '/skincare-guides/'), (g['title'], guide_url(g))], schema=[art])
 
 howto = top('How to use', 'How to use Youth Face', 'Simple steps for the Beauty Cream and the Body Lotion.') + '''<section style="padding-top:24px"><div class="wrap prose">
 <h2>Youth Face Beauty Cream</h2>
@@ -469,10 +537,20 @@ for path, (h, t, d, body) in POL.items():
 
 page('/404', 'Page not found | Youth Face', 'This page could not be found.', top('404', 'This page could not be found', 'The link may be old or mistyped.') + '<section style="padding-top:20px"><div class="wrap"><a class="btn" href="/shop/">Go to the shop</a></div></section>', index=False)
 
+# ---------------- Owner page (private, needs ADMIN_KEY) ----------------
+owner = top('Owner only', 'Orders and follow-ups', 'Paid orders, people who started an order and did not pay, and customers due a reorder. Youth Face orders only.') + \
+    '''<section style="padding-top:20px"><div class="wrap track"><form class="form" id="ro-form" novalidate>
+  <div class="f"><label for="ro-key">Admin key</label><input id="ro-key" type="password" autocomplete="off"></div>
+  <div class="f"><label for="ro-range">Show</label><select id="ro-range"><option value="today">Paid orders today</option><option value="week">Paid orders, last 7 days</option><option value="left">Started an order, did not pay (last 3 days)</option><option value="25-40">Ordered 25 to 40 days ago (reorder due)</option><option value="41-70">Ordered 41 to 70 days ago (missed)</option><option value="0-24">Ordered 0 to 24 days ago (not due yet)</option></select></div>
+  <button class="btn block" type="submit" id="ro-go">Show</button></form>
+<div class="track-out" id="ro-out" hidden></div></div></section>'''
+page('/reorder/', 'Orders and follow-ups | Youth Face', 'Owner page.', owner, index=False, js='store.js,owner.js')
+
 # ---------------- Assets, sitemap, redirects ----------------
 os.makedirs(os.path.join(ROOT, 'assets'), exist_ok=True)
 shutil.copy(os.path.join(B, 'site.css'), os.path.join(ROOT, 'assets', 'site.css'))
 shutil.copy(os.path.join(B, 'store.js'), os.path.join(ROOT, 'assets', 'store.js'))
+shutil.copy(os.path.join(B, 'owner.js'), os.path.join(ROOT, 'assets', 'owner.js'))
 open(os.path.join(ROOT, 'assets', 'products.json'), 'w').write(json.dumps({p['id']: {'name': p['name'], 'card': p['card'], 'price': p['price'], 'mrp': p['mrp'], 'img': img(p['thumb']), 'url': url(p), 'wc': p['wc']} for p in PRODUCTS}, ensure_ascii=False))
 open(os.path.join(ROOT, 'assets', 'icon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#740817"/><text x="32" y="44" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="32" fill="#FBF3EA">YF</text></svg>')
 
@@ -482,7 +560,7 @@ for pth in pages:
     sm.append('  <url><loc>%s%s</loc><lastmod>%s</lastmod><priority>%s</priority></url>' % (SITE, pth, TODAY, pri))
 sm.append('</urlset>')
 open(os.path.join(ROOT, 'sitemap.xml'), 'w').write('\n'.join(sm) + '\n')
-open(os.path.join(ROOT, 'robots.txt'), 'w').write('User-agent: *\nDisallow: /cart/\nDisallow: /checkout/\nDisallow: /api/\nAllow: /\n\nSitemap: %s/sitemap.xml\n' % SITE)
+open(os.path.join(ROOT, 'robots.txt'), 'w').write('User-agent: *\nDisallow: /cart/\nDisallow: /checkout/\nDisallow: /reorder/\nDisallow: /api/\nAllow: /\n\nSitemap: %s/sitemap.xml\n' % SITE)
 
 redirects = []
 for p in PRODUCTS:
@@ -504,7 +582,7 @@ for src in ['/wp-admin', '/wp-admin/:path*', '/wp-login.php', '/xmlrpc.php']:
     redirects.append({'source': src, 'destination': '/', 'permanent': False})
 vercel = {'cleanUrls': False, 'redirects': redirects,
           'headers': [{'source': '/(assets|wp-content)/(.*)\\.(webp|jpg|jpeg|png|svg|mp4)', 'headers': [{'key': 'Cache-Control', 'value': 'public, max-age=86400, stale-while-revalidate=604800'}]},
-                      {'source': '/(cart|checkout)/(.*)', 'headers': [{'key': 'X-Robots-Tag', 'value': 'noindex'}]}]}
+                      {'source': '/(cart|checkout|reorder)/(.*)', 'headers': [{'key': 'X-Robots-Tag', 'value': 'noindex'}]}]}
 open(os.path.join(ROOT, 'vercel.json'), 'w').write(json.dumps(vercel, indent=2) + '\n')
 open(os.path.join(ROOT, '.vercelignore'), 'w').write('_build\nREADME.md\n')
 missing = [i for p in PRODUCTS for i in set(p['imgs'] + [p['thumb']]) if not os.path.exists(os.path.join(ROOT, i.strip('/')))]
