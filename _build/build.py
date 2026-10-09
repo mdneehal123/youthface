@@ -15,7 +15,7 @@ TODAY = '2026-10-09'
 GOOGLE_ADS = ''        # e.g. AW-XXXXXXXXXX when Youth Face gets its own Google Ads account
 META_PIXEL = ''        # Meta Pixel ID for Youth Face, when there is one
 GSC_FILE = ''
-GRIEVANCE_NAME = 'Grievance Officer'   # put the owner's full name here (required by the E-Commerce Rules)          # Search Console verification file name, if one is used
+GRIEVANCE_NAME = 'Nihal'   # put the owner's full name here (required by the E-Commerce Rules)          # Search Console verification file name, if one is used
 
 UP = '/wp-content/uploads/2026/10/'
 
