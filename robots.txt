@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /api/
+Allow: /
+
+Sitemap: https://youthfacebeautycream.com/sitemap.xml
