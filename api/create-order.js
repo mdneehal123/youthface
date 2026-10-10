@@ -29,6 +29,7 @@ module.exports = async (req, res) => {
         notes: {
           brand: BRAND, product: BRAND + ': ' + cart.label.slice(0, 200), items: cart.code, total: String(cart.total),
           name, phone, address, city, pincode, mode: advance ? 'advance' : 'full',
+          remind: body.remind === true ? 'yes' : 'no',
           payment: advance ? 'Advance Rs ' + ADVANCE + ' paid, Rs ' + balance + ' cash on delivery' : 'Paid in full online'
         }
       })

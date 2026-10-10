@@ -77,13 +77,32 @@ module.exports = async (req, res) => {
       });
       return res.status(200).json({ kind: 'abandoned', customers: out });
     }
+    if (q.kind === 'refill') {
+      // Customers who ticked "remind me" and whose cream should be running low now:
+      // from 5 days before to 25 days after (about 30 days per jar) since the order.
+      const all = await list(k, now - 200 * 86400, 0, 1000);
+      const out = [];
+      all.filter((o) => o.status === 'paid' && (o.notes || {}).remind === 'yes').forEach((o) => {
+        const n = o.notes || {};
+        const c = cartFrom(String(n.items || ''));
+        const jars = c ? c.lines.reduce((s2, l) => s2 + l.qty * ({ p1: 1, p2: 2, p3: 3, combo: 1 }[l.id] || 0), 0) : 1;
+        const age = Math.floor((now - o.created_at) / 86400);
+        const due = Math.max(1, jars) * 30;
+        if (age < due - 5 || age > due + 25) return;
+        out.push({ id: o.id, name: String(n.name || ''), phone: phoneOf(o), items: itemsOf(o), city: String(n.city || ''),
+          amount: Number(n.total) || Math.round(Number(o.amount) / 100), days: age, remind: true });
+      });
+      const seen = new Set();
+      const uniq = out.sort((x, y) => x.days - y.days).filter((c) => (seen.has(c.phone) ? false : seen.add(c.phone)));
+      return res.status(200).json({ kind: 'refill', customers: uniq });
+    }
     const minDays = Math.max(0, Math.min(365, Number(q.from) || 22));
     const maxDays = Math.max(minDays, Math.min(365, Number(q.to) || 35));
     const all = await list(k, now - maxDays * 86400, now - minDays * 86400, 500);
     const out = all.filter((o) => o.status === 'paid').map((o) => {
       const n = o.notes || {};
       return { id: o.id, name: String(n.name || ''), phone: phoneOf(o), items: itemsOf(o), city: String(n.city || ''),
-        amount: Number(n.total) || Math.round(Number(o.amount) / 100), days: Math.floor((now - o.created_at) / 86400) };
+        amount: Number(n.total) || Math.round(Number(o.amount) / 100), days: Math.floor((now - o.created_at) / 86400), remind: n.remind === 'yes' };
     }).sort((x, y) => y.days - x.days);
     return res.status(200).json({ kind: 'reorder', from: minDays, to: maxDays, customers: out });
   } catch (e) {

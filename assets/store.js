@@ -1,18 +1,23 @@
 (function(){
   'use strict';
   var WA='919980881230', ADVANCE=99, KEY='yf-cart', DETAILS='yf-details', ORDERS='yf-orders', PENDING='yf-pending', NUDGE='yf-nudge';
+  var COMBO_MSG='Combo price applied: Cream + Lotion for ₹999';
   var P=null, $=function(id){return document.getElementById(id);};
   function rs(n){return '₹'+Number(n).toLocaleString('en-IN');}
   function el(tag,cls,text){var e=document.createElement(tag);if(cls){e.className=cls;}if(text!=null){e.textContent=text;}return e;}
   function load(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
   function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
   function cart(){var c=load(KEY,{});return (c&&typeof c==='object')?c:{};}
-  function setCart(c){Object.keys(c).forEach(function(k){if(!(c[k]>0)||(P&&!P[k])){delete c[k];}else{c[k]=Math.min(10,Math.floor(c[k]));}});save(KEY,c);badge();}
+  // Pack of 1 + Body Lotion together become the Combo (same rule as the server). Returns true if a pair was combined.
+  function setCart(c){Object.keys(c).forEach(function(k){if(!(c[k]>0)||(P&&!P[k])){delete c[k];}else{c[k]=Math.min(10,Math.floor(c[k]));}});
+    var n=(P&&P.combo)?Math.min(c.p1||0,c.lotion||0,10-(c.combo||0)):0;
+    if(n>0){c.combo=(c.combo||0)+n;c.p1-=n;c.lotion-=n;if(!c.p1){delete c.p1;}if(!c.lotion){delete c.lotion;}}
+    save(KEY,c);badge();return n>0;}
   function count(){var c=cart();return Object.keys(c).reduce(function(a,k){return a+c[k];},0);}
   function badge(){var b=document.querySelector('.cart-count');if(!b){return;}var n=count();b.textContent=n;b.hidden=!n;}
   function lines(){var c=cart();return Object.keys(c).filter(function(k){return P&&P[k];}).map(function(k){var p=P[k];return {id:k,qty:c[k],p:p,sub:p.price*c[k],mrp:p.mrp*c[k]};});}
   function totals(){var l=lines();return {lines:l,total:l.reduce(function(a,x){return a+x.sub;},0),mrp:l.reduce(function(a,x){return a+x.mrp;},0)};}
-  function add(id,q){var c=cart();c[id]=(c[id]||0)+(q||1);setCart(c);}
+  function add(id,q){var c=cart();c[id]=(c[id]||0)+(q||1);return setCart(c);}
   function toast(text){var t=document.querySelector('.toast');if(!t){t=el('div','toast');t.setAttribute('role','status');document.body.appendChild(t);}
     t.textContent='';t.appendChild(el('span',null,text));var a=el('a',null,'View cart');a.href='/cart/';t.appendChild(a);
     t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show');},3200);}
@@ -30,7 +35,7 @@
     badge();
     document.addEventListener('click',function(e){
       var a=e.target.closest('[data-add]'),b=e.target.closest('[data-buy]');
-      if(a){add(a.getAttribute('data-add'),qtyOf(a));toast((P[a.getAttribute('data-add')]||{}).card+' added to cart');}
+      if(a){var paired=add(a.getAttribute('data-add'),qtyOf(a));toast(paired?COMBO_MSG:(P[a.getAttribute('data-add')]||{}).card+' added to cart');}
       if(b){add(b.getAttribute('data-buy'),qtyOf(b));location.href='/checkout/';}
     });
     // old WooCommerce links like ?add-to-cart=17 keep working
@@ -40,7 +45,7 @@
     if($('checkout')){checkout();}
     if($('track-form')){trackPage();}
     if(!$('checkout')&&!$('ro-form')){resumeStrip();nudge();}
-    buyBar();
+    buyBar();deliveryCheck();
   }
   fetch('/assets/products.json').then(function(r){return r.json();}).then(function(d){P=d;boot();}).catch(function(){P={};badge();});
 
@@ -55,10 +60,20 @@
     else{mid.appendChild(el('span','sub','Qty '+x.qty));}
     row.appendChild(mid);var amt=el('div','amt',rs(x.sub));if(x.mrp>x.sub){amt.appendChild(el('s',null,rs(x.mrp)));}row.appendChild(amt);return row;
   }
+  // "Add X for ₹Y more" box: shown when one half of the combo is in the cart without the other.
+  function upsell(box,after){
+    var c=cart();if(!P||!P.combo){return;}var want=null;
+    if(c.p1&&!c.lotion){want='lotion';}else if(c.lotion&&!c.p1){want='p1';}
+    if(!want){return;}var have=want==='lotion'?'p1':'lotion',more=P.combo.price-P[have].price;
+    var u=el('div','upsell');var im=el('img');im.src=P[want].img;im.alt='';im.width=56;im.height=56;u.appendChild(im);
+    var tx=el('div');tx.appendChild(el('b',null,want==='lotion'?'Add the Body Lotion for just '+rs(more)+' more':'Add the Beauty Cream for just '+rs(more)+' more'));
+    tx.appendChild(el('span',null,'Get the Combo (Cream + Lotion) for '+rs(P.combo.price)+' instead of '+rs(P.p1.price+P.lotion.price)+'.'));u.appendChild(tx);
+    var b=el('button','btn sm','Add +'+rs(more));b.type='button';b.addEventListener('click',function(){add(want,1);toast(COMBO_MSG);after();});u.appendChild(b);box.appendChild(u);
+  }
   function renderCart(){
     var box=$('cart-lines'),t=totals();box.textContent='';
     if(!t.lines.length){var e=el('div','empty');e.appendChild(el('h2',null,'Your cart is empty'));e.appendChild(el('p','muted','Add a pack to get started.'));var s=el('a','btn','Shop now');s.href='/shop/';s.style.marginTop='16px';e.appendChild(s);box.appendChild(e);$('to-checkout').hidden=true;sumRows($('cart-sum'),[]);return;}
-    t.lines.forEach(function(x){box.appendChild(lineNode(x,true,renderCart));});$('to-checkout').hidden=false;
+    t.lines.forEach(function(x){box.appendChild(lineNode(x,true,renderCart));});upsell(box,renderCart);$('to-checkout').hidden=false;
     sumRows($('cart-sum'),[['MRP',rs(t.mrp)],['Discount','− '+rs(t.mrp-t.total),'save'],['Shipping','Free'],['Total',rs(t.total),'total']]);
   }
 
@@ -84,7 +99,7 @@
     function render(){
       var t=totals(),box=$('co-lines');box.textContent='';
       if(!t.lines.length){box.appendChild(el('p','muted','Your cart is empty.'));var s=el('a','btn','Shop now');s.href='/shop/';box.appendChild(s);btn.disabled=true;return;}
-      t.lines.forEach(function(x){box.appendChild(lineNode(x,true,render));});btn.disabled=false;
+      t.lines.forEach(function(x){box.appendChild(lineNode(x,true,render));});upsell(box,render);btn.disabled=false;
       var m=mode();
       $('amt-online').textContent=rs(t.total);$('amt-cod').textContent=rs(t.total);$('amt-wa').textContent=rs(t.total);
       $('cod-note').textContent='Pay '+rs(ADVANCE)+' now, '+rs(Math.max(0,t.total-ADVANCE))+' at delivery';
@@ -107,6 +122,10 @@
         if(d.city&&(!F.city.value.trim()||F.city.value===cityAuto)){F.city.value=d.city;cityAuto=d.city;}
         var parts=[[d.city,d.state].filter(Boolean).join(', ')];
         if(d.days){var by=new Date();by.setDate(by.getDate()+2+d.days);parts.push('estimated delivery by '+by.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'}));}
+        var codR=document.querySelector('input[name=pay][value=cod]'),codL=codR.closest('label');
+        codR.disabled=d.cod===false;codL.classList.toggle('off',d.cod===false);
+        if(d.cod===false){parts.push('Cash on Delivery is not available for this pincode, please pay online');if(codR.checked){document.querySelector('input[name=pay][value=online]').checked=true;render();}}
+        if(d.serviceable===false){parts=['Sorry, our courier does not deliver to '+pin+' yet. Message us on WhatsApp and we will try to arrange it.'];}
         $('pin-note').textContent=parts.filter(Boolean).join(' · ');$('pin-note').hidden=false;if(!err.hidden&&!problem()){err.hidden=true;mark();}}).catch(function(){});}
     F.pin.addEventListener('input',pinLookup);pinLookup();
 
@@ -115,7 +134,7 @@
     function stop(text){busy=false;render();if(text){err.textContent=text;err.hidden=false;}}
     function pay(advance){
       var t=totals();lastMode=advance?'cod':'online';$('not-yet').hidden=true;err.hidden=true;busy=true;btn.textContent='Opening secure payment…';remember();
-      fetch('/api/create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:t.lines.map(function(x){return {id:x.id,qty:x.qty};}),mode:advance?'advance':'full',name:F.name.value.trim(),phone:mobile(F.phone.value),address:F.address.value.trim(),city:F.city.value.trim(),pincode:F.pin.value.trim()})})
+      fetch('/api/create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:t.lines.map(function(x){return {id:x.id,qty:x.qty};}),mode:advance?'advance':'full',name:F.name.value.trim(),phone:mobile(F.phone.value),address:F.address.value.trim(),city:F.city.value.trim(),pincode:F.pin.value.trim(),remind:!!($('co-remind')&&$('co-remind').checked)})})
       .then(function(r){return r.ok?r.json():Promise.reject(r.status);})
       .then(function(o){loadRzp(function(){var done=false;
         var rz=new window.Razorpay({key:o.key_id,order_id:o.order_id,amount:o.amount,currency:o.currency,name:'Youth Face',description:advance?'Advance for Cash on Delivery':'Youth Face order',
@@ -137,6 +156,8 @@
       var wrap=$('checkout');wrap.textContent='';var box=el('div','panel thanks');box.style.gridColumn='1 / -1';
       box.appendChild(el('span','tick','✓'));box.appendChild(el('h2',null,ok?(cod?'Order confirmed. Thank you!':'Payment received. Thank you!'):'Payment submitted. We are confirming it.'));
       box.appendChild(el('p','muted','We will pack your order within 1 to 3 business days and send it with free shipping.'));
+      if($('co-remind')&&$('co-remind').checked){var jars=t.lines.reduce(function(a,x){return a+x.qty*({p1:1,p2:2,p3:3,combo:1}[x.id]||0);},0);
+        if(jars){var rd=new Date();rd.setDate(rd.getDate()+jars*30);box.appendChild(el('p','remind-note','We will remind you on WhatsApp around '+rd.toLocaleDateString('en-IN',{day:'numeric',month:'long'})+', when your cream is about to run out.'));}}
       var s=el('div','sum');var rows=[['Items',t.lines.map(function(x){return x.p.card+(x.qty>1?' ×'+x.qty:'');}).join(', ')]];
       if(cod){rows.push(['Advance paid',rs(ADVANCE)]);rows.push(['Pay at delivery',rs(o.balance),'total']);}else{rows.push(['Paid online',rs(o.total),'total']);}
       rows.push(['You saved on MRP',rs(t.mrp-t.total),'save']);rows.push(['Order number',pid]);sumRows(s,rows);box.appendChild(s);
@@ -198,6 +219,29 @@
     var go=el('a','btn sm','Finish my order');go.href='/checkout/';w.appendChild(go);
     var x=el('button','resume-x','×');x.type='button';x.setAttribute('aria-label','Hide');x.addEventListener('click',function(){bar.remove();try{sessionStorage.setItem('yf-strip-x','1');}catch(e){}});w.appendChild(x);
     bar.appendChild(w);var main=$('main');main.insertBefore(bar,main.firstChild);
+  }
+
+  /* ---------------- delivery check on product pages ---------------- */
+  function deliveryCheck(){
+    var inp=$('dc-pin'),go=$('dc-go'),out=$('dc-out');if(!inp){return;}
+    var det=load(DETAILS,null);if(det&&/^[1-9]\d{5}$/.test(det.pin||'')){inp.value=det.pin;}
+    function say(cls,text){out.className='dc-out '+cls;out.textContent=text;out.hidden=false;}
+    function run(){var pin=inp.value.replace(/\D/g,'').slice(0,6);inp.value=pin;
+      if(!/^[1-9]\d{5}$/.test(pin)){say('bad','Please enter a 6-digit pincode.');return;}
+      var d0=load(DETAILS,{})||{};d0.pin=pin;save(DETAILS,d0);
+      go.disabled=true;say('','Checking…');
+      fetch('/api/pincode?pin='+pin).then(function(r){return r.ok?r.json():null;}).then(function(d){
+        if(!d||!d.ok){say('','We could not check this pincode right now. We deliver across India; order and we will confirm on WhatsApp if there is any issue.');return;}
+        if(d.serviceable===false){say('bad','Sorry, our courier does not deliver to '+pin+' yet. Message us on WhatsApp and we will try to arrange it.');return;}
+        var where=[d.city,d.state].filter(Boolean).join(', '),bits=['Delivers to '+(where||pin)];
+        if(d.days){var by=new Date();by.setDate(by.getDate()+2+d.days);bits[0]+=' by '+by.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});}
+        bits.push(d.cod===false?'Prepaid only for this pincode':'Cash on Delivery available');bits.push('Free shipping');
+        say('ok','✓ '+bits.join(' · '));
+      }).catch(function(){say('','We could not check this pincode right now. Please try again.');}).then(function(){go.disabled=false;});}
+    go.addEventListener('click',run);
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run();}});
+    inp.addEventListener('input',function(){if(/^[1-9]\d{5}$/.test(inp.value.trim())){run();}});
+    if(inp.value){run();}
   }
 
   /* ---------------- sticky Buy bar on product pages ---------------- */

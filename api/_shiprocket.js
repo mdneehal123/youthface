@@ -163,9 +163,10 @@ async function pincode(pin) {
   if (!s) return { ok: false };
   const token = await login(s);
   const head = { headers: { Authorization: 'Bearer ' + token } };
-  const [a, b] = await Promise.all([
+  const sv = (cod) => fetch(BASE + '/courier/serviceability/?pickup_postcode=' + ORIGIN + '&delivery_postcode=' + encodeURIComponent(pin) + '&weight=' + BOX.weight + '&cod=' + cod, head).then((r) => r.json()).catch(() => null);
+  const [a, b, c] = await Promise.all([
     fetch(BASE + '/open/postcode/details?postcode=' + encodeURIComponent(pin), head).then((r) => r.json()).catch(() => null),
-    fetch(BASE + '/courier/serviceability/?pickup_postcode=' + ORIGIN + '&delivery_postcode=' + encodeURIComponent(pin) + '&weight=' + BOX.weight + '&cod=0', head).then((r) => r.json()).catch(() => null)
+    sv(0), sv(1)
   ]);
   const pd = (a && a.postcode_details) || {};
   const name = (v) => String(v || '').trim().toLowerCase().replace(/\b[a-z]/g, (c) => c.toUpperCase()).slice(0, 60);
@@ -179,8 +180,13 @@ async function pincode(pin) {
     const n = Math.round(Number(pick.estimated_delivery_days));
     if (n >= 1 && n <= 12) days = n;
   }
-  if (!city && !days) return { ok: false };
-  return { ok: true, city, state, days };
+  // Cash on Delivery: true / false when the courier answered, null when we could not tell.
+  const codData = c && c.data;
+  const cod = codData && Array.isArray(codData.available_courier_companies) ? codData.available_courier_companies.length > 0 : (c && c.status === 404 ? false : null);
+  // Not serviceable only when the courier clearly answered with no couriers for prepaid either.
+  const serviceable = data && Array.isArray(data.available_courier_companies) ? list.length > 0 : (b && b.status === 404 ? false : null);
+  if (!city && !days && serviceable !== false) return { ok: false };
+  return { ok: true, city, state, days, cod, serviceable };
 }
 
 module.exports = { createOrder, settings, track, pincode };

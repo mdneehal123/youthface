@@ -33,6 +33,13 @@ function cartFrom(input) {
     if (!PRODUCTS[id] || !(qty >= 1)) return;
     merged[id] = Math.min(MAX_QTY, (merged[id] || 0) + qty);
   });
+  // A Pack of 1 cream and a Body Lotion bought together are charged at the combo price (same rule as the cart page).
+  const pairs = Math.min(merged.p1 || 0, merged.lotion || 0, MAX_QTY - (merged.combo || 0));
+  if (pairs > 0) {
+    merged.combo = (merged.combo || 0) + pairs; merged.p1 -= pairs; merged.lotion -= pairs;
+    if (!merged.p1) delete merged.p1;
+    if (!merged.lotion) delete merged.lotion;
+  }
   const lines = Object.keys(merged).map((id) => Object.assign({ id, qty: merged[id] }, PRODUCTS[id]));
   if (!lines.length) return null;
   const total = lines.reduce((a, l) => a + l.price * l.qty, 0);

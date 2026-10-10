@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds the Youth Face static store into the repository root.
 Every public address of the old WordPress site is kept, so search engines see no broken links."""
-import json, os, html, shutil
+import json, os, html, shutil, urllib.parse
 
 B = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(B)
@@ -97,7 +97,7 @@ pages = []
 
 def org_graph():
     return [{
-        '@type': 'Organization', '@id': SITE + '/#org', 'name': 'Youth Face', 'url': SITE + '/', 'legalName': OWNER, 'logo': SITE + '/assets/img/youth-face-logo.png',
+        '@type': 'Organization', '@id': SITE + '/#org', 'name': 'Youth Face', 'url': SITE + '/', 'legalName': OWNER, 'logo': SITE + '/assets/img/youth-face-logo.png', 'image': SITE + '/icon-512.png',
         'address': {'@type': 'PostalAddress', 'streetAddress': 'Azad Nagar, 4th Cross', 'addressLocality': 'Bhatkal',
                     'addressRegion': 'Karnataka', 'postalCode': '581320', 'addressCountry': 'IN'},
         'contactPoint': {'@type': 'ContactPoint', 'telephone': '+' + WA, 'contactType': 'customer service', 'areaServed': 'IN'}
@@ -113,7 +113,7 @@ def product_ld(p):
                        'seller': {'@id': SITE + '/#org'}}}
 
 
-def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='website', ogimg=None, extra_head='', js='store.js'):
+def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='website', ogimg=None, extra_head='', js='store.js', lang='en-IN'):
     full = SITE + path
     nav = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == path else '', t) for h, t in NAV)
     graph = org_graph()
@@ -137,7 +137,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
     if META_PIXEL and index:
         tags += "<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','%s');fbq('track','PageView');</script>\n" % META_PIXEL
     doc = '''<!doctype html>
-<html lang="en-IN">
+<html lang="%(lang)s">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -146,7 +146,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
 <meta name="robots" content="%(robots)s">
 <link rel="canonical" href="%(url)s">
 <meta name="theme-color" content="#FBF3EA">
-<meta property="og:locale" content="en_IN">
+<meta property="og:locale" content="%(ogl)s">
 <meta property="og:type" content="%(og)s">
 <meta property="og:site_name" content="Youth Face">
 <meta property="og:title" content="%(title)s">
@@ -154,7 +154,10 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
 <meta property="og:url" content="%(url)s">
 <meta property="og:image" content="%(ogi)s">
 <meta name="twitter:card" content="summary_large_image">
-%(extra)s<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+%(extra)s<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600;700&display=swap">
@@ -181,7 +184,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
     <div><h4>Customer care</h4><a href="/about-us/">About Us</a><a href="/contact/">Contact</a><a href="/faq/">FAQ</a><a href="/track-order/">Track Order</a><a href="/how-to-use/">How To Use</a><a href="/skincare-guides/">Skincare Guides</a></div>
     <div><h4>Policies</h4>%(pol)s<a href="https://wa.me/%(wa)s">WhatsApp %(wash)s</a></div>
   </div>
-  <div class="legal"><span>© 2026 Youth Face · %(owner)s · %(addr)s</span><span>Online payments by Razorpay. Cosmetic product; results vary from person to person.</span></div>
+  <div class="legal"><span>© 2026 Youth Face · %(owner)s · %(addr)s</span><span>Online payments by Razorpay. Cosmetic product; results vary from person to person.</span><span class="langs"><a href="/" lang="en">English</a> · <a href="/hi/" lang="hi">हिंदी</a> · <a href="/ur/" lang="ur">اردو</a></span></div>
 </div></footer>
 <a class="wa-float" href="https://wa.me/%(wa)s?text=%(watext)s" target="_blank" rel="noopener" aria-label="Chat with Youth Face on WhatsApp">%(glyph)s</a>
 %(js)s
@@ -191,6 +194,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
            url=full, og=og, ogi=ogi, extra=extra_head, tags=tags, ld=ld, brand=BRAND, brandw=BRAND_W, nav=nav, menu=MENU_SVG, cart=CART_SVG, body=body,
            owner=OWNER, addr=ADDR, wa=WA, wash=WA_SHOW, watext='Hi%20Youth%20Face%2C%20I%20need%20help%20with%20my%20order.',
            glyph=WA_GLYPH % (56, 56),
+           lang=lang, ogl={'hi': 'hi_IN', 'ur': 'ur_IN'}.get(lang, 'en_IN'),
            js=''.join('<script src="/assets/%s" defer></script>' % j for j in js.split(',')),
            shop=''.join('<a href="%s">%s</a>' % (url(p), p['card']) for p in PRODUCTS),
            pol=''.join('<a href="%s">%s</a>' % (h, t) for h, t in POLICIES))
@@ -250,6 +254,8 @@ HOME_FAQ = [
     ('How long does delivery take?', 'Orders are packed in 1 to 3 business days and usually reach you 3 to 7 business days after dispatch, depending on your pincode.'),
 ]
 
+ALT = ''.join('<link rel="alternate" hreflang="%s" href="%s%s">\n' % (h, SITE, u) for h, u in [('en-IN', '/'), ('hi-IN', '/hi/'), ('ur-IN', '/ur/'), ('x-default', '/')])
+
 # ---------------- Home ----------------
 home = '''<div class="wrap hero">
   <div>
@@ -292,7 +298,7 @@ home = '''<div class="wrap hero">
                          ''.join(card(p) for p in MAIN), combo_band(), faq_html(HOME_FAQ))
 page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin | Official Store',
      'Youth Face is a modern Indian skincare brand: Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹549, free shipping, COD.',
-     home, og='website', schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + url(p)} for i, p in enumerate(PRODUCTS)]}, faq_ld(HOME_FAQ)])
+     home, og='website', extra_head=ALT, schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + url(p)} for i, p in enumerate(PRODUCTS)]}, faq_ld(HOME_FAQ)])
 
 # ---------------- Shop ----------------
 shop = top('Shop', 'Shop Youth Face', 'Beauty Cream in packs of one, two and three, and the Youth Face Body Lotion. Free shipping and Cash on Delivery on every order.') + \
@@ -332,6 +338,20 @@ for p in PRODUCTS:
         ('%s of Youth Face Beauty Cream with Kojic Acid &amp; Alpha Arbutin. Better value per jar for regular use.' % p['size'].capitalize()) if p['id'] in ('p2', 'p3') else \
         ('One jar of Youth Face Beauty Cream (25 g) for the face and one Youth Face Body Lotion (40 ml) for the body, together for %s instead of %s when bought separately.' % (rs(p['price']), rs(BYID['p1']['price'] + BYID['lotion']['price']))) if p['id'] == 'combo' else \
         'A lightweight, quick-absorbing daily moisturiser for soft, comfortable skin.'
+    if p['id'] == 'lotion':
+        opts = [BYID['lotion'], BYID['combo']]
+    else:
+        opts = [BYID['p1'], BYID['p2'], BYID['p3'], BYID['combo']]
+    def opt_sub(q):
+        if q['id'] in ('p2', 'p3'):
+            return '%s / jar' % rs(round(q['price'] / int(q['id'][1])))
+        return {'p1': '1 jar', 'combo': '+ Body Lotion', 'lotion': '40 ml'}[q['id']]
+    def opt_name(q):
+        return {'p1': 'Pack of 1', 'p2': 'Pack of 2', 'p3': 'Pack of 3', 'combo': 'Combo', 'lotion': 'Body Lotion'}[q['id']]
+    switch = '<div class="switch" role="group" aria-label="Choose a pack">%s</div>' % ''.join(
+        '<a href="%s"%s><b>%s</b><span>%s</span><small>%s</small>%s</a>' % (
+            url(q), ' class="on" aria-current="page"' if q['id'] == p['id'] else '', opt_name(q), rs(q['price']), opt_sub(q),
+            '<em>Popular</em>' if q['id'] == 'p2' else '<em>Save</em>' if q['id'] == 'combo' else '') for q in opts)
     body = '''<div class="wrap pdp" data-product="%(id)s">
   <div class="gallery"><div class="main"><img id="pdp-img" src="%(main)s" alt="%(alt)s" width="1000" height="1000" fetchpriority="high"></div><div class="thumbs">%(thumbs)s</div></div>
   <div>
@@ -340,8 +360,10 @@ for p in PRODUCTS:
     <div class="price"><b>%(price)s</b>%(mrp)s%(off)s</div>
     <p class="tax">Inclusive of all taxes · Free shipping · %(size)s</p>
     <p class="summary">%(summary)s</p>
+    %(switch)s
     <div class="qty-row"><div class="qty" data-qty><button type="button" data-dec aria-label="Less">−</button><output>1</output><button type="button" data-inc aria-label="More">+</button></div><span class="muted" style="font-size:.9rem">In stock · ships from Bhatkal</span></div>
     <div class="acts"><button class="btn ghost" type="button" data-add="%(id)s" data-useqty>Add to cart</button><button class="btn" type="button" data-buy="%(id)s" data-useqty>Buy now</button></div>
+    <div class="dcheck"><label for="dc-pin">Check delivery to your pincode</label><div class="dc-row"><input id="dc-pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="6-digit pincode"><button type="button" class="btn sm ghost" id="dc-go">Check</button></div><p class="dc-out" id="dc-out" role="status" aria-live="polite" hidden></p></div>
     <ul class="perks"><li>Cash on Delivery available (₹99 advance)</li><li>Free shipping across India</li><li>100%% original, shipped by the brand</li></ul>
     <div class="tabs">%(tabs)s</div>
   </div>
@@ -350,7 +372,7 @@ for p in PRODUCTS:
 <section style="padding-top:20px"><div class="wrap"><div class="sec-h"><span class="eyebrow">You may also like</span><h2>More from Youth Face</h2></div><div class="grid three">%(rel)s</div></div></section>
 <div class="buybar" id="buybar" hidden><div class="wrap buybar-in"><img src="%(thumb)s" alt="" width="48" height="48"><div class="bb-t"><b>%(card)s</b><span><b>%(price)s</b>%(bbmrp)s</span></div><button class="btn" type="button" data-buy="%(id)s" data-useqty>Buy now</button></div></div>''' % dict(
         thumb=img(p['thumb']), card='Body Lotion' if p['id'] == 'lotion' else p['card'].split(' · ')[-1], bbmrp=' <s>%s</s>' % rs(p['mrp']) if off else '',
-        id=p['id'], main=img(p['imgs'][0]), alt=html.escape(p['name']), thumbs=thumbs,
+        id=p['id'], switch=switch, main=img(p['imgs'][0]), alt=html.escape(p['name']), thumbs=thumbs,
         badge=' · ' + p['badge'] if p['badge'] else '', name=html.escape(p['name']), price=rs(p['price']),
         mrp='<s>MRP %s</s>' % rs(p['mrp']) if off else '', off='<span class="off">%d%% off</span>' % off if off else '', size=p['size'], summary=summary,
         tabs=''.join('<details%s><summary>%s</summary><div class="in">%s</div></details>' % (' open' if n == 0 else '', t, c) for n, (t, c) in enumerate(tabs)),
@@ -378,6 +400,7 @@ checkout_body = top('Checkout', 'Checkout', 'Enter your delivery details and cho
     <label><input type="radio" name="pay" value="cod"><span>Cash on Delivery<small id="cod-note">Pay ₹99 now, the rest at delivery</small></span><b id="amt-cod"></b></label>
     <label><input type="radio" name="pay" value="wa"><span>Order on WhatsApp<small>Send your order, we confirm on chat</small></span><b id="amt-wa"></b></label>
   </fieldset>
+  <label class="remind"><input type="checkbox" id="co-remind"><span><b>Remind me on WhatsApp when my cream is about to run out</b><small>One friendly message, timed to your pack size. Reply STOP any time.</small></span></label>
   <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Cash on Delivery orders are confirmed with a ₹99 advance paid online now. It is part of the price, not an extra charge. If the parcel is refused at delivery, the ₹99 is not refunded.</p>
   <div class="notyet" id="not-yet" hidden><p><b>Plot twist: your order isn't placed yet.</b> The payment window closed before it finished. Nothing is lost. Your details are saved, so it's one tap from here.</p><button type="button" class="btn" id="ny-retry">Try payment again</button><button type="button" class="btn ghost" id="ny-switch">Switch to Cash on Delivery</button></div>
   <p class="oerr" id="co-err" role="alert" hidden></p>
@@ -611,11 +634,13 @@ for path, (h, t, d, body) in POL.items():
 
 page('/404', 'Page not found | Youth Face', 'This page could not be found.', top('404', 'This page could not be found', 'The link may be old or mistyped.') + '<section style="padding-top:20px"><div class="wrap"><a class="btn" href="/shop/">Go to the shop</a></div></section>', index=False)
 
+exec(open(os.path.join(B, 'langs.py'), encoding='utf-8').read())
+
 # ---------------- Owner page (private, needs ADMIN_KEY) ----------------
 owner = top('Owner only', 'Orders and follow-ups', 'Paid orders, people who started an order and did not pay, and customers due a reorder. Youth Face orders only.') + \
     '''<section style="padding-top:20px"><div class="wrap track"><form class="form" id="ro-form" novalidate>
   <div class="f"><label for="ro-key">Admin key</label><input id="ro-key" type="password" autocomplete="off"></div>
-  <div class="f"><label for="ro-range">Show</label><select id="ro-range"><option value="today">Paid orders today</option><option value="week">Paid orders, last 7 days</option><option value="left">Started an order, did not pay (last 3 days)</option><option value="25-40">Ordered 25 to 40 days ago (reorder due)</option><option value="41-70">Ordered 41 to 70 days ago (missed)</option><option value="0-24">Ordered 0 to 24 days ago (not due yet)</option></select></div>
+  <div class="f"><label for="ro-range">Show</label><select id="ro-range"><option value="today">Paid orders today</option><option value="week">Paid orders, last 7 days</option><option value="left">Started an order, did not pay (last 3 days)</option><option value="refill">Refill reminders due now (customer asked)</option><option value="25-40">Ordered 25 to 40 days ago (reorder due)</option><option value="41-70">Ordered 41 to 70 days ago (missed)</option><option value="0-24">Ordered 0 to 24 days ago (not due yet)</option></select></div>
   <button class="btn block" type="submit" id="ro-go">Show</button></form>
 <div class="track-out" id="ro-out" hidden></div></div></section>'''
 page('/reorder/', 'Orders and follow-ups | Youth Face', 'Owner page.', owner, index=False, js='store.js,owner.js')
@@ -635,6 +660,50 @@ for pth in pages:
 sm.append('</urlset>')
 open(os.path.join(ROOT, 'sitemap.xml'), 'w').write('\n'.join(sm) + '\n')
 open(os.path.join(ROOT, 'robots.txt'), 'w').write('User-agent: *\nDisallow: /cart/\nDisallow: /checkout/\nDisallow: /reorder/\nDisallow: /api/\nAllow: /\n\nSitemap: %s/sitemap.xml\n' % SITE)
+
+# Product feed for Google Merchant Center (free listings / Shopping) and the Meta or Instagram catalogue.
+FEED_DESC = {
+    'p1': 'Youth Face Beauty Cream, 25 g jar. A daily face cream with Kojic Acid and Alpha Arbutin for dark-spot care and a more even-looking skin tone. Apply a small amount to clean skin once or twice daily and use sunscreen in the morning. Cosmetic product. Free shipping across India, Cash on Delivery available.',
+    'p2': 'Youth Face Beauty Cream, pack of 2 jars (2 x 25 g). A daily face cream with Kojic Acid and Alpha Arbutin for dark-spot care and a more even-looking skin tone. Better value per jar for regular use. Cosmetic product. Free shipping across India, Cash on Delivery available.',
+    'p3': 'Youth Face Beauty Cream, pack of 3 jars (3 x 25 g). A daily face cream with Kojic Acid and Alpha Arbutin for dark-spot care and a more even-looking skin tone. Best value per jar. Cosmetic product. Free shipping across India, Cash on Delivery available.',
+    'lotion': 'Youth Face Body Lotion, 40 ml. A lightweight, quick-absorbing daily body moisturiser for soft, comfortable skin. Apply to clean, dry skin after a bath. Free shipping across India, Cash on Delivery available.',
+    'combo': 'Youth Face combo: one Beauty Cream 25 g jar with Kojic Acid and Alpha Arbutin for the face, and one Body Lotion 40 ml for the body, together at one price. Cosmetic products. Free shipping across India, Cash on Delivery available.',
+}
+FEED_GRAMS = {'p1': 60, 'p2': 120, 'p3': 180, 'lotion': 70, 'combo': 130}
+
+
+def feed_xml():
+    e = lambda v: html.escape(str(v), quote=False)
+    items = []
+    for p in PRODUCTS:
+        cream = p['id'] != 'lotion'
+        extra = ''.join('<g:additional_image_link>%s%s</g:additional_image_link>' % (SITE, i.replace('.webp', '.jpg')) for i in p['imgs'][1:])
+        price = '<g:price>%d.00 INR</g:price>' % p['mrp'] + ('<g:sale_price>%d.00 INR</g:sale_price>' % p['price'] if p['mrp'] > p['price'] else '')
+        multi = {'p2': '<g:multipack>2</g:multipack>', 'p3': '<g:multipack>3</g:multipack>', 'combo': '<g:is_bundle>yes</g:is_bundle>'}.get(p['id'], '')
+        items.append('''<item>
+  <g:id>%s</g:id><title>%s</title><description>%s</description>
+  <link>%s%s</link><g:image_link>%s%s</g:image_link>%s
+  <g:availability>in_stock</g:availability>%s
+  <g:brand>Youth Face</g:brand><g:condition>new</g:condition><g:identifier_exists>no</g:identifier_exists>%s
+  <g:google_product_category>%s</g:google_product_category><g:product_type>%s</g:product_type>
+  <g:shipping><g:country>IN</g:country><g:service>Standard</g:service><g:price>0.00 INR</g:price></g:shipping>
+  <g:shipping_weight>%d g</g:shipping_weight>
+</item>''' % (p['sku'], e(p['name'].replace(' – ', ' - ')), e(FEED_DESC[p['id']]), SITE, url(p), SITE, p['og'], extra, price, multi,
+                 'Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Skin Care' + (' &gt; Lotion &amp; Moisturizer' if p['id'] == 'lotion' else ''),
+                 'Skin Care &gt; ' + ('Body Lotion' if p['id'] == 'lotion' else 'Combo' if p['id'] == 'combo' else 'Face Cream'),
+                 FEED_GRAMS[p['id']]))
+    return '''<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+<channel>
+<title>Youth Face</title><link>%s/</link><description>Youth Face product feed</description>
+%s
+</channel>
+</rss>
+''' % (SITE, '\n'.join(items))
+
+
+os.makedirs(os.path.join(ROOT, 'feeds'), exist_ok=True)
+open(os.path.join(ROOT, 'feeds', 'products.xml'), 'w').write(feed_xml())
 
 redirects = []
 for p in PRODUCTS:
