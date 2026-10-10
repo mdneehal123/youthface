@@ -639,7 +639,7 @@ exec(open(os.path.join(B, 'langs.py'), encoding='utf-8').read())
 # ---------------- Owner page (private, needs ADMIN_KEY) ----------------
 owner = top('Owner only', 'Orders and follow-ups', 'Paid orders, people who started an order and did not pay, and customers due a reorder. Youth Face orders only.') + \
     '''<section style="padding-top:20px"><div class="wrap track"><form class="form" id="ro-form" novalidate>
-  <div class="f"><label for="ro-key">Admin key</label><input id="ro-key" type="password" autocomplete="off"></div>
+  <div class="f"><label for="ro-key">Owner code</label><input id="ro-key" type="text" class="masked" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text"></div>
   <div class="f"><label for="ro-range">Show</label><select id="ro-range"><option value="today">Paid orders today</option><option value="week">Paid orders, last 7 days</option><option value="left">Started an order, did not pay (last 3 days)</option><option value="refill">Refill reminders due now (customer asked)</option><option value="25-40">Ordered 25 to 40 days ago (reorder due)</option><option value="41-70">Ordered 41 to 70 days ago (missed)</option><option value="0-24">Ordered 0 to 24 days ago (not due yet)</option></select></div>
   <button class="btn block" type="submit" id="ro-go">Show</button></form>
 <div class="track-out" id="ro-out" hidden></div></div></section>'''

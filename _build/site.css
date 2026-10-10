@@ -410,3 +410,4 @@ body.has-bar footer{padding-bottom:100px}
 .lang-en a{color:var(--accent-2)}
 .langs a{display:inline;padding:0;color:#E3D2CF}
 .dcheck{grid-template-columns:minmax(0,1fr)}.dc-row input{width:100%}
+.masked{-webkit-text-security:disc;text-security:disc}
