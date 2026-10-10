@@ -32,8 +32,8 @@ PRODUCTS = [
     dict(id='p1', wc=16, slug='youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-25g',
          name='Youth Face Beauty Cream 25g – Pack of 1', card='Beauty Cream · Pack of 1', size='1 × 25 g jar', price=549, mrp=899, badge='',
          sku='YFB-CREAM-25',
-         title='Buy Youth Face Beauty Cream 25g – Pack of 1 (Original) | Kojic Acid & Alpha Arbutin',
-         desc='Buy the original Youth Face Beauty Cream 25g with Kojic Acid & Alpha Arbutin, direct from the brand. ₹549, Cash on Delivery available, ships from Bhatkal.',
+         title='Buy Youth Face Beauty Cream 25g – Pack of 1 | Kojic Acid & Alpha Arbutin',
+         desc='Buy Youth Face Beauty Cream 25g with Kojic Acid & Alpha Arbutin. ₹549, free shipping, Cash on Delivery available, ships from Bhatkal, Karnataka.',
          imgs=['/assets/img/yf-pack-1.webp'], og='/assets/img/yf-pack-1.jpg',
          thumb='/assets/img/yf-pack-1-600.webp'),
     dict(id='p2', wc=17, slug='youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-pack-of-2',
@@ -166,7 +166,7 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="strip">Free shipping<span>•</span>COD &amp; online payment<span>•</span>100%% original Youth Face</div>
+<div class="strip">Free shipping<span>•</span>COD &amp; online payment<span>•</span>Ships from Bhatkal, Karnataka</div>
 <header class="head"><div class="wrap head-in">
   <a class="brand" href="/" aria-label="Youth Face home">%(brand)s</a>
   <nav class="nav" id="nav" aria-label="Main">%(nav)s</nav>
@@ -247,7 +247,7 @@ ICON = {
 }
 
 HOME_FAQ = [
-    ('Is Youth Face Beauty Cream original when bought here?', 'Yes. This is the brand\'s own store, run by Beauty Mart in Bhatkal, Karnataka. Every jar ships directly from us, so you get the original product.'),
+    ('Who runs this store?', 'This store is run by Beauty Mart in Bhatkal, Karnataka. Every order is packed by our team in Bhatkal and handed to a courier, in sealed packaging.'),
     ('What does the cream contain?', 'Youth Face Beauty Cream is built around Kojic Acid and Alpha Arbutin, two ingredients widely used in creams for dark-spot care and a more even-looking tone. The full ingredient list is printed on every pack.'),
     ('How do I use it?', 'Wash your face, pat it dry, and apply a small amount to the face and neck, once or twice a day. Always follow with sunscreen in the morning. Patch test first if you have sensitive skin.'),
     ('Is Cash on Delivery available?', 'Yes. Choose Cash on Delivery at checkout: you pay ₹99 online to confirm the order and the rest in cash when it arrives. You can also pay the full amount online by UPI, card or netbanking.'),
@@ -266,10 +266,10 @@ home = '''<div class="wrap hero">
     <div class="cta"><a class="btn" href="#packs">Shop now</a><a class="btn ghost" href="/how-to-use/">How to use</a></div>
   </div>
   <div class="hero-media"><div class="frame"><a href="/product/youth-face-beauty-cream-body-lotion-combo/"><img src="%s" alt="Youth Face Combo: Beauty Cream 25g with Kojic Acid and Alpha Arbutin, and Body Lotion 40ml" width="1200" height="1200" fetchpriority="high"></a></div>
-    <div class="chips"><span class="chip a">Combo <b>₹999</b> · COD available</span><span class="chip b">100%% original</span></div></div>
+    <div class="chips"><span class="chip a">Combo <b>₹999</b> · COD available</span><span class="chip b">Ships from Bhatkal</span></div></div>
 </div>
 <div class="wrap trust">
-  <div>%s<p><b>100%% original</b><span>Direct from the brand</span></p></div>
+  <div>%s<p><b>Sealed packs</b><span>Packed in Bhatkal</span></p></div>
   <div>%s<p><b>COD + online</b><span>UPI, cards, netbanking</span></p></div>
   <div>%s<p><b>WhatsApp support</b><span>Real people, quick replies</span></p></div>
   <div>%s<p><b>Simple routine</b><span>Morning and night</span></p></div>
@@ -296,7 +296,7 @@ home = '''<div class="wrap hero">
   <p style="margin-top:22px"><a class="btn ghost" href="/faq/">All questions</a></p>
 </div></section>''' % ('/assets/img/yf-combo.webp', ICON['orig'], ICON['cod'], ICON['wa'], ICON['routine'],
                          ''.join(card(p) for p in MAIN), combo_band(), faq_html(HOME_FAQ))
-page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin | Official Store',
+page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin | Online Store',
      'Youth Face is a modern Indian skincare brand: Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹549, free shipping, COD.',
      home, og='website', extra_head=ALT, schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + url(p)} for i, p in enumerate(PRODUCTS)]}, faq_ld(HOME_FAQ)])
 
@@ -308,7 +308,7 @@ page('/shop/', 'Shop Youth Face Skincare | Beauty Cream & Body Lotion', 'Shop Yo
 
 # ---------------- Product pages ----------------
 CREAM_TABS = [
-    ('Description', '<p>Youth Face Beauty Cream is a daily face cream built around Kojic Acid and Alpha Arbutin, two ingredients widely used in skincare for dark-spot care and a more even-looking tone. It has a light texture that spreads easily and fits into a simple morning and night routine.</p><p>Buying here means you get the original Youth Face product, shipped directly by the brand from Bhatkal, Karnataka.</p>'),
+    ('Description', '<p>Youth Face Beauty Cream is a daily face cream built around Kojic Acid and Alpha Arbutin, two ingredients widely used in skincare for dark-spot care and a more even-looking tone. It has a light texture that spreads easily and fits into a simple morning and night routine.</p><p>Orders are packed in sealed packaging by Beauty Mart in Bhatkal, Karnataka, and shipped free across India.</p>'),
     ('Key ingredients', '<p><b>Kojic Acid:</b> used in creams made for dark spots and uneven-looking tone.</p><p><b>Alpha Arbutin:</b> a gentle partner ingredient used for a brighter-looking, more even complexion.</p><p>The complete ingredient list is printed on the pack.</p>'),
     ('How to use', '<p>1. Wash your face and pat dry. 2. Apply a small amount to face and neck and massage gently. 3. Use once or twice daily; in the morning, always follow with sunscreen.</p><p>Patch test on a small area first. Avoid the eyes. Stop use if irritation occurs.</p>'),
     ('Shipping & payment', '<p>Free shipping across India. Pay online by UPI, card or netbanking, or choose Cash on Delivery with a ₹99 advance. Orders are packed in 1 to 3 business days and usually delivered 3 to 7 business days after dispatch.</p>'),
@@ -324,7 +324,7 @@ COMBO_TABS = [
     ('Shipping & payment', CREAM_TABS[3][1]),
 ]
 PDP_FAQ = [
-    ('Is this the original Youth Face product?', 'Yes. This is the official Youth Face store and every order ships directly from the brand.'),
+    ('Who packs and ships my order?', 'Beauty Mart in Bhatkal, Karnataka packs every order in sealed packaging and ships it free across India.'),
     ('Can I pay Cash on Delivery?', 'Yes. Pay ₹99 online to confirm and the rest in cash at delivery, or pay the full amount online.'),
     ('When will I see a difference?', 'Skin responds slowly and differently for everyone. Use it regularly for several weeks with daily sunscreen before judging.'),
 ]
@@ -364,7 +364,7 @@ for p in PRODUCTS:
     <div class="qty-row"><div class="qty" data-qty><button type="button" data-dec aria-label="Less">−</button><output>1</output><button type="button" data-inc aria-label="More">+</button></div><span class="muted" style="font-size:.9rem">In stock · ships from Bhatkal</span></div>
     <div class="acts"><button class="btn ghost" type="button" data-add="%(id)s" data-useqty>Add to cart</button><button class="btn" type="button" data-buy="%(id)s" data-useqty>Buy now</button></div>
     <div class="dcheck"><label for="dc-pin">Check delivery to your pincode</label><div class="dc-row"><input id="dc-pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="6-digit pincode"><button type="button" class="btn sm ghost" id="dc-go">Check</button></div><p class="dc-out" id="dc-out" role="status" aria-live="polite" hidden></p></div>
-    <ul class="perks"><li>Cash on Delivery available (₹99 advance)</li><li>Free shipping across India</li><li>100%% original, shipped by the brand</li></ul>
+    <ul class="perks"><li>Cash on Delivery available (₹99 advance)</li><li>Free shipping across India</li><li>Sealed pack, shipped from Bhatkal</li></ul>
     <div class="tabs">%(tabs)s</div>
   </div>
 </div>
@@ -417,7 +417,7 @@ about = top('About us', 'About Youth Face', 'A modern Indian skincare brand focu
 <h2>What we make</h2>
 <p>Our first product is <a href="%s">Youth Face Beauty Cream</a>, built around Kojic Acid and Alpha Arbutin for dark-spot care and a more even-looking tone. It is available as a single 25 g jar and in packs of two and three. We also make <a href="%s">Youth Face Body Lotion</a>, a light daily moisturiser for the body. More products are on the way.</p>
 <h2>Our promise</h2>
-<ul><li><b>Genuine products</b>, shipped directly by us. Buy from this site to avoid third-party copies.</li><li><b>Clear information</b> on ingredients, usage and pricing, with no hidden costs.</li><li><b>Secure payment</b> online, or Cash on Delivery with a small advance.</li><li><b>Real support</b> on WhatsApp, before and after you buy.</li></ul>
+<ul><li><b>Sealed products</b>, packed and shipped by our own team in Bhatkal.</li><li><b>Clear information</b> on ingredients, usage and pricing, with no hidden costs.</li><li><b>Secure payment</b> online, or Cash on Delivery with a small advance.</li><li><b>Real support</b> on WhatsApp, before and after you buy.</li></ul>
 <h2>Who we are</h2>
 <p>Youth Face is run by %s from Bhatkal, Karnataka. Every order is packed by our team and handed to a trusted courier.</p>
 <p style="margin-top:26px"><a class="btn" href="/shop/">Shop Youth Face</a></p></div></section>''' % (url(PRODUCTS[0]), url(PRODUCTS[3]), OWNER)
@@ -438,7 +438,7 @@ FAQ_ALL = HOME_FAQ + [
     ('Should I use sunscreen?', 'Yes. Daily broad-spectrum sunscreen is important with any dark-spot care routine.'),
     ('Is the Body Lotion the same as the Beauty Cream?', 'No. The Body Lotion is a separate, lightweight moisturiser for the body. The Beauty Cream is made for the face.'),
 ]
-page('/faq/', 'Youth Face FAQ | Orders, COD, Delivery & Usage', 'Answers about Youth Face Beauty Cream and Body Lotion: original products, Cash on Delivery, delivery times, tracking, returns and how to use.',
+page('/faq/', 'Youth Face FAQ | Orders, COD, Delivery & Usage', 'Answers about Youth Face Beauty Cream and Body Lotion: who runs the store, Cash on Delivery, delivery times, tracking, returns and how to use.',
      top('FAQ', 'Frequently asked questions') + '<section style="padding-top:24px"><div class="wrap">%s</div></section>' % faq_html(FAQ_ALL),
      crumbs=[('FAQ', '/faq/')], schema=[faq_ld(FAQ_ALL)])
 
@@ -546,11 +546,11 @@ track = top('Track order', 'Track your Youth Face order', 'Use the mobile number
 <div class="track-out" id="t-out" role="status" aria-live="polite" hidden></div></div></section>'''
 page('/track-order/', 'Track Your Order | Youth Face', 'Track your Youth Face order with your mobile number and pincode, payment ID or courier tracking number.', track, crumbs=[('Track Order', '/track-order/')])
 
-BIZ = '''<div class="bizcard"><b>Business details</b><span>Youth Face, a brand of %s</span><span>%s</span><span>WhatsApp and phone: %s</span><span>Hours: Monday to Saturday, 10 am to 7 pm IST</span></div>''' % (OWNER, ADDR, WA_SHOW)
+BIZ = '''<div class="bizcard"><b>Business details</b><span>Youth Face online store, run by %s</span><span>%s</span><span>WhatsApp and phone: %s</span><span>Hours: Monday to Saturday, 10 am to 7 pm IST</span></div>''' % (OWNER, ADDR, WA_SHOW)
 GRIEV = '''<h2>Grievance officer</h2><p>In line with the Consumer Protection (E-Commerce) Rules, 2020, complaints can be sent to our Grievance Officer: <b>%s</b>, %s, %s. WhatsApp and phone: %s. We acknowledge every complaint within 48 hours and aim to resolve it within one month of receiving it.</p>''' % (GRIEVANCE_NAME, OWNER, ADDR, WA_SHOW)
 POL = {
 '/privacy-policy/': ('Privacy Policy', 'Privacy Policy | Youth Face', 'How Youth Face collects, uses, shares and protects your personal information, how we use cookies and Google and Meta advertising, and how to opt out or delete your data.', '''
-<p>This Privacy Policy explains how Youth Face, a brand of %(o)s (&ldquo;we&rdquo;, &ldquo;us&rdquo;), collects, uses, shares and protects personal information when you visit youthfacebeautycream.com (the &ldquo;site&rdquo;) or place an order. By using the site you agree to this policy.</p>
+<p>This Privacy Policy explains how the Youth Face online store, run by %(o)s (&ldquo;we&rdquo;, &ldquo;us&rdquo;), collects, uses, shares and protects personal information when you visit youthfacebeautycream.com (the &ldquo;site&rdquo;) or place an order. By using the site you agree to this policy.</p>
 %(biz)s
 <h2>1. Information we collect</h2>
 <p><b>Information you give us:</b> when you order or contact us, we collect your name, mobile number, delivery address, city and pincode, the products you choose, and any messages you send us on WhatsApp.</p>
