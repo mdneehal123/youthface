@@ -411,3 +411,6 @@ body.has-bar footer{padding-bottom:100px}
 .langs a{display:inline;padding:0;color:#E3D2CF}
 .dcheck{grid-template-columns:minmax(0,1fr)}.dc-row input{width:100%}
 .masked{-webkit-text-security:disc;text-security:disc}
+.setup-note{display:grid;gap:12px}
+.setup-note h2{font-size:1.6rem}
+.setup-note p{color:var(--muted)}

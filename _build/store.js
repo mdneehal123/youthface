@@ -79,6 +79,19 @@
 
   /* ---------------- checkout ---------------- */
   function checkout(){
+    // Until online payment is switched on, do not ask for personal details: offer WhatsApp ordering instead.
+    fetch('/api/config').then(function(r){return r.ok?r.json():null;}).then(function(c){
+      if(!c||c.razorpay){return;}
+      var form=$('co-form');if(!form){return;}form.hidden=true;
+      var t=totals(),box=el('div','setup-note');
+      box.appendChild(el('h2',null,'Order on WhatsApp'));
+      box.appendChild(el('p',null,'Our online checkout is being set up. You can still order right now: tap below to send your cart to us on WhatsApp. We confirm your order on chat and you pay cash on delivery.'));
+      var msg='Hi Youth Face, I would like to order:\n'+t.lines.map(function(x){return '- '+x.p.name+' x'+x.qty+' = '+rs(x.sub);}).join('\n')+'\nTotal: '+rs(t.total);
+      var a=el('a','btn block','Send my order on WhatsApp');a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);a.target='_blank';a.rel='noopener';
+      if(!t.lines.length){a.href='/shop/';a.removeAttribute('target');a.textContent='Go to the shop';}
+      box.appendChild(a);box.appendChild(el('p','muted','Free shipping · Cash on Delivery · WhatsApp '+'+91 99808 81230'));
+      form.parentNode.insertBefore(box,form);
+    }).catch(function(){});
     var F={name:$('co-name'),phone:$('co-phone'),address:$('co-address'),pin:$('co-pin'),city:$('co-city')};
     var btn=$('co-pay'),err=$('co-err'),bad=null,busy=false,lastMode='online';
     var saved=load(DETAILS,null);if(saved){Object.keys(F).forEach(function(k){if(typeof saved[k]==='string'){F[k].value=saved[k].slice(0,300);}});}
@@ -253,7 +266,9 @@
   }
 
   /* ---------------- 3½-minute pop-up (once every 3 days, never on cart/checkout) ---------------- */
+  var NUDGE_ON=false; // switched off while Google Ads is under review; set to true to bring the 3½-minute pop-up back
   function nudge(){
+    if(!NUDGE_ON){return;}
     if(/^\/(cart|checkout|reorder)\//.test(location.pathname)){return;}
     var last=load(NUDGE,0);if(Date.now()-last<3*864e5){return;}
     if(load(ORDERS,[]).some(function(o){return o&&Date.now()-o.at<30*864e5;})){return;}
