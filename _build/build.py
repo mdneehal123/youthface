@@ -756,6 +756,44 @@ for old, new in OLD_IMG.items():
     redirects.append({'source': '/wp-content/uploads/2026/10/%s(-600x600)?.png' % old, 'destination': '/assets/img/%s.jpg' % new, 'permanent': True})
 for src in ['/wp-admin', '/wp-admin/:path*', '/wp-login.php', '/xmlrpc.php']:
     redirects.append({'source': src, 'destination': '/', 'permanent': False})
+# ---- The business keeps ONE Youth Face website: youthfacebeauty.com. Every address here moves there for good (301),
+# page to the closest matching page, so search ranking and old links carry over. Set MOVED_TO = '' to bring this site back.
+MOVED_TO = 'https://youthfacebeauty.com'
+if MOVED_TO:
+    G = '/skincare-guides/'
+    MOVE = [
+        ('/', '/'), ('/shop/', '/shop/'), ('/cart/', '/cart/'), ('/checkout/', '/checkout/'),
+        ('/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/', '/product/youth-face-beauty-cream-25g/'),
+        ('/product/youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin/', '/product/youth-face-beauty-cream-pack-of-2/'),
+        ('/product/youth-face-beauty-cream-pack-of-3-kojic-acid-alpha-arbutin/', '/product/youth-face-beauty-cream-pack-of-3/'),
+        ('/product/youth-face-body-lotion/', '/product/youth-face-body-lotion/'),
+        ('/product/youth-face-beauty-cream-body-lotion-combo/', '/shop/'),
+        ('/product/youth-face-beauty-cream-25g/', '/product/youth-face-beauty-cream-25g/'),
+        ('/product/youth-face-beauty-cream-pack-of-2/', '/product/youth-face-beauty-cream-pack-of-2/'),
+        ('/product/youth-face-beauty-cream-pack-of-3/', '/product/youth-face-beauty-cream-pack-of-3/'),
+        ('/about-us/', '/about-us/'), ('/contact/', '/contact/'), ('/faq/', '/faq/'), ('/how-to-use/', '/how-to-use/'),
+        ('/track-order/', '/track-order/'), ('/refund-returns-policy/', '/refund-returns-policy/'), ('/shipping-delivery/', '/shipping-delivery/'),
+        ('/privacy-policy/', '/privacy-policy/'), ('/terms-conditions/', '/terms-conditions/'), (G, G),
+        (G + 'kojic-acid/', '/kojic-acid-dark-spots-guide/'), (G + 'alpha-arbutin/', '/alpha-arbutin-pigmentation-guide/'),
+        (G + 'skincare-routine-basics/', '/a-simple-daily-skincare-routine/'), (G + 'how-to-use-youth-face/', '/how-to-use/'),
+        (G + 'daytime-skincare-routine/', '/a-simple-daily-skincare-routine/'), (G + 'evening-skincare-routine/', '/a-simple-daily-skincare-routine/'),
+        (G + 'youth-face-cream-price/', '/shop/'), (G + 'youth-face-cream-side-effects/', '/youth-face-cream-side-effects-what-you-should-know/'),
+        (G + 'kojic-acid-vs-alpha-arbutin/', '/kojic-acid-vs-alpha-arbutin-whats-the-difference/'),
+        (G + 'how-to-remove-dark-spots-on-face/', '/dark-spots-uneven-skin-tone-routine/'),
+        ('/hi/', '/'), ('/ur/', '/'), ('/my-account/', '/my-account/'),
+    ]
+    moved = []
+    for src, dst in MOVE:
+        moved.append({'source': src, 'destination': MOVED_TO + dst, 'permanent': True})
+        if src != '/':
+            moved.append({'source': src.rstrip('/'), 'destination': MOVED_TO + dst, 'permanent': True})
+    # the old WordPress short addresses go straight to the final page (no chain of two redirects)
+    for r in redirects:
+        d = r['destination']
+        final = next((MOVED_TO + b for a, b in MOVE if a == d), MOVED_TO + '/')
+        moved.append({'source': r['source'], 'destination': final, 'permanent': r['permanent']})
+    moved.append({'source': '/:path*', 'destination': MOVED_TO + '/', 'permanent': True})
+    redirects = moved
 vercel = {'cleanUrls': False, 'redirects': redirects,
           'headers': [{'source': '/(assets|wp-content)/(.*)\\.(webp|jpg|jpeg|png|svg|mp4)', 'headers': [{'key': 'Cache-Control', 'value': 'public, max-age=86400, stale-while-revalidate=604800'}]},
                       {'source': '/(cart|checkout|reorder)/(.*)', 'headers': [{'key': 'X-Robots-Tag', 'value': 'noindex'}]}]}

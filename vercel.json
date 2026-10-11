@@ -2,164 +2,514 @@
   "cleanUrls": false,
   "redirects": [
     {
-      "source": "/product/youth-face-beauty-cream-25g",
-      "destination": "/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/",
+      "source": "/",
+      "destination": "https://youthfacebeauty.com/",
+      "permanent": true
+    },
+    {
+      "source": "/shop/",
+      "destination": "https://youthfacebeauty.com/shop/",
+      "permanent": true
+    },
+    {
+      "source": "/shop",
+      "destination": "https://youthfacebeauty.com/shop/",
+      "permanent": true
+    },
+    {
+      "source": "/cart/",
+      "destination": "https://youthfacebeauty.com/cart/",
+      "permanent": true
+    },
+    {
+      "source": "/cart",
+      "destination": "https://youthfacebeauty.com/cart/",
+      "permanent": true
+    },
+    {
+      "source": "/checkout/",
+      "destination": "https://youthfacebeauty.com/checkout/",
+      "permanent": true
+    },
+    {
+      "source": "/checkout",
+      "destination": "https://youthfacebeauty.com/checkout/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-25g/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-25g/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-2/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-2/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-3-kojic-acid-alpha-arbutin/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-3/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-3-kojic-acid-alpha-arbutin",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-3/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-body-lotion/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-body-lotion/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-body-lotion",
+      "destination": "https://youthfacebeauty.com/product/youth-face-body-lotion/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-body-lotion-combo/",
+      "destination": "https://youthfacebeauty.com/shop/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-body-lotion-combo",
+      "destination": "https://youthfacebeauty.com/shop/",
       "permanent": true
     },
     {
       "source": "/product/youth-face-beauty-cream-25g/",
-      "destination": "/product/youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-25g/",
       "permanent": true
     },
     {
-      "source": "/product/youth-face-beauty-cream-pack-of-2",
-      "destination": "/product/youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin/",
+      "source": "/product/youth-face-beauty-cream-25g",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-25g/",
       "permanent": true
     },
     {
       "source": "/product/youth-face-beauty-cream-pack-of-2/",
-      "destination": "/product/youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-2/",
       "permanent": true
     },
     {
-      "source": "/product/youth-face-beauty-cream-pack-of-3",
-      "destination": "/product/youth-face-beauty-cream-pack-of-3-kojic-acid-alpha-arbutin/",
+      "source": "/product/youth-face-beauty-cream-pack-of-2",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-2/",
       "permanent": true
     },
     {
       "source": "/product/youth-face-beauty-cream-pack-of-3/",
-      "destination": "/product/youth-face-beauty-cream-pack-of-3-kojic-acid-alpha-arbutin/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-3/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-3",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-3/",
+      "permanent": true
+    },
+    {
+      "source": "/about-us/",
+      "destination": "https://youthfacebeauty.com/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/about-us",
+      "destination": "https://youthfacebeauty.com/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/contact/",
+      "destination": "https://youthfacebeauty.com/contact/",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "https://youthfacebeauty.com/contact/",
+      "permanent": true
+    },
+    {
+      "source": "/faq/",
+      "destination": "https://youthfacebeauty.com/faq/",
+      "permanent": true
+    },
+    {
+      "source": "/faq",
+      "destination": "https://youthfacebeauty.com/faq/",
+      "permanent": true
+    },
+    {
+      "source": "/how-to-use/",
+      "destination": "https://youthfacebeauty.com/how-to-use/",
+      "permanent": true
+    },
+    {
+      "source": "/how-to-use",
+      "destination": "https://youthfacebeauty.com/how-to-use/",
+      "permanent": true
+    },
+    {
+      "source": "/track-order/",
+      "destination": "https://youthfacebeauty.com/track-order/",
+      "permanent": true
+    },
+    {
+      "source": "/track-order",
+      "destination": "https://youthfacebeauty.com/track-order/",
+      "permanent": true
+    },
+    {
+      "source": "/refund-returns-policy/",
+      "destination": "https://youthfacebeauty.com/refund-returns-policy/",
+      "permanent": true
+    },
+    {
+      "source": "/refund-returns-policy",
+      "destination": "https://youthfacebeauty.com/refund-returns-policy/",
+      "permanent": true
+    },
+    {
+      "source": "/shipping-delivery/",
+      "destination": "https://youthfacebeauty.com/shipping-delivery/",
+      "permanent": true
+    },
+    {
+      "source": "/shipping-delivery",
+      "destination": "https://youthfacebeauty.com/shipping-delivery/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy/",
+      "destination": "https://youthfacebeauty.com/privacy-policy/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "https://youthfacebeauty.com/privacy-policy/",
+      "permanent": true
+    },
+    {
+      "source": "/terms-conditions/",
+      "destination": "https://youthfacebeauty.com/terms-conditions/",
+      "permanent": true
+    },
+    {
+      "source": "/terms-conditions",
+      "destination": "https://youthfacebeauty.com/terms-conditions/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/",
+      "destination": "https://youthfacebeauty.com/skincare-guides/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides",
+      "destination": "https://youthfacebeauty.com/skincare-guides/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/kojic-acid/",
+      "destination": "https://youthfacebeauty.com/kojic-acid-dark-spots-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/kojic-acid",
+      "destination": "https://youthfacebeauty.com/kojic-acid-dark-spots-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/alpha-arbutin/",
+      "destination": "https://youthfacebeauty.com/alpha-arbutin-pigmentation-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/alpha-arbutin",
+      "destination": "https://youthfacebeauty.com/alpha-arbutin-pigmentation-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/skincare-routine-basics/",
+      "destination": "https://youthfacebeauty.com/a-simple-daily-skincare-routine/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/skincare-routine-basics",
+      "destination": "https://youthfacebeauty.com/a-simple-daily-skincare-routine/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/how-to-use-youth-face/",
+      "destination": "https://youthfacebeauty.com/how-to-use/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/how-to-use-youth-face",
+      "destination": "https://youthfacebeauty.com/how-to-use/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/daytime-skincare-routine/",
+      "destination": "https://youthfacebeauty.com/a-simple-daily-skincare-routine/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/daytime-skincare-routine",
+      "destination": "https://youthfacebeauty.com/a-simple-daily-skincare-routine/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/evening-skincare-routine/",
+      "destination": "https://youthfacebeauty.com/a-simple-daily-skincare-routine/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/evening-skincare-routine",
+      "destination": "https://youthfacebeauty.com/a-simple-daily-skincare-routine/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/youth-face-cream-price/",
+      "destination": "https://youthfacebeauty.com/shop/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/youth-face-cream-price",
+      "destination": "https://youthfacebeauty.com/shop/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/youth-face-cream-side-effects/",
+      "destination": "https://youthfacebeauty.com/youth-face-cream-side-effects-what-you-should-know/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/youth-face-cream-side-effects",
+      "destination": "https://youthfacebeauty.com/youth-face-cream-side-effects-what-you-should-know/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/kojic-acid-vs-alpha-arbutin/",
+      "destination": "https://youthfacebeauty.com/kojic-acid-vs-alpha-arbutin-whats-the-difference/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/kojic-acid-vs-alpha-arbutin",
+      "destination": "https://youthfacebeauty.com/kojic-acid-vs-alpha-arbutin-whats-the-difference/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/how-to-remove-dark-spots-on-face/",
+      "destination": "https://youthfacebeauty.com/dark-spots-uneven-skin-tone-routine/",
+      "permanent": true
+    },
+    {
+      "source": "/skincare-guides/how-to-remove-dark-spots-on-face",
+      "destination": "https://youthfacebeauty.com/dark-spots-uneven-skin-tone-routine/",
+      "permanent": true
+    },
+    {
+      "source": "/hi/",
+      "destination": "https://youthfacebeauty.com/",
+      "permanent": true
+    },
+    {
+      "source": "/hi",
+      "destination": "https://youthfacebeauty.com/",
+      "permanent": true
+    },
+    {
+      "source": "/ur/",
+      "destination": "https://youthfacebeauty.com/",
+      "permanent": true
+    },
+    {
+      "source": "/ur",
+      "destination": "https://youthfacebeauty.com/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/",
+      "destination": "https://youthfacebeauty.com/my-account/",
       "permanent": true
     },
     {
       "source": "/my-account",
-      "destination": "/track-order/",
+      "destination": "https://youthfacebeauty.com/my-account/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-25g",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-25g/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-25g/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-25g/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-2",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-2/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-2/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-2/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-3",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-3/",
+      "permanent": true
+    },
+    {
+      "source": "/product/youth-face-beauty-cream-pack-of-3/",
+      "destination": "https://youthfacebeauty.com/product/youth-face-beauty-cream-pack-of-3/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account",
+      "destination": "https://youthfacebeauty.com/track-order/",
       "permanent": true
     },
     {
       "source": "/my-account/:path*",
-      "destination": "/track-order/",
+      "destination": "https://youthfacebeauty.com/track-order/",
       "permanent": true
     },
     {
       "source": "/product-category/:path*",
-      "destination": "/shop/",
+      "destination": "https://youthfacebeauty.com/shop/",
       "permanent": true
     },
     {
       "source": "/product-tag/:path*",
-      "destination": "/shop/",
+      "destination": "https://youthfacebeauty.com/shop/",
       "permanent": true
     },
     {
       "source": "/feed",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/feed/",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/comments/feed/",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/home",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/home/",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/wp-sitemap.xml",
-      "destination": "/sitemap.xml",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/sitemap_index.xml",
-      "destination": "/sitemap.xml",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/product-sitemap.xml",
-      "destination": "/sitemap.xml",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/page-sitemap.xml",
-      "destination": "/sitemap.xml",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/post-sitemap.xml",
-      "destination": "/sitemap.xml",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/wp-sitemap-:rest*",
-      "destination": "/sitemap.xml",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/about",
-      "destination": "/about-us/",
+      "destination": "https://youthfacebeauty.com/about-us/",
       "permanent": true
     },
     {
       "source": "/shipping-policy/",
-      "destination": "/shipping-delivery/",
+      "destination": "https://youthfacebeauty.com/shipping-delivery/",
       "permanent": true
     },
     {
       "source": "/refund_returns/",
-      "destination": "/refund-returns-policy/",
+      "destination": "https://youthfacebeauty.com/refund-returns-policy/",
       "permanent": true
     },
     {
       "source": "/wp-content/uploads/2026/10/Youth-Face-Beauty-Cream-25g(-600x600)?.png",
-      "destination": "/assets/img/yf-pack-1.jpg",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/wp-content/uploads/2026/10/ChatGPT-Image-Sep-17-2026-08_27_12-PM(-600x600)?.png",
-      "destination": "/assets/img/yf-pack-2.jpg",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/wp-content/uploads/2026/10/Youth-Face-Beauty-Cream-skincare-product-for-dark-spot-care(-600x600)?.png",
-      "destination": "/assets/img/yf-pack-3.jpg",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/wp-content/uploads/2026/10/ChatGPT-Image-Sep-19-2026-01_47_45-AM(-600x600)?.png",
-      "destination": "/assets/img/yf-body-lotion.jpg",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": true
     },
     {
       "source": "/wp-admin",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": false
     },
     {
       "source": "/wp-admin/:path*",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": false
     },
     {
       "source": "/wp-login.php",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": false
     },
     {
       "source": "/xmlrpc.php",
-      "destination": "/",
+      "destination": "https://youthfacebeauty.com/",
       "permanent": false
+    },
+    {
+      "source": "/:path*",
+      "destination": "https://youthfacebeauty.com/",
+      "permanent": true
     }
   ],
   "headers": [
