@@ -758,7 +758,7 @@ for src in ['/wp-admin', '/wp-admin/:path*', '/wp-login.php', '/xmlrpc.php']:
     redirects.append({'source': src, 'destination': '/', 'permanent': False})
 # ---- The business keeps ONE Youth Face website: youthfacebeauty.com. Every address here moves there for good (301),
 # page to the closest matching page, so search ranking and old links carry over. Set MOVED_TO = '' to bring this site back.
-MOVED_TO = 'https://youthfacebeauty.com'
+MOVED_TO = ''
 if MOVED_TO:
     G = '/skincare-guides/'
     MOVE = [
