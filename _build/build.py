@@ -32,21 +32,21 @@ PRODUCTS = [
     dict(id='p1', wc=16, slug='youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-25g',
          name='Youth Face Beauty Cream 25g – Pack of 1', card='Beauty Cream · Pack of 1', size='1 × 25 g jar', price=549, mrp=899, badge='',
          sku='YFB-CREAM-25',
-         title='Buy Youth Face Beauty Cream 25g – Pack of 1 | Kojic Acid & Alpha Arbutin',
+         title='Youth Face Beauty Cream 25g | Kojic Acid & Alpha Arbutin | ₹549',
          desc='Buy Youth Face Beauty Cream 25g with Kojic Acid & Alpha Arbutin. ₹549, free shipping, Cash on Delivery available, ships from Bhatkal, Karnataka.',
          imgs=['/assets/img/yf-pack-1.webp'], og='/assets/img/yf-pack-1.jpg',
          thumb='/assets/img/yf-pack-1-600.webp'),
     dict(id='p2', wc=17, slug='youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-pack-of-2',
          name='Youth Face Beauty Cream Pack of 2 – Kojic Acid & Alpha Arbutin', card='Beauty Cream · Pack of 2', size='2 × 25 g jars (50 g)', price=999, mrp=1599, badge='Most popular',
          sku='YFB-CREAM-25x2',
-         title='Youth Face Beauty Cream Pack of 2 | Kojic Acid & Alpha Arbutin',
+         title='Youth Face Beauty Cream Pack of 2 (2 × 25g) | ₹999',
          desc='Buy Youth Face Beauty Cream Pack of 2 with Kojic Acid & Alpha Arbutin online in India. 2 × 25g jars for your daily skincare routine. ₹999, COD available.',
          imgs=['/assets/img/yf-pack-2.webp', '/assets/img/yf-pack-1.webp'], og='/assets/img/yf-pack-2.jpg',
          thumb='/assets/img/yf-pack-2-600.webp'),
     dict(id='p3', wc=18, slug='youth-face-beauty-cream-pack-of-3-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-pack-of-3',
          name='Youth Face Beauty Cream Pack of 3 – Kojic Acid & Alpha Arbutin', card='Beauty Cream · Pack of 3', size='3 × 25 g jars (75 g)', price=1444, mrp=1899, badge='Best value',
          sku='YFB-CREAM-25x3',
-         title='Youth Face Beauty Cream Pack of 3 | Kojic Acid & Alpha Arbutin',
+         title='Youth Face Beauty Cream Pack of 3 (3 × 25g) | ₹1,444',
          desc='Youth Face Beauty Cream Pack of 3: three 25g jars with Kojic Acid & Alpha Arbutin. ₹1,444, best value per jar, free shipping and Cash on Delivery.',
          imgs=['/assets/img/yf-pack-3.webp', '/assets/img/yf-pack-1.webp'], og='/assets/img/yf-pack-3.jpg',
          thumb='/assets/img/yf-pack-3-600.webp'),
@@ -60,7 +60,7 @@ PRODUCTS = [
     dict(id='combo', wc=0, slug='youth-face-beauty-cream-body-lotion-combo', short='',
          name='Youth Face Combo – Beauty Cream 25g + Body Lotion 40ml', card='Combo · Cream + Lotion', size='25 g cream + 40 ml lotion', price=999, mrp=1498, badge='Face + body',
          sku='YFB-COMBO-CL',
-         title='Youth Face Combo: Beauty Cream + Body Lotion | ₹999 | Kojic Acid & Alpha Arbutin',
+         title='Youth Face Combo: Beauty Cream + Body Lotion | ₹999',
          desc='Youth Face Combo: Beauty Cream 25g with Kojic Acid & Alpha Arbutin for the face plus Body Lotion 40ml for the body, together for ₹999. Free shipping, COD available.',
          imgs=['/assets/img/yf-combo.webp', '/assets/img/yf-pack-1.webp', '/assets/img/yf-body-lotion.webp'], og='/assets/img/yf-combo.jpg',
          thumb='/assets/img/yf-combo-600.webp'),
@@ -110,11 +110,23 @@ def product_ld(p):
             'description': p['desc'], 'brand': {'@type': 'Brand', 'name': 'Youth Face'},
             'offers': {'@type': 'Offer', 'url': SITE + url(p), 'price': str(p['price']), 'priceCurrency': 'INR',
                        'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition',
+                       'shippingDetails': {'@type': 'OfferShippingDetails',
+                           'shippingRate': {'@type': 'MonetaryAmount', 'value': '0', 'currency': 'INR'},
+                           'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'IN'},
+                           'deliveryTime': {'@type': 'ShippingDeliveryTime',
+                               'handlingTime': {'@type': 'QuantitativeValue', 'minValue': 1, 'maxValue': 3, 'unitCode': 'DAY'},
+                               'transitTime': {'@type': 'QuantitativeValue', 'minValue': 3, 'maxValue': 7, 'unitCode': 'DAY'}}},
+                       'hasMerchantReturnPolicy': {'@type': 'MerchantReturnPolicy', 'applicableCountry': 'IN',
+                           'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow', 'merchantReturnDays': 7,
+                           'returnMethod': 'https://schema.org/ReturnByMail', 'returnFees': 'https://schema.org/ReturnFeesCustomerResolution',
+                           'merchantReturnLink': SITE + '/refund-returns-policy/'},
                        'seller': {'@id': SITE + '/#org'}}}
 
 
 def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='website', ogimg=None, extra_head='', js='store.js', lang='en-IN'):
     full = SITE + path
+    if len(title) > 62 and title.endswith(' | Youth Face'):
+        title = title[:-len(' | Youth Face')]
     nav = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == path else '', t) for h, t in NAV)
     graph = org_graph()
     if crumbs:
@@ -231,6 +243,15 @@ def combo_band(h='h2'):
         url(c), img(c['thumb']), h, url(c), h, rs(c['price']), rs(sep - c['price']), rs(c['price']), rs(c['mrp']), pct(c))
 
 
+def learn_more(p):
+    if p['id'] == 'lotion':
+        links = [('/how-to-use/', 'How to use Youth Face products'), ('/skincare-guides/evening-skincare-routine/', 'Evening skincare routine')]
+    else:
+        links = [('/skincare-guides/youth-face-cream-price/', 'Youth Face Cream price in India'), ('/skincare-guides/youth-face-cream-side-effects/', 'Side effects and safe use'),
+                 ('/skincare-guides/kojic-acid-vs-alpha-arbutin/', 'Kojic Acid vs Alpha Arbutin'), ('/skincare-guides/how-to-remove-dark-spots-on-face/', 'How to remove dark spots on the face')]
+    return '<div class="learn"><h3>Learn more</h3><ul>%s</ul></div>' % ''.join('<li><a href="%s">%s</a></li>' % l for l in links)
+
+
 def faq_html(items):
     return '<div class="faq">' + ''.join('<details><summary>%s</summary><p>%s</p></details>' % (q, a) for q, a in items) + '</div>'
 
@@ -290,19 +311,24 @@ home = '''<div class="wrap hero">
   <div><span class="eyebrow" style="color:#E9C98B">How to use</span><h2>Your routine in three steps</h2><p>Consistency matters more than quantity. Use it daily for several weeks and judge in the same light.</p><p style="margin-top:22px"><a class="btn gold" href="/how-to-use/">Read the full guide</a></p></div>
   <ol><li>Wash your face with a gentle cleanser and pat dry.</li><li>Apply a small amount to the face and neck and massage in.</li><li>In the morning, finish with a broad-spectrum sunscreen.</li></ol>
 </div></section>
+<section style="padding-top:0"><div class="wrap">
+  <div class="sec-h"><span class="eyebrow">Skincare guides</span><h2>Read before you buy</h2></div>
+  <div class="guides"><a href="/skincare-guides/how-to-remove-dark-spots-on-face/"><span class="eyebrow">Guide</span><h3>How to remove dark spots on the face</h3><p>What causes them, what fades them, and how long it takes.</p></a><a href="/skincare-guides/kojic-acid-vs-alpha-arbutin/"><span class="eyebrow">Guide</span><h3>Kojic Acid vs Alpha Arbutin</h3><p>How the two differ, and why they work well together.</p></a><a href="/skincare-guides/youth-face-cream-price/"><span class="eyebrow">Guide</span><h3>Youth Face Cream price in India</h3><p>Every pack, the price per jar, and how long a jar lasts.</p></a></div>
+  <p style="margin-top:18px"><a class="btn ghost" href="/skincare-guides/">All skincare guides</a></p>
+</div></section>
 <section><div class="wrap">
   <div class="sec-h"><span class="eyebrow">Questions</span><h2>Before you order</h2></div>
   %s
   <p style="margin-top:22px"><a class="btn ghost" href="/faq/">All questions</a></p>
 </div></section>''' % ('/assets/img/yf-combo.webp', ICON['orig'], ICON['cod'], ICON['wa'], ICON['routine'],
                          ''.join(card(p) for p in MAIN), combo_band(), faq_html(HOME_FAQ))
-page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin | Online Store',
-     'Youth Face is a modern Indian skincare brand: Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹549, free shipping, COD.',
+page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin Cream',
+     'Youth Face Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹549, free shipping, Cash on Delivery.',
      home, og='website', extra_head=ALT, schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + url(p)} for i, p in enumerate(PRODUCTS)]}, faq_ld(HOME_FAQ)])
 
 # ---------------- Shop ----------------
 shop = top('Shop', 'Shop Youth Face', 'Beauty Cream in packs of one, two and three, and the Youth Face Body Lotion. Free shipping and Cash on Delivery on every order.') + \
-    '<section style="padding-top:28px"><div class="wrap"><div class="grid">%s</div>%s</div></section>' % (''.join(card(p, 'h2') for p in MAIN), combo_band('h2'))
+    '<section style="padding-top:28px"><div class="wrap"><div class="grid">%s</div>%s<div class="prose" style="margin-top:44px"><h2>Which pack is right for you?</h2><p>Youth Face Beauty Cream comes in one size, a 25 g jar, which usually lasts around a month of daily use. The <b>Pack of 1</b> is the easy way to try it and patch test. Because skin changes slowly, the <b>Pack of 2</b> (₹500 a jar) and <b>Pack of 3</b> (₹481 a jar) let you keep the routine going for two to three months without a gap.</p><p>The <b>Combo</b> pairs the cream with the 40 ml Body Lotion for face and body care at one price. Every order ships free across India, with Cash on Delivery. Read the <a href="/skincare-guides/youth-face-cream-price/">price guide</a> or <a href="/how-to-use/">how to use</a> for more.</p></div></div></section>' % (''.join(card(p, 'h2') for p in MAIN), combo_band('h2'))
 page('/shop/', 'Shop Youth Face Skincare | Beauty Cream & Body Lotion', 'Shop Youth Face Beauty Cream (Pack of 1, 2 and 3) with Kojic Acid & Alpha Arbutin, and Youth Face Body Lotion. Free shipping, COD available.',
      shop, crumbs=[('Shop', '/shop/')], schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + url(p)} for i, p in enumerate(PRODUCTS)]}])
 
@@ -368,7 +394,7 @@ for p in PRODUCTS:
     <div class="tabs">%(tabs)s</div>
   </div>
 </div>
-<section style="padding-top:20px"><div class="wrap"><div class="sec-h"><h2>Questions</h2></div>%(faq)s</div></section>
+<section style="padding-top:20px"><div class="wrap"><div class="sec-h"><h2>Questions</h2></div>%(faq)s%(learn)s</div></section>
 <section style="padding-top:20px"><div class="wrap"><div class="sec-h"><span class="eyebrow">You may also like</span><h2>More from Youth Face</h2></div><div class="grid three">%(rel)s</div></div></section>
 <div class="buybar" id="buybar" hidden><div class="wrap buybar-in"><img src="%(thumb)s" alt="" width="48" height="48"><div class="bb-t"><b>%(card)s</b><span><b>%(price)s</b>%(bbmrp)s</span></div><button class="btn" type="button" data-buy="%(id)s" data-useqty>Buy now</button></div></div>''' % dict(
         thumb=img(p['thumb']), card='Body Lotion' if p['id'] == 'lotion' else p['card'].split(' · ')[-1], bbmrp=' <s>%s</s>' % rs(p['mrp']) if off else '',
@@ -376,7 +402,7 @@ for p in PRODUCTS:
         badge=' · ' + p['badge'] if p['badge'] else '', name=html.escape(p['name']), price=rs(p['price']),
         mrp='<s>MRP %s</s>' % rs(p['mrp']) if off else '', off='<span class="off">%d%% off</span>' % off if off else '', size=p['size'], summary=summary,
         tabs=''.join('<details%s><summary>%s</summary><div class="in">%s</div></details>' % (' open' if n == 0 else '', t, c) for n, (t, c) in enumerate(tabs)),
-        faq=faq_html(PDP_FAQ), rel=''.join(card(q) for q in others))
+        learn=learn_more(p), faq=faq_html(PDP_FAQ), rel=''.join(card(q) for q in others))
     ogt = '<meta property="product:brand" content="Youth Face">\n<meta property="product:availability" content="in stock">\n<meta property="product:condition" content="new">\n<meta property="product:price:amount" content="%d">\n<meta property="product:price:currency" content="INR">\n<meta property="product:retailer_item_id" content="%s">\n' % (p['price'], p['sku'])
     page(url(p), p['title'], p['desc'], body, og='product', ogimg=p['og'], extra_head=ogt,
          crumbs=[('Shop', '/shop/'), (p['card'], url(p))], schema=[product_ld(p), faq_ld(PDP_FAQ)])
@@ -431,6 +457,11 @@ contact = top('Contact', 'Contact Youth Face', 'The fastest way to reach us is W
 page('/contact/', 'Contact Youth Face | WhatsApp Support', 'Contact Youth Face on WhatsApp at +91 99808 81230 for help with orders, delivery and products. Beauty Mart, Bhatkal, Karnataka.', contact, crumbs=[('Contact', '/contact/')])
 
 FAQ_ALL = HOME_FAQ + [
+    ('What is the price of Youth Face Beauty Cream?', 'One 25 g jar is ₹549, a pack of 2 is ₹999 and a pack of 3 is ₹1,444. The Beauty Cream + Body Lotion combo is ₹999. Prices include taxes and shipping is free. See the <a href="/skincare-guides/youth-face-cream-price/">full price guide</a>.'),
+    ('How many days does it take to see results?', 'Skin changes slowly. Use it daily with sunscreen for at least 4 to 8 weeks before judging, and compare photos taken in the same light. Results vary from person to person.'),
+    ('Does Youth Face cream have side effects?', 'Some people feel mild tingling in the first days. Lasting redness, itching or burning means stop using it. Patch test first; see <a href="/skincare-guides/youth-face-cream-side-effects/">side effects and safe use</a>.'),
+    ('Can men use Youth Face Beauty Cream?', 'Yes. The cream is for anyone who wants a daily face cream for dark-spot care. Apply after washing the face, and after shaving only once the skin has settled.'),
+    ('Is it suitable for oily skin?', 'Yes. Use a pea-sized amount on clean skin; a thin layer is enough. In humid weather, use it at night and keep the morning routine light with sunscreen.'),
     ('How do I track my order?', 'Open the Track Order page and enter the mobile number and pincode used on your order, or your payment ID. Tracking appears once the courier collects the parcel.'),
     ('Can I cancel my order?', 'Yes, if it has not been packed or dispatched yet. Message us on WhatsApp with your order details as soon as possible.'),
     ('What if my product arrives damaged or wrong?', 'Contact us within 7 days of delivery with your order details and photos of the product, packaging and label. After checking, we will offer a replacement or refund.'),
@@ -472,7 +503,7 @@ GUIDES = [
 <h2>How to use it</h2><ol><li>Apply to clean, dry skin, once or twice a day.</li><li>Follow with sunscreen in the morning.</li><li>Be patient: expect gradual change over several weeks of regular use.</li></ol>
 <h2>Good to know</h2><ul><li>Even gentle ingredients deserve a patch test.</li><li>Consistency beats quantity. A thick layer does not work faster.</li><li>If you are pregnant, nursing or under treatment for a skin condition, ask your doctor before starting any new active product.</li></ul>'''),
     dict(slug='how-to-use-youth-face', old='using-youth-face', title='How to use Youth Face products', blurb='Simple directions for the Beauty Cream and Body Lotion.',
-         seo='How to Use Youth Face Beauty Cream and Body Lotion | Step-by-Step Guide',
+         seo='How to Use Youth Face Beauty Cream & Body Lotion',
          desc='Step-by-step directions for Youth Face Beauty Cream with Kojic Acid & Alpha Arbutin and Youth Face Body Lotion: how much to use, when, and what to avoid.',
          body='''<p>Both Youth Face products are made for a simple daily routine. Here is exactly how to use each one.</p>
 <h2>Youth Face Beauty Cream (face)</h2><ol><li>Wash your face with a gentle cleanser and pat dry.</li><li>Take a pea-sized amount for the face, a little more if you include the neck.</li><li>Dot it on the forehead, cheeks and chin, then massage in gently until absorbed. Avoid the eye area.</li><li>Use once a day to start, then twice a day (morning and night) if your skin is comfortable.</li><li>Every morning, finish with a broad-spectrum sunscreen.</li></ol>
@@ -501,6 +532,8 @@ GUIDES = [
 <h2>Common mistakes</h2><ul><li><b>Too many actives at once.</b> Layering several strong products at night is a common cause of irritation. Keep it to one treatment cream.</li><li><b>Skipping the cleanse.</b> Cream applied over the day's sunscreen and dust works less well.</li><li><b>Scrubbing hard.</b> Rough exfoliation makes skin sensitive. Gentle is enough.</li></ul>
 <p>Pair this with the <a href="/skincare-guides/daytime-skincare-routine/">daytime routine</a> and you have the whole day covered.</p>'''),
 ]
+
+exec(open(os.path.join(B, 'guides_extra.py'), encoding='utf-8').read())
 
 
 def guide_url(g):
@@ -549,7 +582,7 @@ page('/track-order/', 'Track Your Order | Youth Face', 'Track your Youth Face or
 BIZ = '''<div class="bizcard"><b>Business details</b><span>Youth Face online store, run by %s</span><span>%s</span><span>WhatsApp and phone: %s</span><span>Hours: Monday to Saturday, 10 am to 7 pm IST</span></div>''' % (OWNER, ADDR, WA_SHOW)
 GRIEV = '''<h2>Grievance officer</h2><p>In line with the Consumer Protection (E-Commerce) Rules, 2020, complaints can be sent to our Grievance Officer: <b>%s</b>, %s, %s. WhatsApp and phone: %s. We acknowledge every complaint within 48 hours and aim to resolve it within one month of receiving it.</p>''' % (GRIEVANCE_NAME, OWNER, ADDR, WA_SHOW)
 POL = {
-'/privacy-policy/': ('Privacy Policy', 'Privacy Policy | Youth Face', 'How Youth Face collects, uses, shares and protects your personal information, how we use cookies and Google and Meta advertising, and how to opt out or delete your data.', '''
+'/privacy-policy/': ('Privacy Policy', 'Privacy Policy | Youth Face', 'How Youth Face collects, uses, shares and protects your personal information, how cookies and ads work on this site, and how to opt out.', '''
 <p>This Privacy Policy explains how the Youth Face online store, run by %(o)s (&ldquo;we&rdquo;, &ldquo;us&rdquo;), collects, uses, shares and protects personal information when you visit youthfacebeautycream.com (the &ldquo;site&rdquo;) or place an order. By using the site you agree to this policy.</p>
 %(biz)s
 <h2>1. Information we collect</h2>

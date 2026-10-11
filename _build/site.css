@@ -313,7 +313,7 @@ body.has-bar footer{padding-bottom:100px}
 .guide-cta img{border-radius:14px;margin-bottom:8px;background:var(--bg)}
 .guide-cta b{font-family:var(--display);font-size:1.25rem;font-weight:600}
 .guide-cta span{font-size:.85rem;color:var(--muted);margin-bottom:8px}
-@media (max-width:900px){.article{grid-template-columns:1fr}.guide-cta{position:static;max-width:420px}}
+@media (max-width:900px){.article{grid-template-columns:minmax(0,1fr)}.guide-cta{position:static;max-width:420px}}
 
 /* 3½-minute pop-up */
 .nudge{position:fixed;inset:0;z-index:80;background:rgba(42,18,21,.55);display:flex;align-items:center;justify-content:center;padding:16px;animation:nfade .25s ease}
@@ -414,3 +414,15 @@ body.has-bar footer{padding-bottom:100px}
 .setup-note{display:grid;gap:12px}
 .setup-note h2{font-size:1.6rem}
 .setup-note p{color:var(--muted)}
+
+/* tables in articles, learn-more box */
+.tbl{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table{border-collapse:collapse;width:100%;min-width:480px;font-size:.92rem;font-variant-numeric:tabular-nums}
+.tbl th,.tbl td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-weight:700;background:var(--bg)}
+.tbl tr:last-child td{border-bottom:0}
+.learn{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;max-width:820px}
+.learn h3{font-size:1.2rem;margin-bottom:8px}
+.learn ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.learn a{color:var(--accent-2)}
+.article>*{min-width:0}
