@@ -173,7 +173,7 @@
       ]
     },
     {
-      "source": "/(cart|checkout|reorder)/(.*)",
+      "source": "/(cart|checkout|reorder|sample-test)/(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",

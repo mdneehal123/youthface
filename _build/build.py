@@ -271,7 +271,7 @@ HOME_FAQ = [
     ('Who runs this store?', 'This store is run by Beauty Mart in Bhatkal, Karnataka. Every order is packed by our team in Bhatkal and handed to a courier, in sealed packaging.'),
     ('What does the cream contain?', 'Youth Face Beauty Cream is built around Kojic Acid and Alpha Arbutin, two ingredients widely used in creams for dark-spot care and a more even-looking tone. The full ingredient list is printed on every pack.'),
     ('How do I use it?', 'Wash your face, pat it dry, and apply a small amount to the face and neck, once or twice a day. Always follow with sunscreen in the morning. Patch test first if you have sensitive skin.'),
-    ('Is Cash on Delivery available?', 'Yes. Choose Cash on Delivery at checkout: you pay ₹99 online to confirm the order and the rest in cash when it arrives. You can also pay the full amount online by UPI, card or netbanking.'),
+    ('Is Cash on Delivery available?', 'Yes. Choose Cash on Delivery at checkout: nothing to pay in advance, you pay the full amount in cash when your parcel arrives, with no Cash on Delivery fee. You can also pay online by UPI, card or netbanking.'),
     ('How long does delivery take?', 'Orders are packed in 1 to 3 business days and usually reach you 3 to 7 business days after dispatch, depending on your pincode.'),
 ]
 
@@ -337,7 +337,7 @@ CREAM_TABS = [
     ('Description', '<p>Youth Face Beauty Cream is a daily face cream built around Kojic Acid and Alpha Arbutin, two ingredients widely used in skincare for dark-spot care and a more even-looking tone. It has a light texture that spreads easily and fits into a simple morning and night routine.</p><p>Orders are packed in sealed packaging by Beauty Mart in Bhatkal, Karnataka, and shipped free across India.</p>'),
     ('Key ingredients', '<p><b>Kojic Acid:</b> used in creams made for dark spots and uneven-looking tone.</p><p><b>Alpha Arbutin:</b> a gentle partner ingredient used for a brighter-looking, more even complexion.</p><p>The complete ingredient list is printed on the pack.</p>'),
     ('How to use', '<p>1. Wash your face and pat dry. 2. Apply a small amount to face and neck and massage gently. 3. Use once or twice daily; in the morning, always follow with sunscreen.</p><p>Patch test on a small area first. Avoid the eyes. Stop use if irritation occurs.</p>'),
-    ('Shipping & payment', '<p>Free shipping across India. Pay online by UPI, card or netbanking, or choose Cash on Delivery with a ₹99 advance. Orders are packed in 1 to 3 business days and usually delivered 3 to 7 business days after dispatch.</p>'),
+    ('Shipping & payment', '<p>Free shipping across India. Pay online by UPI, card or netbanking, or choose Cash on Delivery and pay in cash when the parcel arrives (nothing to pay in advance). Orders are packed in 1 to 3 business days and usually delivered 3 to 7 business days after dispatch.</p>'),
 ]
 LOTION_TABS = [
     ('Description', '<p>Youth Face Body Lotion is a lightweight daily body moisturiser with a quick-absorbing, non-greasy texture that leaves skin feeling soft and comfortable. It is a separate product from Youth Face Beauty Cream and is made for the body.</p>'),
@@ -351,7 +351,7 @@ COMBO_TABS = [
 ]
 PDP_FAQ = [
     ('Who packs and ships my order?', 'Beauty Mart in Bhatkal, Karnataka packs every order in sealed packaging and ships it free across India.'),
-    ('Can I pay Cash on Delivery?', 'Yes. Pay ₹99 online to confirm and the rest in cash at delivery, or pay the full amount online.'),
+    ('Can I pay Cash on Delivery?', 'Yes. Choose Cash on Delivery at checkout and pay the full amount in cash when your parcel arrives. Nothing is paid in advance. You can also pay online.'),
     ('When will I see a difference?', 'Skin responds slowly and differently for everyone. Use it regularly for several weeks with daily sunscreen before judging.'),
 ]
 for p in PRODUCTS:
@@ -390,7 +390,7 @@ for p in PRODUCTS:
     <div class="qty-row"><div class="qty" data-qty><button type="button" data-dec aria-label="Less">−</button><output>1</output><button type="button" data-inc aria-label="More">+</button></div><span class="muted" style="font-size:.9rem">In stock · ships from Bhatkal</span></div>
     <div class="acts"><button class="btn ghost" type="button" data-add="%(id)s" data-useqty>Add to cart</button><button class="btn" type="button" data-buy="%(id)s" data-useqty>Buy now</button></div>
     <div class="dcheck"><label for="dc-pin">Check delivery to your pincode</label><div class="dc-row"><input id="dc-pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="6-digit pincode"><button type="button" class="btn sm ghost" id="dc-go">Check</button></div><p class="dc-out" id="dc-out" role="status" aria-live="polite" hidden></p></div>
-    <ul class="perks"><li>Cash on Delivery available (₹99 advance)</li><li>Free shipping across India</li><li>Sealed pack, shipped from Bhatkal</li></ul>
+    <ul class="perks"><li>Cash on Delivery: nothing to pay in advance</li><li>Free shipping across India</li><li>Sealed pack, shipped from Bhatkal</li></ul>
     <div class="tabs">%(tabs)s</div>
   </div>
 </div>
@@ -423,11 +423,11 @@ checkout_body = top('Checkout', 'Checkout', 'Enter your delivery details and cho
   <p class="pinnote" id="pin-note" hidden></p>
   <fieldset class="pay"><legend>How would you like to pay?</legend>
     <label><em class="rec-tag">Recommended</em><input type="radio" name="pay" value="online" checked><span>Pay online<small>UPI, cards, netbanking · nothing to pay at the door</small></span><b id="amt-online"></b></label>
-    <label><input type="radio" name="pay" value="cod"><span>Cash on Delivery<small id="cod-note">Pay ₹99 now, the rest at delivery</small></span><b id="amt-cod"></b></label>
+    <label><input type="radio" name="pay" value="cod"><span>Cash on Delivery<small id="cod-note">Nothing to pay now · pay in cash when it arrives</small></span><b id="amt-cod"></b></label>
     <label><input type="radio" name="pay" value="wa"><span>Order on WhatsApp<small>Send your order, we confirm on chat</small></span><b id="amt-wa"></b></label>
   </fieldset>
   <label class="remind"><input type="checkbox" id="co-remind"><span><b>Remind me on WhatsApp when my cream is about to run out</b><small>One friendly message, timed to your pack size. Reply STOP any time.</small></span></label>
-  <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Cash on Delivery orders are confirmed with a ₹99 advance paid online now. It is part of the price, not an extra charge. If the parcel is refused at delivery, the ₹99 is not refunded.</p>
+  <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Delivered by Delhivery. Nothing to pay now: please keep the exact amount ready at delivery. There is no Cash on Delivery fee. You get a Delhivery tracking number as soon as the order is placed.</p>
   <div class="notyet" id="not-yet" hidden><p><b>Plot twist: your order isn't placed yet.</b> The payment window closed before it finished. Nothing is lost. Your details are saved, so it's one tap from here.</p><button type="button" class="btn" id="ny-retry">Try payment again</button><button type="button" class="btn ghost" id="ny-switch">Switch to Cash on Delivery</button></div>
   <p class="oerr" id="co-err" role="alert" hidden></p>
   <button class="btn block" type="submit" id="co-pay">Pay securely</button>
@@ -443,7 +443,7 @@ about = top('About us', 'About Youth Face', 'A modern Indian skincare brand focu
 <h2>What we make</h2>
 <p>Our first product is <a href="%s">Youth Face Beauty Cream</a>, built around Kojic Acid and Alpha Arbutin for dark-spot care and a more even-looking tone. It is available as a single 25 g jar and in packs of two and three. We also make <a href="%s">Youth Face Body Lotion</a>, a light daily moisturiser for the body. More products are on the way.</p>
 <h2>Our promise</h2>
-<ul><li><b>Sealed products</b>, packed and shipped by our own team in Bhatkal.</li><li><b>Clear information</b> on ingredients, usage and pricing, with no hidden costs.</li><li><b>Secure payment</b> online, or Cash on Delivery with a small advance.</li><li><b>Real support</b> on WhatsApp, before and after you buy.</li></ul>
+<ul><li><b>Sealed products</b>, packed and shipped by our own team in Bhatkal.</li><li><b>Clear information</b> on ingredients, usage and pricing, with no hidden costs.</li><li><b>Secure payment</b> online, or Cash on Delivery with nothing to pay in advance.</li><li><b>Real support</b> on WhatsApp, before and after you buy.</li></ul>
 <h2>Who we are</h2>
 <p>Youth Face is run by %s from Bhatkal, Karnataka. Every order is packed by our team and handed to a trusted courier.</p>
 <p style="margin-top:26px"><a class="btn" href="/shop/">Shop Youth Face</a></p></div></section>''' % (url(PRODUCTS[0]), url(PRODUCTS[3]), OWNER)
@@ -462,7 +462,7 @@ FAQ_ALL = HOME_FAQ + [
     ('Does Youth Face cream have side effects?', 'Some people feel mild tingling in the first days. Lasting redness, itching or burning means stop using it. Patch test first; see <a href="/skincare-guides/youth-face-cream-side-effects/">side effects and safe use</a>.'),
     ('Can men use Youth Face Beauty Cream?', 'Yes. The cream is for anyone who wants a daily face cream for dark-spot care. Apply after washing the face, and after shaving only once the skin has settled.'),
     ('Is it suitable for oily skin?', 'Yes. Use a pea-sized amount on clean skin; a thin layer is enough. In humid weather, use it at night and keep the morning routine light with sunscreen.'),
-    ('How do I track my order?', 'Open the Track Order page and enter the mobile number and pincode used on your order, or your payment ID. Tracking appears once the courier collects the parcel.'),
+    ('How do I track my order?', 'Open the Track Order page and enter the mobile number and pincode used on your order, your order number (starts with YC), payment ID or Delhivery tracking number. Tracking appears once the courier collects the parcel.'),
     ('Can I cancel my order?', 'Yes, if it has not been packed or dispatched yet. Message us on WhatsApp with your order details as soon as possible.'),
     ('What if my product arrives damaged or wrong?', 'Contact us within 7 days of delivery with your order details and photos of the product, packaging and label. After checking, we will offer a replacement or refund.'),
     ('Can I return an opened jar?', 'For hygiene reasons, opened or used products cannot be returned unless they arrived damaged, defective or incorrect. See the Refund & Returns policy.'),
@@ -569,15 +569,15 @@ howto = top('How to use', 'How to use Youth Face', 'Simple steps for the Beauty 
 <p style="margin-top:26px"><a class="btn" href="/shop/">Shop Youth Face</a></p></div></section>'''
 page('/how-to-use/', 'How To Use Youth Face Beauty Cream & Body Lotion', 'How to use Youth Face Beauty Cream with Kojic Acid & Alpha Arbutin, step by step, plus Body Lotion directions and patch-test tips.', howto, crumbs=[('How To Use', '/how-to-use/')])
 
-track = top('Track order', 'Track your Youth Face order', 'Use the mobile number and pincode from your order, or your payment ID.') + '''<section style="padding-top:20px"><div class="wrap track">
+track = top('Track order', 'Track your Youth Face order', 'Use the mobile number and pincode from your order, or your order number, payment ID or tracking number.') + '''<section style="padding-top:20px"><div class="wrap track">
 <form class="form" id="track-form" novalidate>
   <div class="track-by" role="tablist"><button type="button" id="by-phone" class="on" aria-selected="true">Mobile number</button><button type="button" id="by-id" aria-selected="false">Payment ID / tracking no.</button></div>
   <div id="by-phone-box" class="form"><div class="f"><label for="t-phone">Mobile number used on the order</label><input id="t-phone" type="tel" inputmode="numeric" maxlength="16"></div><div class="f"><label for="t-pin">Delivery pincode</label><input id="t-pin" inputmode="numeric" maxlength="6"></div></div>
-  <div id="by-id-box" class="form" hidden><div class="f"><label for="t-id">Payment ID or tracking number</label><input id="t-id" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="pay_XXXXXXXXXXXX"></div></div>
+  <div id="by-id-box" class="form" hidden><div class="f"><label for="t-id">Order number, payment ID or tracking number</label><input id="t-id" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="YC12345678 or pay_XXXXXXXXXXXX"></div></div>
   <button class="btn block" type="submit" id="t-go">Track order</button>
 </form>
 <div class="track-out" id="t-out" role="status" aria-live="polite" hidden></div></div></section>'''
-page('/track-order/', 'Track Your Order | Youth Face', 'Track your Youth Face order with your mobile number and pincode, payment ID or courier tracking number.', track, crumbs=[('Track Order', '/track-order/')])
+page('/track-order/', 'Track Your Order | Youth Face', 'Track your Youth Face order with your mobile number and pincode, order number, payment ID or courier tracking number.', track, crumbs=[('Track Order', '/track-order/')])
 
 BIZ = '''<div class="bizcard"><b>Business details</b><span>Youth Face online store, run by %s</span><span>%s</span><span>WhatsApp and phone: %s</span><span>Hours: Monday to Saturday, 10 am to 7 pm IST</span></div>''' % (OWNER, ADDR, WA_SHOW)
 GRIEV = '''<h2>Grievance officer</h2><p>In line with the Consumer Protection (E-Commerce) Rules, 2020, complaints can be sent to our Grievance Officer: <b>%s</b>, %s, %s. WhatsApp and phone: %s. We acknowledge every complaint within 48 hours and aim to resolve it within one month of receiving it.</p>''' % (GRIEVANCE_NAME, OWNER, ADDR, WA_SHOW)
@@ -594,7 +594,7 @@ POL = {
 <p>We do <b>not</b> sell or rent your personal information to anyone.</p>
 <h2>3. Who we share it with</h2>
 <p>We share only what each partner needs to do its job:</p>
-<ul><li><b>Razorpay</b>, to process payments.</li><li><b>Shiprocket and its courier partners</b>, who receive your name, phone number and address to deliver your parcel.</li><li><b>Vercel</b>, which hosts this website.</li><li><b>Google and Meta</b>, for advertising measurement as described below.</li><li><b>WhatsApp</b> (Meta), when you choose to message us there.</li><li><b>Government or legal authorities</b>, when required by law.</li></ul>
+<ul><li><b>Razorpay</b>, to process payments.</li><li><b>Delhivery and other courier partners</b>, who receive your name, phone number and address to deliver your parcel.</li><li><b>Vercel</b>, which hosts this website.</li><li><b>Google and Meta</b>, for advertising measurement as described below.</li><li><b>WhatsApp</b> (Meta), when you choose to message us there.</li><li><b>Government or legal authorities</b>, when required by law.</li></ul>
 <h2>4. Cookies, advertising and remarketing</h2>
 <p>We use cookies and similar technologies to keep the site working (for example, your cart) and to measure and improve our advertising.</p>
 <p><b>Google:</b> we use Google Ads, including remarketing. Third-party vendors, including Google, use cookies to show our ads to you on sites across the internet based on your previous visits to this site, and to measure ad conversions. You can opt out of Google&rsquo;s use of cookies for personalised ads at <a href="https://adssettings.google.com" rel="noopener">Google Ads Settings</a>, and learn how Google uses data at <a href="https://policies.google.com/technologies/partner-sites" rel="noopener">How Google uses information from sites that use its services</a>.</p>
@@ -621,9 +621,9 @@ POL = {
 <h2>1. Eligibility</h2><p>You must be at least 18 years old, or use the site under the supervision of a parent or guardian, to place an order.</p>
 <h2>2. Products and descriptions</h2><p>We try to show products, ingredients and prices accurately. Colours and packaging may look slightly different on screen. The full ingredient list is printed on every pack. Our products are cosmetics. They are not medicines and are not intended to diagnose, treat, cure or prevent any disease.</p>
 <h2>3. Prices</h2><p>All prices are in Indian rupees (₹) and include applicable taxes. Shipping is free across India. There are no hidden charges: the amount shown at checkout is the full amount you pay. If a product is listed at a clearly wrong price because of an error, we may cancel the order and refund any amount paid in full.</p>
-<h2>4. Orders</h2><p>An order is confirmed only when payment, or the Cash on Delivery advance, is received and you see the confirmation screen. We may refuse or cancel an order if a product is out of stock, the delivery pincode is not serviceable, or the order details appear incorrect or fraudulent. If we cancel, any amount paid is refunded in full to the original payment method.</p>
+<h2>4. Orders</h2><p>An online order is confirmed when the payment succeeds and you see the confirmation screen. A Cash on Delivery order is confirmed when it is placed and you see the confirmation screen. We may refuse or cancel an order if a product is out of stock, the delivery pincode is not serviceable, or the order details appear incorrect or fraudulent. If we cancel, any amount paid is refunded in full to the original payment method.</p>
 <h2>5. Payment</h2><p>You can pay online by UPI, debit or credit card, or netbanking through Razorpay. We do not store your card or UPI details.</p>
-<h2>6. Cash on Delivery</h2><p>Cash on Delivery orders are confirmed with an advance of <b>₹99 paid online</b>. The advance is part of the product price, not an extra fee, and the remaining amount is paid in cash to the courier at delivery. If a Cash on Delivery parcel is refused at the door, or cannot be delivered because the address or phone number given was incorrect, the ₹99 advance is not refunded, as it covers the cost of shipping the parcel both ways. In every other case, including cancellations before dispatch, the advance is refunded in full.</p>
+<h2>6. Cash on Delivery</h2><p>Cash on Delivery orders need <b>nothing paid in advance</b>: you pay the full amount in cash to the courier when the parcel arrives. There is no Cash on Delivery fee. Cash on Delivery is available for pincodes our courier serves for it; if it is not available for your pincode, the checkout tells you and you can pay online instead.</p>
 <h2>7. Shipping, returns and refunds</h2><p>Delivery is covered by our <a href="/shipping-delivery/">Shipping &amp; Delivery Policy</a>. Returns, replacements and refunds are covered by our <a href="/refund-returns-policy/">Refund &amp; Returns Policy</a>.</p>
 <h2>8. Using our products safely</h2><p>Read the label and follow the directions. Patch test on a small area for 24 hours before first use. Avoid the eyes and broken skin. Stop use and consult a doctor if irritation occurs. If you are pregnant, breastfeeding or being treated for a skin condition, ask your doctor before use. Results vary from person to person and are not guaranteed.</p>
 <h2>9. Reviews and content</h2><p>All text, photos, logos and designs on this site belong to %(o)s and may not be copied without permission.</p>
@@ -639,10 +639,10 @@ POL = {
 <h2>2. Items that can be returned</h2><ul><li><b>Damaged, defective, leaking or wrong items:</b> we replace the item or refund you in full, including any shipping cost. You do not pay anything to return it.</li><li><b>Unopened items you no longer want:</b> accepted within 7 days if the item is unused, sealed and in its original packaging. You arrange and pay for the return shipping. After we receive and check it, we refund the product price.</li></ul>
 <h2>3. Items that cannot be returned</h2><p>For hygiene and safety reasons, cosmetics that have been <b>opened, used, tested or tampered with</b>, or whose seal is broken, cannot be returned unless they arrived damaged, defective or wrong. Your statutory rights are not affected.</p>
 <h2>4. How to request a return</h2><ol><li>Message us on WhatsApp at %(wa)s within 7 days of delivery with your order number or the mobile number used on the order.</li><li>Send clear photos of the product, its packaging and the shipping label. For damaged or leaking items, a short unboxing video helps us resolve it faster.</li><li>We reply within 2 business days. If approved, we tell you whether we will arrange a pickup or how to send the item back. Please do not send items back without approval.</li></ol>
-<h2>5. Refunds</h2><ul><li><b>When:</b> we start the refund within 2 business days of receiving and checking the returned item, or of approving your claim when no return is needed (for example, a wrong item).</li><li><b>Prepaid orders:</b> refunded to the original payment method (UPI, card or bank account) through Razorpay. Banks usually take <b>5 to 7 business days</b> to show the amount.</li><li><b>Cash on Delivery orders:</b> the ₹99 advance is refunded to the original payment method; the cash part is refunded by UPI or bank transfer to the account details you share with us.</li><li>You will receive a confirmation on WhatsApp when the refund is made.</li></ul>
+<h2>5. Refunds</h2><ul><li><b>When:</b> we start the refund within 2 business days of receiving and checking the returned item, or of approving your claim when no return is needed (for example, a wrong item).</li><li><b>Prepaid orders:</b> refunded to the original payment method (UPI, card or bank account) through Razorpay. Banks usually take <b>5 to 7 business days</b> to show the amount.</li><li><b>Cash on Delivery orders:</b> refunded by UPI or bank transfer to the account details you share with us.</li><li>You will receive a confirmation on WhatsApp when the refund is made.</li></ul>
 <h2>6. Replacements</h2><p>If you prefer a replacement for a damaged, defective or wrong item, we ship it free of charge as soon as the claim is approved, subject to stock.</p>
-<h2>7. Cancellations</h2><p>You can cancel an order free of charge at any time <b>before it is dispatched</b> by messaging us on WhatsApp. Any amount paid, including the Cash on Delivery advance, is refunded in full within 5 to 7 business days. Once an order has been dispatched, it cannot be cancelled, but you may refuse delivery or follow the return process above.</p>
-<h2>8. Refused or undeliverable Cash on Delivery orders</h2><p>If a Cash on Delivery parcel is refused at delivery, or returned because the address or phone number was incorrect, the ₹99 advance is not refunded, as it covers two-way shipping. This is shown at checkout before you pay.</p>
+<h2>7. Cancellations</h2><p>You can cancel an order free of charge at any time <b>before it is dispatched</b> by messaging us on WhatsApp. Any amount paid online is refunded in full within 5 to 7 business days. Once an order has been dispatched, it cannot be cancelled, but you may refuse delivery or follow the return process above.</p>
+<h2>8. Refused or undeliverable Cash on Delivery orders</h2><p>Please place a Cash on Delivery order only if you will accept it. If a Cash on Delivery parcel is refused at delivery, or returned because the address or phone number was incorrect, we may ask you to pay online for future orders.</p>
 <h2>9. Orders from other sellers</h2><p>This policy covers orders placed on youthfacebeautycream.com. Products bought from other websites or shops follow that seller&rsquo;s policy.</p>
 %(biz)s
 %(griev)s''' % dict(wa=WA_SHOW, biz=BIZ, griev=GRIEV)),
@@ -654,8 +654,8 @@ POL = {
 <h2>2. Shipping charges</h2><p>Shipping is <b>free</b> on all orders. There is no minimum order value and no extra handling or Cash on Delivery fee.</p>
 <h2>3. Processing time</h2><p>Orders are packed and handed to the courier within <b>1 to 3 business days</b> (Monday to Saturday, excluding public holidays) after payment or Cash on Delivery confirmation. Orders placed on Sundays or holidays are processed on the next business day.</p>
 <h2>4. Delivery time</h2><p>After dispatch, delivery usually takes <b>3 to 7 business days</b>: metro cities are often faster, and remote or hilly areas can take longer. Delivery dates are estimates. Delays can happen because of weather, strikes, festivals or courier issues outside our control; we will help you follow up if your parcel is late.</p>
-<h2>5. Couriers and tracking</h2><p>Orders ship through Shiprocket with trusted courier partners. Once the parcel is collected, you can track it on our <a href="/track-order/">Track Order</a> page using your mobile number and pincode, or your payment ID.</p>
-<h2>6. Cash on Delivery</h2><p>Cash on Delivery is available on most pincodes. You pay ₹99 online to confirm the order, and the remaining amount in cash to the courier at delivery. Please keep the exact amount ready.</p>
+<h2>5. Couriers and tracking</h2><p>Orders ship with Delhivery and other trusted courier partners. Cash on Delivery orders get a Delhivery tracking number as soon as they are placed. You can track your parcel on our <a href="/track-order/">Track Order</a> page using your mobile number and pincode, your order number, payment ID or tracking number.</p>
+<h2>6. Cash on Delivery</h2><p>Cash on Delivery is available on most pincodes, with nothing to pay in advance: you pay the full amount in cash to the courier at delivery. There is no Cash on Delivery fee. Please keep the exact amount ready.</p>
 <h2>7. Delivery attempts and address</h2><p>Please enter a complete address with landmark and a mobile number that can be reached. The courier usually makes up to three delivery attempts. If the parcel cannot be delivered, it is returned to us; see our <a href="/refund-returns-policy/">Refund &amp; Returns Policy</a> for what happens next.</p>
 <h2>8. Damaged or tampered parcels</h2><p>If the outer package looks damaged or tampered with, you may refuse it, or take photos before opening. Contact us on WhatsApp within 7 days of delivery and we will replace or refund damaged items at no cost.</p>
 %(biz)s
@@ -683,7 +683,31 @@ os.makedirs(os.path.join(ROOT, 'assets'), exist_ok=True)
 shutil.copy(os.path.join(B, 'site.css'), os.path.join(ROOT, 'assets', 'site.css'))
 shutil.copy(os.path.join(B, 'store.js'), os.path.join(ROOT, 'assets', 'store.js'))
 shutil.copy(os.path.join(B, 'owner.js'), os.path.join(ROOT, 'assets', 'owner.js'))
-open(os.path.join(ROOT, 'assets', 'products.json'), 'w').write(json.dumps({p['id']: {'name': p['name'], 'card': p['card'], 'price': p['price'], 'mrp': p['mrp'], 'img': img(p['thumb']), 'url': url(p), 'wc': p['wc']} for p in PRODUCTS}, ensure_ascii=False))
+STORE_ITEMS = {p['id']: {'name': p['name'], 'card': p['card'], 'price': p['price'], 'mrp': p['mrp'], 'img': img(p['thumb']), 'url': url(p), 'wc': p['wc']} for p in PRODUCTS}
+# TEMPORARY ₹1 test item for checking online payments (page /sample-test/, not linked or indexed). Remove after testing,
+# together with 'sample' in api/_shared.js and the /sample-test/ page below.
+STORE_ITEMS['sample'] = {'name': 'Youth Face Test Sample (₹1)', 'card': 'Test sample · ₹1', 'price': 1, 'mrp': 1, 'img': img(PRODUCTS[0]['thumb']), 'url': '/sample-test/', 'wc': -1}
+open(os.path.join(ROOT, 'assets', 'products.json'), 'w').write(json.dumps(STORE_ITEMS, ensure_ascii=False))
+os.makedirs(os.path.join(ROOT, 'sample-test'), exist_ok=True)
+open(os.path.join(ROOT, 'sample-test', 'index.html'), 'w').write('''<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Test sample</title>
+<style>body{font-family:system-ui,sans-serif;background:#fbf3ea;color:#2b2320;display:grid;place-items:center;min-height:100vh;margin:0;padding:16px;text-align:center}button{background:#740817;color:#fff;border:0;border-radius:12px;padding:16px 28px;font-size:18px}</style>
+</head><body><main><h1>₹1 test sample</h1><p>Owner test only. Adds a ₹1 item to the cart and opens checkout.</p>
+<button id="go" type="button">Add ₹1 sample &amp; checkout</button><p id="msg"></p></main>
+<script>
+document.getElementById('go').addEventListener('click',async function(){
+  this.disabled=true;document.getElementById('msg').textContent='Loading…';
+  try{ // refresh the cached product list, so the new ₹1 item is known to the cart
+    var r=await fetch('/assets/products.json?t='+Date.now(),{cache:'reload'});var body=await r.text();
+    await fetch('/assets/products.json',{cache:'reload'}).catch(function(){});
+    if(window.caches){var ks=await caches.keys();for(var k of ks){var c=await caches.open(k);await c.put('/assets/products.json',new Response(body,{headers:{'Content-Type':'application/json'}}));}}
+  }catch(e){}
+  try{localStorage.setItem('yf-cart',JSON.stringify({sample:1}));}catch(e){}
+  location.href='/checkout/';
+});
+</script></body></html>
+''')
 open(os.path.join(ROOT, 'assets', 'icon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#740817"/><text x="32" y="44" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="32" fill="#FBF3EA">YF</text></svg>')
 
 sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
@@ -796,7 +820,7 @@ if MOVED_TO:
     redirects = moved
 vercel = {'cleanUrls': False, 'redirects': redirects,
           'headers': [{'source': '/(assets|wp-content)/(.*)\\.(webp|jpg|jpeg|png|svg|mp4)', 'headers': [{'key': 'Cache-Control', 'value': 'public, max-age=86400, stale-while-revalidate=604800'}]},
-                      {'source': '/(cart|checkout|reorder)/(.*)', 'headers': [{'key': 'X-Robots-Tag', 'value': 'noindex'}]}]}
+                      {'source': '/(cart|checkout|reorder|sample-test)/(.*)', 'headers': [{'key': 'X-Robots-Tag', 'value': 'noindex'}]}]}
 open(os.path.join(ROOT, 'vercel.json'), 'w').write(json.dumps(vercel, indent=2) + '\n')
 open(os.path.join(ROOT, '.vercelignore'), 'w').write('_build\nREADME.md\n')
 missing = [i for p in PRODUCTS for i in set(p['imgs'] + [p['thumb']]) if not os.path.exists(os.path.join(ROOT, i.strip('/')))]

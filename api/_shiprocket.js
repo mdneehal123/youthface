@@ -1,21 +1,9 @@
-// Sends a paid order to Shiprocket so it appears under New Orders, ready to ship.
-// Switched on by two environment variables: SHIPROCKET_EMAIL and SHIPROCKET_PASSWORD
-// (an API user, not the main login).
+// LEGACY: orders are no longer sent to Shiprocket (paid orders go to the Order Desk, Cash on Delivery to Delhivery).
+// Kept only so orders shipped through Shiprocket before the switch can still be tracked, and as a pincode lookup
+// fallback while Delhivery is not set up. Used only when SHIPROCKET_EMAIL and SHIPROCKET_PASSWORD are still set.
 const BASE = 'https://apiv2.shiprocket.in/v1/external';
 
-// Pickup address nickname in Shiprocket (Azad Nagar 4th Cross, Bhatkal 581320). Not a secret.
-const PICKUP = 'Primary';
-
-// Parcel size by number of jars/bottles. Weight is the products plus about 50 g of packing.
-// Owner to confirm real box sizes; these are safe estimates.
-const BOX = { weight: 0.1, length: 10, breadth: 10, height: 8 };
-function parcel(cart) {
-  const units = cart.lines.reduce((a, l) => a + l.qty * (/x3$/.test(l.sku) ? 3 : /x2$|COMBO/.test(l.sku) ? 2 : 1), 0);
-  const weight = Math.max(0.1, Math.round((cart.kg + 0.05) * 100) / 100);
-  if (units <= 1) return { weight, length: 10, breadth: 10, height: 8 };
-  if (units <= 3) return { weight, length: 15, breadth: 12, height: 8 };
-  return { weight, length: 20, breadth: 15, height: 10 };
-}
+const BOX = { weight: 0.1 };
 
 // Fallback when the pincode lookup is unavailable: first two digits of the pincode.
 const STATE_BY_PREFIX = {
@@ -35,7 +23,7 @@ const STATE_BY_PREFIX = {
 function settings() {
   const email = process.env.SHIPROCKET_EMAIL;
   const password = process.env.SHIPROCKET_PASSWORD;
-  return email && password ? { email, password, pickup: PICKUP } : null;
+  return email && password ? { email, password } : null;
 }
 
 let cached = { token: '', until: 0 };
@@ -55,71 +43,6 @@ async function login(s) {
   }
   cached = { token: d.token, until: Date.now() + 8 * 24 * 3600 * 1000 };
   return d.token;
-}
-
-async function stateFor(pincode, token) {
-  try {
-    const r = await fetch(BASE + '/open/postcode/details?postcode=' + encodeURIComponent(pincode), {
-      headers: { Authorization: 'Bearer ' + token }
-    });
-    const d = await r.json();
-    const s = d && d.postcode_details && d.postcode_details.state;
-    if (s) return String(s);
-  } catch (e) { /* fall through to the prefix table */ }
-  return STATE_BY_PREFIX[Number(String(pincode).slice(0, 2))] || '';
-}
-
-function stamp(date) {
-  const ist = new Date(date.getTime() + 5.5 * 3600 * 1000);
-  return ist.toISOString().slice(0, 16).replace('T', ' ');
-}
-
-// order: { id, cart, name, phone, address, city, pincode, cod, discount, collect }
-// Prepaid: item prices add up to what was paid. Cash on Delivery with advance: discount is the advance
-// already paid, and the courier collects the rest.
-async function createOrder(order) {
-  const s = settings();
-  if (!s) return { status: 'off' };
-  const box = parcel(order.cart);
-  const token = await login(s);
-  const state = await stateFor(order.pincode, token);
-  const r = await fetch(BASE + '/orders/create/adhoc', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-    body: JSON.stringify({
-      order_id: order.id,
-      order_date: stamp(new Date()),
-      pickup_location: s.pickup,
-      comment: 'Youth Face website order',
-      billing_customer_name: order.name,
-      billing_last_name: '',
-      billing_address: order.address,
-      billing_city: order.city,
-      billing_pincode: order.pincode,
-      billing_state: state,
-      billing_country: 'India',
-      billing_email: process.env.SHIPROCKET_ORDER_EMAIL || 'orders@youthfacebeautycream.com',
-      billing_phone: String(order.phone).replace(/\D/g, '').slice(-10),
-      shipping_is_billing: true,
-      order_items: order.cart.lines.map((l) => ({ name: l.name, sku: l.sku, units: l.qty, selling_price: l.price })),
-      payment_method: order.cod ? 'COD' : 'Prepaid',
-      total_discount: order.discount || 0,
-      sub_total: order.cod ? order.collect : order.cart.total,
-      length: box.length,
-      breadth: box.breadth,
-      height: box.height,
-      weight: box.weight
-    })
-  });
-  const d = await r.json().catch(() => ({}));
-  if (!r.ok || !(d.order_id || d.shipment_id)) {
-    // Shiprocket names the valid pickup locations when the nickname is wrong.
-    const list = d && d.data && Array.isArray(d.data.data) ? d.data.data.map((x) => x.pickup_location).filter(Boolean) : undefined;
-    const detail = { step: 'create', http: r.status, message: String(d.message || '').slice(0, 300), errors: d.errors, pickup_sent: s.pickup, pickup_available: list, state_sent: state };
-    console.error('shiprocket create failed', JSON.stringify(detail));
-    return { status: 'failed', reason: 'shiprocket_rejected', detail };
-  }
-  return { status: 'created', shiprocket_order_id: d.order_id || null };
 }
 
 // Tracking. kind: 'order' (our order id) or 'awb'. Returns a small, customer-safe summary.
@@ -189,4 +112,4 @@ async function pincode(pin) {
   return { ok: true, city, state, days, cod, serviceable };
 }
 
-module.exports = { createOrder, settings, track, pincode };
+module.exports = { settings, track, pincode };
