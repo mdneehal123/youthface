@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Test sample</title>
+<style>body{font-family:system-ui,sans-serif;background:#fbf3ea;color:#2b2320;display:grid;place-items:center;min-height:100vh;margin:0;padding:16px;text-align:center}button{background:#740817;color:#fff;border:0;border-radius:12px;padding:16px 28px;font-size:18px}</style>
+</head><body><main><h1>₹1 test sample</h1><p>Owner test only. Adds a ₹1 item to the cart and opens checkout.</p>
+<button id="go" type="button">Add ₹1 sample &amp; checkout</button><p id="msg"></p></main>
+<script>
+document.getElementById('go').addEventListener('click',async function(){
+  this.disabled=true;document.getElementById('msg').textContent='Loading…';
+  try{ // refresh the cached product list, so the new ₹1 item is known to the cart
+    var r=await fetch('/assets/products.json?t='+Date.now(),{cache:'reload'});var body=await r.text();
+    await fetch('/assets/products.json',{cache:'reload'}).catch(function(){});
+    if(window.caches){var ks=await caches.keys();for(var k of ks){var c=await caches.open(k);await c.put('/assets/products.json',new Response(body,{headers:{'Content-Type':'application/json'}}));}}
+  }catch(e){}
+  try{localStorage.setItem('yf-cart',JSON.stringify({sample:1}));}catch(e){}
+  location.href='/checkout/';
+});
+</script></body></html>

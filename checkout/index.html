@@ -45,11 +45,11 @@
   <p class="pinnote" id="pin-note" hidden></p>
   <fieldset class="pay"><legend>How would you like to pay?</legend>
     <label><em class="rec-tag">Recommended</em><input type="radio" name="pay" value="online" checked><span>Pay online<small>UPI, cards, netbanking · nothing to pay at the door</small></span><b id="amt-online"></b></label>
-    <label><input type="radio" name="pay" value="cod"><span>Cash on Delivery<small id="cod-note">Pay ₹99 now, the rest at delivery</small></span><b id="amt-cod"></b></label>
+    <label><input type="radio" name="pay" value="cod"><span>Cash on Delivery<small id="cod-note">Nothing to pay now · pay in cash when it arrives</small></span><b id="amt-cod"></b></label>
     <label><input type="radio" name="pay" value="wa"><span>Order on WhatsApp<small>Send your order, we confirm on chat</small></span><b id="amt-wa"></b></label>
   </fieldset>
   <label class="remind"><input type="checkbox" id="co-remind"><span><b>Remind me on WhatsApp when my cream is about to run out</b><small>One friendly message, timed to your pack size. Reply STOP any time.</small></span></label>
-  <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Cash on Delivery orders are confirmed with a ₹99 advance paid online now. It is part of the price, not an extra charge. If the parcel is refused at delivery, the ₹99 is not refunded.</p>
+  <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Delivered by Delhivery. Nothing to pay now: please keep the exact amount ready at delivery. There is no Cash on Delivery fee. You get a Delhivery tracking number as soon as the order is placed.</p>
   <div class="notyet" id="not-yet" hidden><p><b>Plot twist: your order isn't placed yet.</b> The payment window closed before it finished. Nothing is lost. Your details are saved, so it's one tap from here.</p><button type="button" class="btn" id="ny-retry">Try payment again</button><button type="button" class="btn ghost" id="ny-switch">Switch to Cash on Delivery</button></div>
   <p class="oerr" id="co-err" role="alert" hidden></p>
   <button class="btn block" type="submit" id="co-pay">Pay securely</button>

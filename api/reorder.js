@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const { keys, BRAND, ADVANCE, cartFrom } = require('./_shared');
+const { keys, BRAND, LEGACY_ADVANCE: ADVANCE, cartFrom } = require('./_shared'); // ADVANCE: only for old ₹99-advance COD orders
 
 // Owner-only lists: paid orders, unfinished orders and customers due a reorder.
 // Protected by the ADMIN_KEY environment variable. Returns names and phone numbers, so never open it to the public.
