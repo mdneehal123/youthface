@@ -22,4 +22,17 @@ async function pushToDesk({ ref, c, lines, sub, disc, coupon, total, pay, paid, 
   } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 }
 
-module.exports = { pushToDesk, deskOn };
+// A shopper who ticked the consent box at checkout. Order Desk keeps one lead per phone number.
+async function pushLead({ phone, name, product }) {
+  if (!deskOn()) return { ok: false, error: 'WEB_ORDER_KEY not set' };
+  const body = { lead: true, consent: true, phone, name, product, site: 'youthfacebeautycream.com' };
+  try {
+    const r = await fetch(deskUrl() + '/api/web-order', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'x-web-order-key': process.env.WEB_ORDER_KEY.trim() }, body: JSON.stringify(body)
+    });
+    const j = await r.json().catch(() => ({}));
+    return r.ok && j.ok ? { ok: true } : { ok: false, error: j.error || 'Order Desk HTTP ' + r.status };
+  } catch (e) { return { ok: false, error: 'Order Desk unreachable' }; }
+}
+
+module.exports = { pushToDesk, pushLead, deskOn };

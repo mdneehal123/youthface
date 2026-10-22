@@ -150,6 +150,12 @@
         $('pin-note').textContent=parts.filter(Boolean).join(' · ');$('pin-note').hidden=false;if(!err.hidden&&!problem()){err.hidden=true;mark();}}).catch(function(){});}
     F.pin.addEventListener('input',pinLookup);pinLookup();
 
+    /* Lead capture: only when the shopper ticks the consent box AND the mobile is valid; once per number per page load. */
+    var LEAD_SENT={};
+    function sendLead(){var cb=$('co-lead');if(!cb||!cb.checked)return;var ph=mobile(F.phone.value);if(!ph||LEAD_SENT[ph])return;LEAD_SENT[ph]=1;
+      try{var t=totals();fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify({name:F.name.value.trim(),phone:ph,product:t.lines.map(function(x){return x.p.name+' x'+x.qty;}).join(', ').slice(0,120),consent:true})}).catch(function(){});}catch(e){}}
+    F.phone.addEventListener('blur',sendLead);if($('co-lead'))$('co-lead').addEventListener('change',sendLead);
+
     function waUrl(){var t=totals();var msg='New Youth Face order\n'+t.lines.map(function(x){return '- '+x.p.name+' x'+x.qty+' = '+rs(x.sub);}).join('\n')+'\nTotal: '+rs(t.total)+'\nPayment: please confirm with me on WhatsApp\n\nName: '+F.name.value.trim()+'\nMobile: '+F.phone.value.trim()+'\nAddress: '+F.address.value.trim()+'\nCity: '+F.city.value.trim()+'\nPincode: '+F.pin.value.trim();return 'https://wa.me/'+WA+'?text='+encodeURIComponent(msg);}
     function loadRzp(done,fail){if(window.Razorpay){done();return;}var s=document.createElement('script');s.src='https://checkout.razorpay.com/v1/checkout.js';s.onload=done;s.onerror=fail;document.head.appendChild(s);}
     function stop(text){busy=false;render();if(text){err.textContent=text;err.hidden=false;}}

@@ -427,6 +427,7 @@ checkout_body = top('Checkout', 'Checkout', 'Enter your delivery details and cho
     <label><input type="radio" name="pay" value="wa"><span>Order on WhatsApp<small>Send your order, we confirm on chat</small></span><b id="amt-wa"></b></label>
   </fieldset>
   <label class="remind"><input type="checkbox" id="co-remind"><span><b>Remind me on WhatsApp when my cream is about to run out</b><small>One friendly message, timed to your pack size. Reply STOP any time.</small></span></label>
+  <label class="remind"><input type="checkbox" id="co-lead"><span><b>You may message me on WhatsApp about this order and related offers, even if I don't complete it.</b></span></label>
   <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Delivered by Delhivery. Nothing to pay now: please keep the exact amount ready at delivery. There is no Cash on Delivery fee. You get a Delhivery tracking number as soon as the order is placed.</p>
   <div class="notyet" id="not-yet" hidden><p><b>Plot twist: your order isn't placed yet.</b> The payment window closed before it finished. Nothing is lost. Your details are saved, so it's one tap from here.</p><button type="button" class="btn" id="ny-retry">Try payment again</button><button type="button" class="btn ghost" id="ny-switch">Switch to Cash on Delivery</button></div>
   <p class="oerr" id="co-err" role="alert" hidden></p>
@@ -592,6 +593,7 @@ POL = {
 <h2>2. How we use your information</h2>
 <ul><li>To process, pack, ship and deliver your order, and to collect Cash on Delivery payments.</li><li>To send you order confirmations and delivery updates, and to answer your questions.</li><li>If you start a payment and do not complete it, we may contact you once on the number you entered to ask whether you need help finishing the order.</li><li>To prevent fraud and misuse of the site.</li><li>To measure how our website and ads perform and to show you relevant Youth Face ads (see section 4).</li><li>To meet legal, tax and accounting requirements.</li></ul>
 <p>We do <b>not</b> sell or rent your personal information to anyone.</p>
+<p>If you tick the WhatsApp box at checkout, we keep your mobile number and name to message you on WhatsApp about your order and related offers. You can ask us to stop at any time by messaging us on WhatsApp, and we will remove you.</p>
 <h2>3. Who we share it with</h2>
 <p>We share only what each partner needs to do its job:</p>
 <ul><li><b>Razorpay</b>, to process payments.</li><li><b>Delhivery and other courier partners</b>, who receive your name, phone number and address to deliver your parcel.</li><li><b>Vercel</b>, which hosts this website.</li><li><b>Google and Meta</b>, for advertising measurement as described below.</li><li><b>WhatsApp</b> (Meta), when you choose to message us there.</li><li><b>Government or legal authorities</b>, when required by law.</li></ul>

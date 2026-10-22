@@ -21,8 +21,8 @@ Parcel weight for Delhivery = product weights in `api/_shared.js` + about 50 g p
 Shiprocket is no longer used for orders; `api/_shiprocket.js` only tracks parcels booked before the switch (and answers
 pincode lookups while Delhivery is not set up), and only if its old env vars are still set.
 
-There are 8 serverless functions (the Vercel Hobby limit is 12): `cod-order`, `config`, `create-order`,
-`delhivery-check`, `pincode`, `reorder`, `track`, `verify`. Files starting with `_` are shared code, not functions.
+There are 9 serverless functions (the Vercel Hobby limit is 12): `cod-order`, `config`, `create-order`,
+`delhivery-check`, `lead`, `pincode`, `reorder`, `track`, `verify`. (`lead` passes a shopper who ticked the WhatsApp consent box at checkout to the Order Desk.) Files starting with `_` are shared code, not functions.
 
 ## Environment variables (Vercel project settings)
 
