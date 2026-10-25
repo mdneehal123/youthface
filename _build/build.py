@@ -191,7 +191,8 @@ def page(path, title, desc, body, schema=None, crumbs=None, index=True, og='webs
 <footer><div class="wrap">
   <div class="fgrid">
     <div><a class="brand" href="/">%(brandw)s</a><p class="about">Premium skincare for a simple everyday routine. %(owner)s, Bhatkal, Karnataka.</p>
-      <div class="accept" aria-label="We accept"><span>UPI</span><span>Cards</span><span>Netbanking</span><span>Cash on Delivery</span></div></div>
+      <div class="accept" aria-label="We accept"><span>UPI</span><span>Cards</span><span>Netbanking</span><span>Cash on Delivery</span></div>
+      <p class="about">Also from the team: <a href="https://mircglow.com/" target="_blank" rel="noopener">Mirc Glow avocado night creams</a>.</p></div>
     <div><h4>Shop</h4>%(shop)s</div>
     <div><h4>Customer care</h4><a href="/about-us/">About Us</a><a href="/contact/">Contact</a><a href="/faq/">FAQ</a><a href="/track-order/">Track Order</a><a href="/how-to-use/">How To Use</a><a href="/skincare-guides/">Skincare Guides</a></div>
     <div><h4>Policies</h4>%(pol)s<a href="https://wa.me/%(wa)s">WhatsApp %(wash)s</a></div>
