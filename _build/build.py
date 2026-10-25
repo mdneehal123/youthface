@@ -537,6 +537,7 @@ GUIDES = [
 
 exec(open(os.path.join(B, 'guides_extra.py'), encoding='utf-8').read())
 exec(open(os.path.join(B, 'guides_oct25.py'), encoding='utf-8').read())
+exec(open(os.path.join(B, 'guides_oct26.py'), encoding='utf-8').read())
 
 
 def guide_url(g):

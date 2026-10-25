@@ -24,8 +24,8 @@ GUIDES += [
             u1=url(_p1), u2=url(_p2), u3=url(_p3), uc=url(_c))),
     dict(slug='youth-face-cream-side-effects', old='side-effects', title='Youth Face Cream: side effects and safe use',
          blurb='What is normal, what is not, and who should check with a doctor first.',
-         seo='Youth Face Cream Side Effects and Safe Use',
-         desc='Youth Face Beauty Cream side effects: mild tingling vs a real reaction, how to patch test, and who should ask a doctor first.',
+         seo='Youth Face Cream Side Effects: Is It Safe? Patch Test & Safe Use',
+         desc='Is Youth Face cream safe? Side effects explained: normal tingling vs a real reaction, how to patch test in 24 hours, and who should ask a doctor first.',
          body='''<p>Most people use Youth Face Beauty Cream without problems, but any cream with active ingredients like Kojic Acid and Alpha Arbutin can irritate some skin. Here is how to use it safely and what to watch for.</p>
 <h2>What can happen</h2><ul><li><b>Mild tingling or warmth</b> for a minute after applying, in the first few days. This is common with active creams and usually settles.</li><li><b>Dryness or light peeling</b>, especially if you also use scrubs, retinol or other strong products.</li><li><b>Redness, itching or burning that lasts</b>: this is a reaction. Stop using the cream.</li><li><b>Rash, swelling or bumps</b>: stop at once, wash it off, and see a doctor if it doesn't settle.</li></ul>
 <h2>How to patch test (do this first)</h2><ol><li>Apply a small amount behind the ear or on the inner arm.</li><li>Leave it for 24 hours without washing the spot.</li><li>No redness, itching or swelling? Start on the face, once a day for the first week.</li></ol>
