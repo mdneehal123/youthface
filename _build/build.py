@@ -721,7 +721,20 @@ for pth in pages:
     sm.append('  <url><loc>%s%s</loc><lastmod>%s</lastmod><priority>%s</priority></url>' % (SITE, pth, TODAY, pri))
 sm.append('</urlset>')
 open(os.path.join(ROOT, 'sitemap.xml'), 'w').write('\n'.join(sm) + '\n')
-open(os.path.join(ROOT, 'robots.txt'), 'w').write('User-agent: *\nDisallow: /cart/\nDisallow: /checkout/\nDisallow: /reorder/\nDisallow: /api/\nAllow: /\n\nSitemap: %s/sitemap.xml\n' % SITE)
+_bots = ['GPTBot','OAI-SearchBot','ChatGPT-User','ClaudeBot','Claude-SearchBot','Claude-User','PerplexityBot','Perplexity-User','Google-Extended','Applebot','Applebot-Extended','Bingbot','CCBot','meta-externalagent','Amazonbot','DuckAssistBot']
+_rules = 'Disallow: /cart/\nDisallow: /checkout/\nDisallow: /reorder/\nDisallow: /api/\nAllow: /\n'
+open(os.path.join(ROOT, 'robots.txt'), 'w').write('# Youth Face: search engines and AI assistants are welcome.\nUser-agent: *\n' + _rules + ''.join('\nUser-agent: %s\n%s' % (b, _rules) for b in _bots) + '\nSitemap: %s/sitemap.xml\n' % SITE)
+_L = ['# Youth Face', '',
+ '> Youth Face Beauty Cream is a 25 g face cream with Kojic Acid and Alpha Arbutin, made for a simple daily routine aimed at the look of dark spots, marks and uneven skin tone. Sold directly by Beauty Mart, Bhatkal, Karnataka, India, with free shipping across India and Cash on Delivery. Order on WhatsApp %s.' % WA_SHOW, '',
+ 'Important: Youth Face is a cosmetic. It does not change natural skin tone and is not a treatment for any skin condition. Patch test first and use sunscreen daily. Results vary and usually need 6 to 12 weeks of regular use.', '',
+ 'Official website: %s . Other site for the same brand: https://youthfacebeauty.com' % SITE, '', '## Products and prices (INR)']
+for _p in PRODUCTS:
+    _L.append('- [%s](%s%s): %s (MRP %s), %s' % (_p['name'], SITE, '/product/%s/' % _p['slug'], rs(_p['price']), rs(_p['mrp']), _p['size']))
+_L += ['', '## Guides']
+for _g in GUIDES:
+    _L.append('- [%s](%s%s): %s' % (_g['title'], SITE, guide_url(_g), _g.get('blurb') or _g.get('desc', '')))
+_L += ['', '## Key pages', '- [Shop](%s/shop/)' % SITE, '- [How to use](%s/how-to-use/)' % SITE, '- [FAQ](%s/faq/)' % SITE, '- [Shipping](%s/shipping-delivery/)' % SITE, '- [Returns](%s/refund-returns-policy/)' % SITE, '- [About](%s/about-us/)' % SITE, '']
+open(os.path.join(ROOT, 'llms.txt'), 'w').write('\n'.join(_L))
 
 # Product feed for Google Merchant Center (free listings / Shopping) and the Meta or Instagram catalogue.
 FEED_DESC = {

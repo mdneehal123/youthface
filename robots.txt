@@ -1,4 +1,117 @@
+# Youth Face: search engines and AI assistants are welcome.
 User-agent: *
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: GPTBot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: OAI-SearchBot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: ChatGPT-User
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: ClaudeBot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: Claude-SearchBot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: Claude-User
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: PerplexityBot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: Perplexity-User
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: Google-Extended
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: Applebot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: Applebot-Extended
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: Bingbot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: CCBot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: meta-externalagent
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: Amazonbot
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /reorder/
+Disallow: /api/
+Allow: /
+
+User-agent: DuckAssistBot
 Disallow: /cart/
 Disallow: /checkout/
 Disallow: /reorder/
