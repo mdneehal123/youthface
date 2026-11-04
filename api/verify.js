@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
     return res.status(200).json({ ok: true, savedToDesk: false });
   }
   const confirmed = !!p;
-  const priced = args.cart.total; // server price (cart from the fixed price table)
+  const priced = args.cart.total - args.onlineOff; // server price (fixed price table, minus the online saving)
   const charged = confirmed ? p.amount / 100 : priced;
   const warn = [];
   if (!confirmed) warn.push('⚠ could not confirm the payment with Razorpay: check the dashboard before shipping');
@@ -48,10 +48,10 @@ module.exports = async (req, res) => {
   const ref = args.ref || (REF_PREFIX + orderId.replace(/^order_/, '').toUpperCase()).slice(0, 20);
   const remind = ((o && o.notes) || {}).remind === 'yes';
   const desk = await pushToDesk({
-    ref, c, lines: args.cart.lines, sub: args.cart.total, disc: 0, coupon: '', total: charged,
+    ref, c, lines: args.cart.lines, sub: args.cart.total, disc: args.onlineOff, coupon: '', total: charged,
     pay: 'upi', paid: confirmed, payId: paymentId,
     note: ['Paid online via Razorpay' + (confirmed && p.method ? ' (' + p.method + ')' : '') + ' ' + paymentId + ' · ' + orderId]
-      .concat(remind ? ['customer asked for a WhatsApp refill reminder'] : [], warn).join(' · ')
+      .concat(args.onlineOff ? ['online payment −₹' + args.onlineOff] : [], remind ? ['customer asked for a WhatsApp refill reminder'] : [], warn).join(' · ')
   });
   if (!desk.ok) console.error('order desk push failed', ref, orderId, desk.error);
   return res.status(200).json({ ok: true, ref, savedToDesk: desk.ok });

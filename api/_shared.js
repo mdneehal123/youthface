@@ -111,10 +111,15 @@ function shipArgs(o) {
   const cart = cartFrom(String(n.items || ''));
   if (!cart || !n.name) return null;
   const legacyCod = n.mode === 'advance';
+  const onlineOff = Math.max(0, Math.floor(Number(n.online_off || 0))); // saving for paying online
   return {
-    id: o.id, ref: n.ref || '', cart, name: n.name, phone: n.phone, address: n.address, city: n.city, pincode: n.pincode,
-    cod: legacyCod, collect: legacyCod ? Math.max(0, cart.total - LEGACY_ADVANCE) : 0, paid: legacyCod ? null : cart.total
+    id: o.id, ref: n.ref || '', cart, name: n.name, phone: n.phone, address: n.address, city: n.city, pincode: n.pincode, onlineOff,
+    cod: legacyCod, collect: legacyCod ? Math.max(0, cart.total - LEGACY_ADVANCE) : 0, paid: legacyCod ? null : cart.total - onlineOff
   };
 }
 
-module.exports = { PRODUCTS, BRAND, LEGACY_ADVANCE, DESK_BRAND, DESK_ID, REF_PREFIX, keys, clean, cartFrom, shipArgs, orderRef, parcel, stateFor, customer };
+// Saving for paying online (₹ off the order). Cash on Delivery pays the full price.
+const ONLINE_OFF = 50;
+const onlineOff = (amount) => Math.max(0, Math.min(ONLINE_OFF, amount - 1));
+
+module.exports = { ONLINE_OFF, onlineOff, PRODUCTS, BRAND, LEGACY_ADVANCE, DESK_BRAND, DESK_ID, REF_PREFIX, keys, clean, cartFrom, shipArgs, orderRef, parcel, stateFor, customer };

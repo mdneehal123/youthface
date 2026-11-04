@@ -423,12 +423,13 @@ checkout_body = top('Checkout', 'Checkout', 'Enter your delivery details and cho
   <div class="two"><div class="f"><label for="co-pin">Pincode</label><input id="co-pin" inputmode="numeric" maxlength="6" autocomplete="postal-code"></div><div class="f"><label for="co-city">City</label><input id="co-city" autocomplete="address-level2"></div></div>
   <p class="pinnote" id="pin-note" hidden></p>
   <fieldset class="pay"><legend>How would you like to pay?</legend>
-    <label><em class="rec-tag">Recommended</em><input type="radio" name="pay" value="online" checked><span>Pay online<small>UPI, cards, netbanking · nothing to pay at the door</small></span><b id="amt-online"></b></label>
+    <label><em class="rec-tag">Recommended</em><input type="radio" name="pay" value="online" checked><span>Pay online<small><b id="online-save"></b>UPI, cards, netbanking · nothing to pay at the door</small></span><b id="amt-online"></b></label>
     <label><input type="radio" name="pay" value="cod"><span>Cash on Delivery<small id="cod-note">Nothing to pay now · pay in cash when it arrives</small></span><b id="amt-cod"></b></label>
     <label><input type="radio" name="pay" value="wa"><span>Order on WhatsApp<small>Send your order, we confirm on chat</small></span><b id="amt-wa"></b></label>
   </fieldset>
   <label class="remind"><input type="checkbox" id="co-remind"><span><b>Remind me on WhatsApp when my cream is about to run out</b><small>One friendly message, timed to your pack size. Reply STOP any time.</small></span></label>
   <label class="remind"><input type="checkbox" id="co-lead"><span><b>You may message me on WhatsApp about this order and related offers, even if I don't complete it.</b></span></label>
+  <div class="notyet" id="cod-nudge" hidden><p><b id="cod-nudge-h"></b><span id="cod-nudge-t"></span></p><button type="button" class="btn" id="cod-nudge-go">Pay online instead</button></div>
   <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Delivered by Delhivery. Nothing to pay now: please keep the exact amount ready at delivery. There is no Cash on Delivery fee. You get a Delhivery tracking number as soon as the order is placed.</p>
   <div class="notyet" id="not-yet" hidden><p><b>Plot twist: your order isn't placed yet.</b> The payment window closed before it finished. Nothing is lost. Your details are saved, so it's one tap from here.</p><button type="button" class="btn" id="ny-retry">Try payment again</button><button type="button" class="btn ghost" id="ny-switch">Switch to Cash on Delivery</button></div>
   <p class="oerr" id="co-err" role="alert" hidden></p>
