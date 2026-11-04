@@ -4,7 +4,7 @@ GUIDES += [
     dict(slug='youth-face-cream-price', old='price', title='Youth Face Cream price in India',
          blurb='Every pack, the price per jar, and how much a jar lasts.',
          seo='Youth Face Cream Price in India: Pack of 1, 2, 3 & Combo (2026)',
-         desc='Youth Face Beauty Cream price in India: ₹549 for 25 g, ₹999 for 2 jars, ₹1,444 for 3, and the Cream + Body Lotion combo at ₹999. Free shipping, COD.',
+         desc='Youth Face Beauty Cream price in India: ₹599 for 25 g, ₹999 for 2 jars, ₹1,444 for 3, and the Cream + Body Lotion combo at ₹999. Free shipping, COD.',
          body='''<p>Youth Face Beauty Cream costs <b>%(p1)s for one 25 g jar</b> on youthfacebeautycream.com. Packs of two and three cost less per jar, and every order ships free across India with Cash on Delivery available.</p>
 <h2>Price list</h2>
 <div class="tbl"><table><thead><tr><th>Pack</th><th>What you get</th><th>MRP</th><th>Price</th><th>Per jar</th></tr></thead><tbody>
@@ -13,7 +13,7 @@ GUIDES += [
 <tr><td><a href="%(u3)s">Pack of 3</a></td><td>3 × 25 g jars</td><td>%(m3)s</td><td>%(p3)s</td><td>%(e3)s</td></tr>
 <tr><td><a href="%(uc)s">Combo</a></td><td>25 g cream + 40 ml Body Lotion</td><td>%(mc)s</td><td>%(pc)s</td><td>n/a</td></tr>
 </tbody></table></div>
-<p>Prices include all taxes. Shipping is free on every order, with no extra Cash on Delivery fee.</p>
+<p>Prices include all taxes. Shipping is free on every order. Cash on Delivery adds ₹30 to orders with the single 25 g jar (Pack of 1); other packs have no Cash on Delivery fee.</p>
 <h2>How long does one jar last?</h2><p>With a pea-sized amount on the face and neck once or twice a day, a 25 g jar usually lasts around a month, depending on how much you apply. Because results take several weeks of regular use, many people choose the Pack of 2 or Pack of 3 so the routine doesn't stop halfway.</p>
 <h2>Which pack should I buy?</h2><ul><li><b>Trying it for the first time:</b> Pack of 1. Patch test it and see how your skin feels.</li><li><b>Planning a two-month routine:</b> Pack of 2, at %(e2)s a jar.</li><li><b>Best value:</b> Pack of 3, at %(e3)s a jar.</li><li><b>Face and body together:</b> the <a href="%(uc)s">Combo</a>, which adds the 40 ml Body Lotion for %(save)s less than buying both separately.</li></ul>
 <h2>How to pay</h2><p>Pay online by UPI, card or netbanking through Razorpay, or choose Cash on Delivery: nothing to pay in advance, you pay the full amount in cash when the parcel arrives. You can also order on WhatsApp.</p>

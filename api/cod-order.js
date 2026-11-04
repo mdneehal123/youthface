@@ -2,7 +2,7 @@
 // The price is worked out here on the server from the fixed price table (combo rule included), Delhivery is checked
 // for the pincode, the shipment is booked with Delhivery, and the order is ALWAYS saved in the Order Desk
 // (with the Delhivery tracking number when booked, or flagged for manual booking when not).
-const { cartFrom, customer, orderRef } = require('./_shared');
+const { cartFrom, customer, orderRef, codFee } = require('./_shared');
 const guard = require('./_guard');
 const kv = require('./_kv');
 const { delhiveryOn, serviceable, createShipment } = require('./_delhivery');
@@ -70,7 +70,8 @@ module.exports = async (req, res) => {
     return res.status(429).json({ error: 'busy' });
   }
 
-  const total = cart.total;
+  const fee = codFee(cart); // ₹30 Cash on Delivery fee when the order has the single 25 g jar
+  const total = cart.total + fee;
   // COD only when Delhivery confirms this pincode is serviceable and allows COD. Unknown pincode, failed check or no answer: refuse, before saving or booking.
   let s = null;
   if (delhiveryOn()) { try { s = await serviceable(c.pin); } catch (e) { s = null; } }
@@ -82,9 +83,10 @@ module.exports = async (req, res) => {
   try { d = await createShipment({ ref, c, cart, total, pay: 'cod' }); } catch (e) { d = { ok: false, error: String((e && e.message) || e) }; }
 
   const order = { ref, c, lines: cart.lines, sub: cart.total, disc: 0, coupon: '', total, pay: 'cod', paid: false };
+  const feeNote = fee ? ' · includes ₹' + fee + ' Cash on Delivery fee' : '';
   const desk = await pushToDesk(d.ok
-    ? Object.assign(order, { courier: 'Delhivery', awb: d.awb, note: 'COD booked with Delhivery · AWB ' + d.awb + ' · print the label from the Delhivery panel' })
-    : Object.assign(order, { note: '⚠ COD website order — Delhivery booking failed: ' + d.error + '. Please book it in Delhivery.' }));
+    ? Object.assign(order, { courier: 'Delhivery', awb: d.awb, note: 'COD booked with Delhivery · AWB ' + d.awb + ' · print the label from the Delhivery panel' + feeNote })
+    : Object.assign(order, { note: '⚠ COD website order — Delhivery booking failed: ' + d.error + '. Please book it in Delhivery.' + feeNote }));
   if (!desk.ok) console.error('order desk push failed', ref, desk.error);
 
   if (!d.ok && !desk.ok) {

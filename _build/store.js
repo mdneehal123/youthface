@@ -97,7 +97,7 @@
       form.parentNode.insertBefore(box,form);
     }).catch(function(){});
     var F={name:$('co-name'),phone:$('co-phone'),address:$('co-address'),pin:$('co-pin'),city:$('co-city')};
-    var btn=$('co-pay'),err=$('co-err'),bad=null,busy=false,lastMode='online',online=true,codOn=true,pinNoCod='';
+    var btn=$('co-pay'),err=$('co-err'),bad=null,busy=false,lastMode='online',online=true,codOn=true,pinNoCod='',COD_FEE=30; /* ₹30 Cash on Delivery fee when the order has the single 25 g jar (p1): keep the same as COD_FEE in api/_shared.js */
     /* one order number per checkout (YC + 8 digits): a retry of the same order is never booked twice */
     var REF='';function ref(){if(!REF){var a=new Uint32Array(1);try{crypto.getRandomValues(a);}catch(e){a[0]=Math.floor(Math.random()*1e9);}REF='YC'+String(a[0]%1e8+1e8).slice(1);}return REF;}
     /* turns a payment choice on or off; if the chosen one goes off, the next available one is chosen */
@@ -123,16 +123,22 @@
       var t=totals(),box=$('co-lines');box.textContent='';
       if(!t.lines.length){box.appendChild(el('p','muted','Your cart is empty.'));var s=el('a','btn','Shop now');s.href='/shop/';box.appendChild(s);btn.disabled=true;return;}
       t.lines.forEach(function(x){box.appendChild(lineNode(x,true,render));});upsell(box,render);btn.disabled=false;
-      var m=mode();
-      $('amt-online').textContent=rs(t.total);$('amt-cod').textContent=rs(t.total);$('amt-wa').textContent=rs(t.total);
+      var m=mode(),fee=t.lines.some(function(x){return x.id==='p1';})?COD_FEE:0,codT=t.total+fee;
+      $('amt-online').textContent=rs(t.total);$('amt-cod').textContent=rs(codT);$('amt-wa').textContent=rs(t.total);
+      $('cod-note').textContent=fee?'Nothing to pay now · '+rs(fee)+' Cash on Delivery fee':'Nothing to pay now · pay in cash when it arrives';
+      $('online-save').textContent=fee&&online?'Save '+rs(fee)+' · ':'';
       $('cod-terms').hidden=m!=='cod';
+      /* Cash on Delivery chosen and it costs more: suggest paying online, with the exact saving */
+      $('cod-nudge').hidden=!(m==='cod'&&fee>0&&online);
+      if(fee){$('cod-nudge-h').textContent='Save '+rs(fee)+' by paying online.';$('cod-nudge-t').textContent=' Pay '+rs(t.total)+' instead of '+rs(codT)+' by UPI, card or netbanking, with nothing to pay at the door.';}
       var rows=[['MRP',rs(t.mrp)],['Discount','− '+rs(t.mrp-t.total),'save'],['Shipping','Free']];
-      if(m==='cod'){rows.push(['Pay now','₹0']);rows.push(['Pay at delivery',rs(t.total),'total']);}
+      if(m==='cod'){if(fee){rows.push(['Cash on Delivery fee',rs(fee)]);}rows.push(['Pay now','₹0']);rows.push(['Pay at delivery',rs(codT),'total']);}
       else{rows.push([m==='wa'?'Order total':'You pay',rs(t.total),'total']);}
       sumRows($('co-sum'),rows);
-      if(!busy){btn.textContent=m==='online'?'Pay '+rs(t.total)+' securely':m==='cod'?'Place order · pay '+rs(t.total)+' on delivery':'Send order on WhatsApp';}
+      if(!busy){btn.textContent=m==='online'?'Pay '+rs(t.total)+' securely':m==='cod'?'Place order · pay '+rs(codT)+' on delivery':'Send order on WhatsApp';}
     }
     [].slice.call(document.querySelectorAll('input[name=pay]')).forEach(function(r){r.addEventListener('change',render);});
+    $('cod-nudge-go').addEventListener('click',function(){var on=document.querySelector('input[name=pay][value=online]');if(!on.disabled){on.checked=true;render();}});
     var pend=load(PENDING,null);
     if(pend&&Date.now()-pend.at<3*864e5&&lines().length){var r0=document.querySelector('input[name=pay][value=online]');if(r0){r0.checked=true;}
       var wb=el('p','welcome','Welcome back! Your details are already filled in. One tap below and your order is placed.');btn.insertAdjacentElement('beforebegin',wb);}
