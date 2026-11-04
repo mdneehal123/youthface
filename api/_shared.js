@@ -1,6 +1,6 @@
 // Youth Face store: prices are fixed here, on the server, so the amount charged cannot be changed from the browser.
 const PRODUCTS = {
-  p1: { name: 'Youth Face Beauty Cream 25g, Pack of 1', sku: 'YFB-CREAM-25', price: 549, mrp: 899, kg: 0.06 },
+  p1: { name: 'Youth Face Beauty Cream 25g, Pack of 1', sku: 'YFB-CREAM-25', price: 599, mrp: 899, kg: 0.06 },
   p2: { name: 'Youth Face Beauty Cream, Pack of 2', sku: 'YFB-CREAM-25x2', price: 999, mrp: 1599, kg: 0.12 },
   p3: { name: 'Youth Face Beauty Cream, Pack of 3', sku: 'YFB-CREAM-25x3', price: 1444, mrp: 1899, kg: 0.18 },
   lotion: { name: 'Youth Face Body Lotion 40ml', sku: 'YFB-LOTION-40', price: 599, mrp: 599, kg: 0.07 },
@@ -13,6 +13,10 @@ const BRAND = 'Youth Face';
 // Used only to read those old orders back; new Cash on Delivery orders have nothing paid upfront.
 const LEGACY_ADVANCE = 99;
 const MAX_QTY = 10;
+// Cash on Delivery fee: ₹30 once per order when the order has the single 25 g jar (Pack of 1). Other items have no fee.
+// Keep the same as COD_FEE in _build/store.js.
+const COD_FEE = 30;
+const codFee = (cart) => (cart && cart.lines.some((l) => l.id === 'p1') ? COD_FEE : 0);
 // Order Desk (owner's order inbox): brand id, order number prefix, and product ids for items that are exactly an Order Desk product.
 // The combo has no Order Desk product id: it is kept by its name and price as sold.
 const DESK_BRAND = 'yf';
@@ -117,4 +121,4 @@ function shipArgs(o) {
   };
 }
 
-module.exports = { PRODUCTS, BRAND, LEGACY_ADVANCE, DESK_BRAND, DESK_ID, REF_PREFIX, keys, clean, cartFrom, shipArgs, orderRef, parcel, stateFor, customer };
+module.exports = { COD_FEE, codFee, PRODUCTS, BRAND, LEGACY_ADVANCE, DESK_BRAND, DESK_ID, REF_PREFIX, keys, clean, cartFrom, shipArgs, orderRef, parcel, stateFor, customer };

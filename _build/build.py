@@ -30,10 +30,10 @@ def img(name):
 
 PRODUCTS = [
     dict(id='p1', wc=16, slug='youth-face-beauty-cream-25g-pack-of-1-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-25g',
-         name='Youth Face Beauty Cream 25g – Pack of 1', card='Beauty Cream · Pack of 1', size='1 × 25 g jar', price=549, mrp=899, badge='',
+         name='Youth Face Beauty Cream 25g – Pack of 1', card='Beauty Cream · Pack of 1', size='1 × 25 g jar', price=599, mrp=899, badge='',
          sku='YFB-CREAM-25',
-         title='Youth Face Beauty Cream 25g | Kojic Acid & Alpha Arbutin | ₹549',
-         desc='Buy Youth Face Beauty Cream 25g with Kojic Acid & Alpha Arbutin. ₹549, free shipping, Cash on Delivery available, ships from Bhatkal, Karnataka.',
+         title='Youth Face Beauty Cream 25g | Kojic Acid & Alpha Arbutin | ₹599',
+         desc='Buy Youth Face Beauty Cream 25g with Kojic Acid & Alpha Arbutin. ₹599, free shipping, Cash on Delivery available, ships from Bhatkal, Karnataka.',
          imgs=['/assets/img/yf-pack-1.webp'], og='/assets/img/yf-pack-1.jpg',
          thumb='/assets/img/yf-pack-1-600.webp'),
     dict(id='p2', wc=17, slug='youth-face-beauty-cream-pack-of-2-kojic-acid-alpha-arbutin', short='youth-face-beauty-cream-pack-of-2',
@@ -272,7 +272,7 @@ HOME_FAQ = [
     ('Who runs this store?', 'This store is run by Beauty Mart in Bhatkal, Karnataka. Every order is packed by our team in Bhatkal and handed to a courier, in sealed packaging.'),
     ('What does the cream contain?', 'Youth Face Beauty Cream is built around Kojic Acid and Alpha Arbutin, two ingredients widely used in creams for dark-spot care and a more even-looking tone. The full ingredient list is printed on every pack.'),
     ('How do I use it?', 'Wash your face, pat it dry, and apply a small amount to the face and neck, once or twice a day. Always follow with sunscreen in the morning. Patch test first if you have sensitive skin.'),
-    ('Is Cash on Delivery available?', 'Yes. Choose Cash on Delivery at checkout: nothing to pay in advance, you pay the full amount in cash when your parcel arrives, with no Cash on Delivery fee. You can also pay online by UPI, card or netbanking.'),
+    ('Is Cash on Delivery available?', 'Yes. Choose Cash on Delivery at checkout: nothing to pay in advance, you pay the full amount in cash when your parcel arrives. Orders with the single 25 g jar (Pack of 1) have a ₹30 Cash on Delivery fee; packs of 2 and 3, the Body Lotion and the Combo have none. You can also pay online by UPI, card or netbanking.'),
     ('How long does delivery take?', 'Orders are packed in 1 to 3 business days and usually reach you 3 to 7 business days after dispatch, depending on your pincode.'),
 ]
 
@@ -324,7 +324,7 @@ home = '''<div class="wrap hero">
 </div></section>''' % ('/assets/img/yf-combo.webp', ICON['orig'], ICON['cod'], ICON['wa'], ICON['routine'],
                          ''.join(card(p) for p in MAIN), combo_band(), faq_html(HOME_FAQ))
 page('/', 'Youth Face Beauty Cream | Kojic Acid & Alpha Arbutin Cream',
-     'Youth Face Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹549, free shipping, Cash on Delivery.',
+     'Youth Face Beauty Cream with Kojic Acid & Alpha Arbutin for dark-spot care and an even-looking tone. From ₹599, free shipping, Cash on Delivery.',
      home, og='website', extra_head=ALT, schema=[{'@type': 'ItemList', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + url(p)} for i, p in enumerate(PRODUCTS)]}, faq_ld(HOME_FAQ)])
 
 # ---------------- Shop ----------------
@@ -423,13 +423,14 @@ checkout_body = top('Checkout', 'Checkout', 'Enter your delivery details and cho
   <div class="two"><div class="f"><label for="co-pin">Pincode</label><input id="co-pin" inputmode="numeric" maxlength="6" autocomplete="postal-code"></div><div class="f"><label for="co-city">City</label><input id="co-city" autocomplete="address-level2"></div></div>
   <p class="pinnote" id="pin-note" hidden></p>
   <fieldset class="pay"><legend>How would you like to pay?</legend>
-    <label><em class="rec-tag">Recommended</em><input type="radio" name="pay" value="online" checked><span>Pay online<small>UPI, cards, netbanking · nothing to pay at the door</small></span><b id="amt-online"></b></label>
+    <label><em class="rec-tag">Recommended</em><input type="radio" name="pay" value="online" checked><span>Pay online<small><b id="online-save"></b>UPI, cards, netbanking · nothing to pay at the door</small></span><b id="amt-online"></b></label>
     <label><input type="radio" name="pay" value="cod"><span>Cash on Delivery<small id="cod-note">Nothing to pay now · pay in cash when it arrives</small></span><b id="amt-cod"></b></label>
     <label><input type="radio" name="pay" value="wa"><span>Order on WhatsApp<small>Send your order, we confirm on chat</small></span><b id="amt-wa"></b></label>
   </fieldset>
   <label class="remind"><input type="checkbox" id="co-remind"><span><b>Remind me on WhatsApp when my cream is about to run out</b><small>One friendly message, timed to your pack size. Reply STOP any time.</small></span></label>
   <label class="remind"><input type="checkbox" id="co-lead"><span><b>You may message me on WhatsApp about this order and related offers, even if I don't complete it.</b></span></label>
-  <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Delivered by Delhivery. Nothing to pay now: please keep the exact amount ready at delivery. There is no Cash on Delivery fee. You get a Delhivery tracking number as soon as the order is placed.</p>
+  <div class="notyet" id="cod-nudge" hidden><p><b id="cod-nudge-h"></b><span id="cod-nudge-t"></span></p><button type="button" class="btn" id="cod-nudge-go">Pay online instead</button></div>
+  <p class="muted" id="cod-terms" style="font-size:.84rem" hidden>Delivered by Delhivery. Nothing to pay now: please keep the exact amount ready at delivery. Orders with the single 25 g jar (Pack of 1) have a ₹30 Cash on Delivery fee; packs of 2 and 3, the Body Lotion and the Combo have none. You get a Delhivery tracking number as soon as the order is placed.</p>
   <div class="notyet" id="not-yet" hidden><p><b>Plot twist: your order isn't placed yet.</b> The payment window closed before it finished. Nothing is lost. Your details are saved, so it's one tap from here.</p><button type="button" class="btn" id="ny-retry">Try payment again</button><button type="button" class="btn ghost" id="ny-switch">Switch to Cash on Delivery</button></div>
   <p class="oerr" id="co-err" role="alert" hidden></p>
   <button class="btn block" type="submit" id="co-pay">Pay securely</button>
@@ -459,7 +460,7 @@ contact = top('Contact', 'Contact Youth Face', 'The fastest way to reach us is W
 page('/contact/', 'Contact Youth Face | WhatsApp Support', 'Contact Youth Face on WhatsApp at +91 99808 81230 for help with orders, delivery and products. Beauty Mart, Bhatkal, Karnataka.', contact, crumbs=[('Contact', '/contact/')])
 
 FAQ_ALL = HOME_FAQ + [
-    ('What is the price of Youth Face Beauty Cream?', 'One 25 g jar is ₹549, a pack of 2 is ₹999 and a pack of 3 is ₹1,444. The Beauty Cream + Body Lotion combo is ₹999. Prices include taxes and shipping is free. See the <a href="/skincare-guides/youth-face-cream-price/">full price guide</a>.'),
+    ('What is the price of Youth Face Beauty Cream?', 'One 25 g jar is ₹599, a pack of 2 is ₹999 and a pack of 3 is ₹1,444. The Beauty Cream + Body Lotion combo is ₹999. Prices include taxes and shipping is free. See the <a href="/skincare-guides/youth-face-cream-price/">full price guide</a>.'),
     ('How many days does it take to see results?', 'Skin changes slowly. Use it daily with sunscreen for at least 4 to 8 weeks before judging, and compare photos taken in the same light. Results vary from person to person.'),
     ('Does Youth Face cream have side effects?', 'Some people feel mild tingling in the first days. Lasting redness, itching or burning means stop using it. Patch test first; see <a href="/skincare-guides/youth-face-cream-side-effects/">side effects and safe use</a>.'),
     ('Can men use Youth Face Beauty Cream?', 'Yes. The cream is for anyone who wants a daily face cream for dark-spot care. Apply after washing the face, and after shaving only once the skin has settled.'),
@@ -628,7 +629,7 @@ POL = {
 <h2>3. Prices</h2><p>All prices are in Indian rupees (₹) and include applicable taxes. Shipping is free across India. There are no hidden charges: the amount shown at checkout is the full amount you pay. If a product is listed at a clearly wrong price because of an error, we may cancel the order and refund any amount paid in full.</p>
 <h2>4. Orders</h2><p>An online order is confirmed when the payment succeeds and you see the confirmation screen. A Cash on Delivery order is confirmed when it is placed and you see the confirmation screen. We may refuse or cancel an order if a product is out of stock, the delivery pincode is not serviceable, or the order details appear incorrect or fraudulent. If we cancel, any amount paid is refunded in full to the original payment method.</p>
 <h2>5. Payment</h2><p>You can pay online by UPI, debit or credit card, or netbanking through Razorpay. We do not store your card or UPI details.</p>
-<h2>6. Cash on Delivery</h2><p>Cash on Delivery orders need <b>nothing paid in advance</b>: you pay the full amount in cash to the courier when the parcel arrives. There is no Cash on Delivery fee. Cash on Delivery is available for pincodes our courier serves for it; if it is not available for your pincode, the checkout tells you and you can pay online instead.</p>
+<h2>6. Cash on Delivery</h2><p>Cash on Delivery orders need <b>nothing paid in advance</b>: you pay the full amount in cash to the courier when the parcel arrives. Orders with the single 25 g jar (Pack of 1) have a ₹30 Cash on Delivery fee; packs of 2 and 3, the Body Lotion and the Combo have none. Cash on Delivery is available for pincodes our courier serves for it; if it is not available for your pincode, the checkout tells you and you can pay online instead.</p>
 <h2>7. Shipping, returns and refunds</h2><p>Delivery is covered by our <a href="/shipping-delivery/">Shipping &amp; Delivery Policy</a>. Returns, replacements and refunds are covered by our <a href="/refund-returns-policy/">Refund &amp; Returns Policy</a>.</p>
 <h2>8. Using our products safely</h2><p>Read the label and follow the directions. Patch test on a small area for 24 hours before first use. Avoid the eyes and broken skin. Stop use and consult a doctor if irritation occurs. If you are pregnant, breastfeeding or being treated for a skin condition, ask your doctor before use. Results vary from person to person and are not guaranteed.</p>
 <h2>9. Reviews and content</h2><p>All text, photos, logos and designs on this site belong to %(o)s and may not be copied without permission.</p>
@@ -656,11 +657,11 @@ POL = {
 <p>This policy explains where we ship, what it costs and how long it takes.</p>
 <div class="policy-sum"><div><b>₹0</b><span>shipping on every order, anywhere in India</span></div><div><b>1–3 days</b><span>to pack and dispatch (business days)</span></div><div><b>3–7 days</b><span>delivery after dispatch, depending on pincode</span></div></div>
 <h2>1. Where we ship</h2><p>We ship to serviceable pincodes across <b>India only</b>. We do not ship outside India. At checkout, entering your pincode shows your city and an estimated delivery date. If your pincode turns out not to be serviceable after you order, we contact you and refund any amount paid in full.</p>
-<h2>2. Shipping charges</h2><p>Shipping is <b>free</b> on all orders. There is no minimum order value and no extra handling or Cash on Delivery fee.</p>
+<h2>2. Shipping charges</h2><p>Shipping is <b>free</b> on all orders. There is no minimum order value and no extra handling fee. Cash on Delivery orders with the single 25 g jar (Pack of 1) have a ₹30 Cash on Delivery fee; other orders have none.</p>
 <h2>3. Processing time</h2><p>Orders are packed and handed to the courier within <b>1 to 3 business days</b> (Monday to Saturday, excluding public holidays) after payment or Cash on Delivery confirmation. Orders placed on Sundays or holidays are processed on the next business day.</p>
 <h2>4. Delivery time</h2><p>After dispatch, delivery usually takes <b>3 to 7 business days</b>: metro cities are often faster, and remote or hilly areas can take longer. Delivery dates are estimates. Delays can happen because of weather, strikes, festivals or courier issues outside our control; we will help you follow up if your parcel is late.</p>
 <h2>5. Couriers and tracking</h2><p>Orders ship with Delhivery and other trusted courier partners. Cash on Delivery orders get a Delhivery tracking number as soon as they are placed. You can track your parcel on our <a href="/track-order/">Track Order</a> page using your mobile number and pincode, your order number, payment ID or tracking number.</p>
-<h2>6. Cash on Delivery</h2><p>Cash on Delivery is available on most pincodes, with nothing to pay in advance: you pay the full amount in cash to the courier at delivery. There is no Cash on Delivery fee. Please keep the exact amount ready.</p>
+<h2>6. Cash on Delivery</h2><p>Cash on Delivery is available on most pincodes, with nothing to pay in advance: you pay the full amount in cash to the courier at delivery. Orders with the single 25 g jar (Pack of 1) have a ₹30 Cash on Delivery fee; packs of 2 and 3, the Body Lotion and the Combo have none. Please keep the exact amount ready.</p>
 <h2>7. Delivery attempts and address</h2><p>Please enter a complete address with landmark and a mobile number that can be reached. The courier usually makes up to three delivery attempts. If the parcel cannot be delivered, it is returned to us; see our <a href="/refund-returns-policy/">Refund &amp; Returns Policy</a> for what happens next.</p>
 <h2>8. Damaged or tampered parcels</h2><p>If the outer package looks damaged or tampered with, you may refuse it, or take photos before opening. Contact us on WhatsApp within 7 days of delivery and we will replace or refund damaged items at no cost.</p>
 %(biz)s
