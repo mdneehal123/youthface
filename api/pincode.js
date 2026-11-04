@@ -16,7 +16,8 @@ async function lookup(pin) {
     return { ok: true, city: title(s.city), state: stateFor(pin), days: 0, cod: s.cod, serviceable: s.cod || s.prepaid };
   }
   // Delhivery not set up yet: the old Shiprocket lookup, if it is still connected (city and delivery days only).
-  if (shiprocket.settings()) return shiprocket.pincode(pin);
+  // Cash on Delivery needs Delhivery's answer, so it is never offered from this lookup.
+  if (shiprocket.settings()) { const r = await shiprocket.pincode(pin); if (r && r.ok) r.cod = false; return r; }
   return { ok: false };
 }
 
