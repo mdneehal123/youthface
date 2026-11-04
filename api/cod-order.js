@@ -71,17 +71,15 @@ module.exports = async (req, res) => {
   }
 
   const total = cart.total;
-  let d = { ok: false, error: 'Delhivery is not set up on the website (DELHIVERY_TOKEN / DELHIVERY_PICKUP missing)' };
-  if (delhiveryOn()) {
-    try {
-      const s = await serviceable(c.pin);
-      if (!s.cod) {
-        await store.release(ref);
-        return res.status(409).json({ error: 'cod_unavailable', codUnavailable: true, message: 'Cash on Delivery is not available for pincode ' + c.pin + '. Please pay online instead.' });
-      }
-    } catch (e) { /* if the check itself fails, still try to book */ }
-    try { d = await createShipment({ ref, c, cart, total, pay: 'cod' }); } catch (e) { d = { ok: false, error: String((e && e.message) || e) }; }
+  // COD only when Delhivery confirms this pincode is serviceable and allows COD. Unknown pincode, failed check or no answer: refuse, before saving or booking.
+  let s = null;
+  if (delhiveryOn()) { try { s = await serviceable(c.pin); } catch (e) { s = null; } }
+  if (!s || !s.known || !s.cod) {
+    await store.release(ref);
+    return res.status(409).json({ error: 'cod_unavailable', codUnavailable: true, message: 'Cash on Delivery is not available for this pincode. Please pay online.' });
   }
+  let d;
+  try { d = await createShipment({ ref, c, cart, total, pay: 'cod' }); } catch (e) { d = { ok: false, error: String((e && e.message) || e) }; }
 
   const order = { ref, c, lines: cart.lines, sub: cart.total, disc: 0, coupon: '', total, pay: 'cod', paid: false };
   const desk = await pushToDesk(d.ok

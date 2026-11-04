@@ -140,14 +140,17 @@
     // pincode → city and delivery estimate
     var pinSeen='',cityAuto='';
     function pinLookup(){var pin=F.pin.value.trim();if(!/^[1-9]\d{5}$/.test(pin)){$('pin-note').hidden=true;pinSeen='';return;}if(pin===pinSeen){return;}pinSeen=pin;
-      fetch('/api/pincode?pin='+pin).then(function(r){return r.ok?r.json():null;}).then(function(d){if(!d||!d.ok||F.pin.value.trim()!==pin){return;}
+      /* Cash on Delivery only when Delhivery allows it for this pincode; a failed check also turns it off. Online payment is never affected. */
+      var NO_COD='Cash on Delivery is not available for this pincode. Please pay online.';
+      fetch('/api/pincode?pin='+pin).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(d){if(F.pin.value.trim()!==pin){return;}
+        if(!d||!d.ok){pinNoCod=pin;payOpt('cod',false);render();$('pin-note').textContent=NO_COD;$('pin-note').hidden=false;return;}
         if(d.city&&(!F.city.value.trim()||F.city.value===cityAuto)){F.city.value=d.city;cityAuto=d.city;}
         var parts=[[d.city,d.state].filter(Boolean).join(', ')];
         if(d.days){var by=new Date();by.setDate(by.getDate()+2+d.days);parts.push('estimated delivery by '+by.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'}));}
-        if(d.cod===false){parts.push('Cash on Delivery is not available for this pincode, please pay online');pinNoCod=pin;payOpt('cod',false);render();}
+        if(d.cod!==true){parts.push(NO_COD);pinNoCod=pin;payOpt('cod',false);render();}
         else if(pinNoCod&&codOn){pinNoCod='';payOpt('cod',true);render();}
         if(d.serviceable===false){parts=['Sorry, our courier does not deliver to '+pin+' yet. Message us on WhatsApp and we will try to arrange it.'];}
-        $('pin-note').textContent=parts.filter(Boolean).join(' · ');$('pin-note').hidden=false;if(!err.hidden&&!problem()){err.hidden=true;mark();}}).catch(function(){});}
+        $('pin-note').textContent=parts.filter(Boolean).join(' · ');$('pin-note').hidden=false;if(!err.hidden&&!problem()){err.hidden=true;mark();}});}
     F.pin.addEventListener('input',pinLookup);pinLookup();
 
     /* Lead capture: only when the shopper ticks the consent box AND the mobile is valid; once per number per page load. */
@@ -167,7 +170,7 @@
       .then(function(r){return r.json().catch(function(){return {};}).then(function(j){return {s:r.status,j:j||{}};});})
       .then(function(x){var j=x.j;btn.disabled=false;
         if(x.s===200&&j.ok){finishOrder({kind:'cod',res:j});return;}
-        if(j.codUnavailable){pinNoCod=F.pin.value.trim();payOpt('cod',false);stop(j.message||'Cash on Delivery is not available for this pincode. Please pay online.');return;}
+        if(j.codUnavailable){pinNoCod=F.pin.value.trim();payOpt('cod',false);stop('Cash on Delivery is not available for this pincode. Please pay online.');return;}
         if(j.error==='in_progress'){stop('Your order is already being placed. Please wait a moment and tap again to see it.');return;}
         if(x.s===429){stop('Too many tries from this number. Please wait a while, pay online, or order on WhatsApp.');return;}
         stop('We could not place the Cash on Delivery order right now. Please try again, pay online, or order on WhatsApp.');})
