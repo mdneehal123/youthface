@@ -119,3 +119,6 @@ Disallow: /api/
 Allow: /
 
 Sitemap: https://youthfacebeautycream.com/sitemap.xml
+
+User-agent: OAI-SearchBot
+Disallow: /

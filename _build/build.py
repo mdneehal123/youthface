@@ -723,7 +723,7 @@ sm.append('</urlset>')
 open(os.path.join(ROOT, 'sitemap.xml'), 'w').write('\n'.join(sm) + '\n')
 _bots = ['GPTBot','OAI-SearchBot','ChatGPT-User','ClaudeBot','Claude-SearchBot','Claude-User','PerplexityBot','Perplexity-User','Google-Extended','Applebot','Applebot-Extended','Bingbot','CCBot','meta-externalagent','Amazonbot','DuckAssistBot']
 _rules = 'Disallow: /cart/\nDisallow: /checkout/\nDisallow: /reorder/\nDisallow: /api/\nAllow: /\n'
-open(os.path.join(ROOT, 'robots.txt'), 'w').write('# Youth Face: search engines and AI assistants are welcome.\nUser-agent: *\n' + _rules + ''.join('\nUser-agent: %s\n%s' % (b, _rules) for b in _bots) + '\nSitemap: %s/sitemap.xml\n' % SITE)
+open(os.path.join(ROOT, 'robots.txt'), 'w').write('# Youth Face: search engines and AI assistants are welcome.\nUser-agent: *\n' + _rules + ''.join('\nUser-agent: %s\n%s' % (b, _rules) for b in _bots) + '\nSitemap: %s/sitemap.xml\n' % SITE + '\nUser-agent: OAI-SearchBot\nDisallow: /\n')
 _L = ['# Youth Face', '',
  '> Youth Face Beauty Cream is a 25 g face cream with Kojic Acid and Alpha Arbutin, made for a simple daily routine aimed at the look of dark spots, marks and uneven skin tone. Sold directly by Beauty Mart, Bhatkal, Karnataka, India, with free shipping across India and Cash on Delivery. Order on WhatsApp %s.' % WA_SHOW, '',
  'Important: Youth Face is a cosmetic. It does not change natural skin tone and is not a treatment for any skin condition. Patch test first and use sunscreen daily. Results vary and usually need 6 to 12 weeks of regular use.', '',
