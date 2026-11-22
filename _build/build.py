@@ -721,7 +721,7 @@ for pth in pages:
     sm.append('  <url><loc>%s%s</loc><lastmod>%s</lastmod><priority>%s</priority></url>' % (SITE, pth, TODAY, pri))
 sm.append('</urlset>')
 open(os.path.join(ROOT, 'sitemap.xml'), 'w').write('\n'.join(sm) + '\n')
-_bots = ['GPTBot','OAI-SearchBot','ChatGPT-User','ClaudeBot','Claude-SearchBot','Claude-User','PerplexityBot','Perplexity-User','Google-Extended','Applebot','Applebot-Extended','Bingbot','CCBot','meta-externalagent','Amazonbot','DuckAssistBot']
+_bots = ['GPTBot','ChatGPT-User','ClaudeBot','Claude-SearchBot','Claude-User','PerplexityBot','Perplexity-User','Google-Extended','Applebot','Applebot-Extended','Bingbot','CCBot','meta-externalagent','Amazonbot','DuckAssistBot']
 _rules = 'Disallow: /cart/\nDisallow: /checkout/\nDisallow: /reorder/\nDisallow: /api/\nAllow: /\n'
 open(os.path.join(ROOT, 'robots.txt'), 'w').write('# Youth Face: search engines and AI assistants are welcome.\nUser-agent: *\n' + _rules + ''.join('\nUser-agent: %s\n%s' % (b, _rules) for b in _bots) + '\nSitemap: %s/sitemap.xml\n' % SITE + '\nUser-agent: OAI-SearchBot\nDisallow: /\n')
 _L = ['# Youth Face', '',

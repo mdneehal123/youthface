@@ -13,13 +13,6 @@ Disallow: /reorder/
 Disallow: /api/
 Allow: /
 
-User-agent: OAI-SearchBot
-Disallow: /cart/
-Disallow: /checkout/
-Disallow: /reorder/
-Disallow: /api/
-Allow: /
-
 User-agent: ChatGPT-User
 Disallow: /cart/
 Disallow: /checkout/
