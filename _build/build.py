@@ -10,7 +10,7 @@ OLD = 'https://youthfacebeautycream.com'   # images are read from here until the
 WA = '919980881230'
 WA_SHOW = '+91 99808 81230'
 OWNER = 'Beauty Mart'
-ADDR = 'Azad Nagar, 4th Cross, Bhatkal, Uttara Kannada, Karnataka 581320, India'
+ADDR = 'Bhatkal, Karnataka, India'
 TODAY = '2026-10-09'
 GOOGLE_ADS = ''        # e.g. AW-XXXXXXXXXX when Youth Face gets its own Google Ads account
 META_PIXEL = ''        # Meta Pixel ID for Youth Face, when there is one
@@ -98,8 +98,8 @@ pages = []
 def org_graph():
     return [{
         '@type': 'Organization', '@id': SITE + '/#org', 'name': 'Youth Face', 'url': SITE + '/', 'legalName': OWNER, 'logo': SITE + '/assets/img/youth-face-logo.png', 'image': SITE + '/icon-512.png',
-        'address': {'@type': 'PostalAddress', 'streetAddress': 'Azad Nagar, 4th Cross', 'addressLocality': 'Bhatkal',
-                    'addressRegion': 'Karnataka', 'postalCode': '581320', 'addressCountry': 'IN'},
+        'address': {'@type': 'PostalAddress', 'addressLocality': 'Bhatkal',
+                    'addressRegion': 'Karnataka', 'addressCountry': 'IN'},
         'contactPoint': {'@type': 'ContactPoint', 'telephone': '+' + WA, 'contactType': 'customer service', 'areaServed': 'IN'}
     }, {'@type': 'WebSite', '@id': SITE + '/#site', 'url': SITE + '/', 'name': 'Youth Face', 'publisher': {'@id': SITE + '/#org'}}]
 
